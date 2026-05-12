@@ -1,0 +1,6 @@
+*.db
+*.json
+output/
+.claude/
+__pycache__/
+*.pyc
