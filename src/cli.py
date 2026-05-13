@@ -143,6 +143,19 @@ def cmd_meta_view(args):
     print()
 
 
+def cmd_import_fs(args):
+    from .player_stats import get_player_stats
+    ps = get_player_stats()
+    print("正在从 Firestone 导入对局数据...")
+    result = ps.import_from_firestone()
+    print(f"  新增: {result.get('new', 0)}")
+    print(f"  跳过(重复): {result.get('skipped', 0)}")
+    print(f"  错误: {result.get('errors', 0)}")
+    if result.get("msg"):
+        print(f"  {result['msg']}")
+    print("导入完成!")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="bg-strategy",
@@ -183,6 +196,9 @@ def main():
 
     p_meta = sub.add_parser("meta", help="版本环境总览")
     p_meta.set_defaults(func=cmd_meta_view)
+
+    p_import = sub.add_parser("import", help="从 Firestone 导入对局数据")
+    p_import.set_defaults(func=cmd_import_fs)
 
     args = parser.parse_args()
     if not args.command:

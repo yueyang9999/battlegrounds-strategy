@@ -5,105 +5,147 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>酒馆战棋攻略面板</title>
 <style>
+:root {
+  --c-positive: #4caf50;
+  --c-positive-glow: rgba(76,175,80,0.2);
+  --c-accent: #f0c060;
+  --c-accent-glow: rgba(240,192,96,0.15);
+  --c-danger: #f44336;
+  --c-blue: #2196F3;
+  --bg-deep: #0f0f1a;
+  --bg-panel: rgba(22,22,37,0.94);
+  --bg-card: rgba(22,22,37,0.78);
+  --bg-hover: rgba(30,30,50,0.88);
+  --bg-input: rgba(15,15,26,0.75);
+  --bg-overlay: rgba(0,0,0,0.72);
+  --border-subtle: rgba(42,42,58,0.65);
+  --text-primary: rgba(255,255,255,0.9);
+  --text-secondary: rgba(255,255,255,0.58);
+  --text-muted: rgba(255,255,255,0.32);
+  --shadow-text: 0 1px 3px rgba(0,0,0,0.7);
+  --r-sm: 4px;  --r-md: 6px;  --r-lg: 10px;
+  --ease: 0.2s ease;
+}
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background:#0f0f1a; color:#ccc; display:flex; height:100vh; overflow:hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "PingFang SC", sans-serif; background:var(--bg-deep); color:var(--text-primary); display:flex; height:100vh; overflow:hidden; }
 
-/* === Sidebar === */
-#sidebar { width:200px; min-width:200px; background:#161625; display:flex; flex-direction:column; border-right:1px solid #2a2a3a; }
-#sidebar .logo { padding:20px 16px 12px; font-size:18px; font-weight:bold; color:#f0c060; border-bottom:1px solid #2a2a3a; }
-#sidebar .logo span { font-size:12px; color:#888; display:block; font-weight:normal; margin-top:2px; }
+#sidebar { width:200px; min-width:200px; background:var(--bg-panel); display:flex; flex-direction:column; border-right:1px solid var(--border-subtle); backdrop-filter:blur(8px); }
+#sidebar .logo { padding:20px 16px 12px; font-size:18px; font-weight:bold; color:var(--c-accent); text-shadow:var(--shadow-text); border-bottom:1px solid var(--border-subtle); }
+#sidebar .logo span { font-size:12px; color:var(--text-muted); display:block; font-weight:normal; margin-top:2px; }
 #sidebar nav { flex:1; padding:8px 0; }
-#sidebar nav a { display:flex; align-items:center; gap:8px; padding:10px 20px; color:#999; text-decoration:none; font-size:14px; border-left:3px solid transparent; transition:all .15s; }
-#sidebar nav a:hover { color:#ddd; background:#1e1e30; }
-#sidebar nav a.active { color:#f0c060; background:#1e1e30; border-left-color:#f0c060; }
-#sidebar .stats-bar { padding:12px 16px; border-top:1px solid #2a2a3a; font-size:11px; color:#666; }
+#sidebar nav a { display:flex; align-items:center; gap:8px; padding:10px 20px; color:var(--text-secondary); text-decoration:none; font-size:14px; border-left:3px solid transparent; transition:all var(--ease); }
+#sidebar nav a:hover { color:var(--text-primary); background:var(--bg-hover); }
+#sidebar nav a.active { color:var(--c-accent); background:var(--bg-hover); border-left-color:var(--c-accent); }
+#sidebar .stats-bar { padding:12px 16px; border-top:1px solid var(--border-subtle); font-size:11px; color:var(--text-muted); }
 
-/* === Main === */
 #main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
-#topbar { padding:12px 24px; background:#161625; border-bottom:1px solid #2a2a3a; display:flex; align-items:center; gap:12px; min-height:48px; }
-#topbar input { flex:1; max-width:400px; padding:8px 14px; background:#0f0f1a; border:1px solid #3a3a4a; border-radius:6px; color:#ccc; font-size:13px; outline:none; }
-#topbar input:focus { border-color:#f0c060; }
-#topbar input::placeholder { color:#555; }
-#tab-label { font-size:16px; font-weight:bold; color:#ddd; white-space:nowrap; }
+#topbar { padding:12px 24px; background:var(--bg-panel); border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:12px; min-height:48px; backdrop-filter:blur(8px); }
+#topbar input { flex:1; max-width:400px; padding:8px 14px; background:var(--bg-input); border:1px solid var(--border-subtle); border-radius:var(--r-md); color:var(--text-primary); font-size:13px; outline:none; transition:border-color var(--ease); }
+#topbar input:focus { border-color:var(--c-accent); }
+#topbar input::placeholder { color:var(--text-muted); }
+#tab-label { font-size:16px; font-weight:bold; color:var(--text-primary); text-shadow:var(--shadow-text); white-space:nowrap; }
 
 #content { flex:1; overflow-y:auto; padding:20px 24px; scroll-behavior:smooth; }
 
-/* === Cards Grid === */
 .card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; }
-.card-cell { background:#161625; border-radius:8px; padding:10px; cursor:pointer; border:1px solid transparent; transition:all .15s; text-align:center; }
-.card-cell:hover { border-color:#f0c060; transform:translateY(-2px); background:#1e1e32; }
-.card-cell img { width:100%; max-width:120px; height:auto; border-radius:4px; background:#0f0f1a; min-height:80px; object-fit:contain; }
-.card-cell .name { font-size:13px; color:#ddd; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.card-cell .sub { font-size:11px; color:#777; margin-top:2px; }
-.card-cell .tier { display:inline-block; background:#f0c060; color:#0f0f1a; font-size:11px; padding:1px 6px; border-radius:3px; font-weight:bold; margin-top:3px; }
-.card-cell .atk { color:#4caf50; font-size:11px; }
-.card-cell .hp { color:#f44336; font-size:11px; margin-left:4px; }
+.card-cell { background:var(--bg-card); border-radius:var(--r-lg); padding:10px; cursor:pointer; border:1px solid var(--border-subtle); transition:border-color var(--ease), background var(--ease); text-align:center; backdrop-filter:blur(4px); }
+.card-cell:hover { border-color:var(--c-accent); background:var(--bg-hover); }
+.card-cell img { width:100%; max-width:120px; height:auto; border-radius:var(--r-sm); background:var(--bg-deep); min-height:80px; object-fit:contain; }
+.card-cell .name { font-size:13px; color:var(--text-primary); margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-cell .sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.card-cell .tier { display:inline-block; background:var(--c-accent); color:var(--bg-deep); font-size:11px; padding:1px 6px; border-radius:var(--r-sm); font-weight:bold; margin-top:3px; }
+.card-cell .atk { color:var(--c-positive); font-size:11px; }
+.card-cell .hp { color:var(--c-danger); font-size:11px; margin-left:4px; }
 .card-cell .type-tags { display:flex; gap:2px; justify-content:center; flex-wrap:wrap; margin-top:4px; }
-.card-cell .type-tag { font-size:10px; padding:1px 5px; border-radius:3px; background:#2a2a3a; color:#888; }
+.card-cell .type-tag { font-size:10px; padding:1px 5px; border-radius:var(--r-sm); background:rgba(42,42,58,0.5); color:var(--text-muted); }
 
-/* === Hero Table === */
 .hero-table { width:100%; border-collapse:collapse; font-size:13px; }
-.hero-table th { text-align:left; padding:10px 12px; background:#161625; color:#888; font-weight:normal; border-bottom:1px solid #2a2a3a; position:sticky; top:0; z-index:1; }
-.hero-table td { padding:8px 12px; border-bottom:1px solid #1a1a2a; }
-.hero-table tr:hover td { background:#1a1a30; }
-.hero-table .rank { color:#f0c060; font-weight:bold; }
+.hero-table th { text-align:left; padding:10px 12px; background:var(--bg-panel); color:var(--text-muted); font-weight:normal; border-bottom:1px solid var(--border-subtle); position:sticky; top:0; z-index:1; }
+.hero-table td { padding:8px 12px; border-bottom:1px solid rgba(26,26,42,0.45); }
+.hero-table tr:hover td { background:var(--bg-hover); }
+.hero-table .rank { color:var(--c-accent); font-weight:bold; }
+.hero-table tbody tr:nth-child(1) .rank,
+.hero-table tbody tr:nth-child(2) .rank,
+.hero-table tbody tr:nth-child(3) .rank { color:var(--c-positive); }
 
-/* === Filters === */
 .filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
-.filters button { padding:6px 14px; background:#1e1e30; border:1px solid #3a3a4a; border-radius:6px; color:#999; font-size:12px; cursor:pointer; transition:all .15s; }
-.filters button:hover { border-color:#f0c060; color:#ddd; }
-.filters button.active { background:#f0c060; color:#0f0f1a; border-color:#f0c060; font-weight:bold; }
-.result-count { font-size:12px; color:#666; margin-bottom:12px; }
+.filters button { padding:6px 14px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--r-md); color:var(--text-secondary); font-size:12px; cursor:pointer; transition:all var(--ease); }
+.filters button:hover { border-color:var(--c-accent); color:var(--text-primary); }
+.filters button.active { background:var(--c-accent); color:var(--bg-deep); border-color:var(--c-accent); font-weight:bold; }
+.result-count { font-size:12px; color:var(--text-muted); margin-bottom:12px; }
 
-/* === Comp Cards === */
-.comp-card { background:#161625; border-radius:10px; padding:16px 20px; margin-bottom:12px; border-left:3px solid #f0c060; }
-.comp-card h3 { color:#f0c060; font-size:16px; margin-bottom:6px; }
-.comp-card .meta { font-size:12px; color:#888; margin-bottom:8px; }
+.comp-card { background:var(--bg-card); border-radius:var(--r-lg); padding:16px 20px; margin-bottom:12px; border-left:3px solid var(--c-accent); backdrop-filter:blur(4px); }
+.comp-card.accent-green { border-left-color:var(--c-positive); }
+.comp-card.accent-blue { border-left-color:var(--c-blue); }
+.comp-card h3 { color:var(--c-accent); font-size:16px; margin-bottom:6px; text-shadow:var(--shadow-text); }
+.comp-card .stat-big { font-size:28px; font-weight:bold; }
+.comp-card .stat-big.green { color:var(--c-positive); }
+.comp-card .stat-big.gold { color:var(--c-accent); }
+.comp-card .stat-sub { font-size:12px; color:var(--text-muted); }
+.comp-card .meta { font-size:12px; color:var(--text-muted); margin-bottom:8px; }
 .comp-card .meta span { margin-right:16px; }
+
+.mini-board { display:flex; gap:6px; align-items:center; margin:12px 0; flex-wrap:wrap; }
+.mini-slot { width:64px; height:88px; border-radius:var(--r-md); background:var(--bg-deep); border:1px solid var(--border-subtle); position:relative; overflow:hidden; cursor:pointer; transition:border-color var(--ease); flex-shrink:0; }
+.mini-slot:hover { border-color:var(--c-accent); }
+.mini-slot.core { border-color:var(--c-accent); border-width:2px; }
+.mini-slot img { width:100%; height:100%; object-fit:cover; }
+.mini-slot .ms-name { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.8); font-size:9px; color:var(--text-primary); padding:2px 4px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mini-slot .ms-overflow { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); font-size:16px; color:var(--text-secondary); font-weight:bold; }
+.mini-slot .ms-core-badge { position:absolute; top:2px; right:2px; background:var(--c-accent); color:var(--bg-deep); font-size:8px; padding:0 3px; border-radius:2px; font-weight:bold; }
+.comp-card .actions { margin-top:10px; display:flex; gap:8px; }
+.comp-card .actions a { font-size:12px; color:var(--text-muted); text-decoration:none; transition:color var(--ease); }
+.comp-card .actions a:hover { color:var(--c-accent); }
 .comp-card .cards-list { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
-.comp-card .cards-list .cc { background:#0f0f1a; padding:4px 10px; border-radius:4px; font-size:12px; color:#ccc; cursor:pointer; }
-.comp-card .cards-list .cc:hover { background:#f0c060; color:#0f0f1a; }
-.comp-card .tips { font-size:12px; color:#aaa; }
+.comp-card .cards-list .cc { background:var(--bg-deep); padding:4px 10px; border-radius:var(--r-sm); font-size:12px; color:var(--text-primary); cursor:pointer; transition:all var(--ease); }
+.comp-card .cards-list .cc:hover { background:var(--c-accent); color:var(--bg-deep); }
+.comp-card .tips { font-size:12px; color:var(--text-secondary); }
 .comp-card .tips li { margin:3px 0 3px 18px; }
 
-/* === Placement Distribution === */
 .placement-bars { display:flex; gap:2px; align-items:flex-end; height:36px; }
-.placement-bars .pb { flex:1; border-radius:2px 2px 0 0; min-width:8px; transition:height .3s; }
+.placement-bars .pb { flex:1; border-radius:2px 2px 0 0; min-width:8px; transition:height 0.3s ease; }
 .pb.f1 { background:#4caf50; } .pb.f2 { background:#8bc34a; }
 .pb.f3 { background:#cddc39; } .pb.f4 { background:#ffc107; }
 .pb.f5 { background:#ff9800; } .pb.f6 { background:#f44336; }
 .pb.f7 { background:#9c27b0; } .pb.f8 { background:#607d8b; }
 
-/* === Modal === */
-#modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; justify-content:center; align-items:center; }
+#modal-overlay { display:none; position:fixed; inset:0; background:var(--bg-overlay); z-index:100; justify-content:center; align-items:center; }
 #modal-overlay.show { display:flex; }
-#modal { background:#1a1a2e; border:1px solid #3a3a4a; border-radius:12px; padding:24px; max-width:580px; width:90%; max-height:82vh; overflow-y:auto; position:relative; }
-#modal .close { position:absolute; top:10px; right:16px; background:none; border:none; color:#888; font-size:22px; cursor:pointer; }
-#modal .close:hover { color:#f0c060; }
-#modal img { max-width:200px; border-radius:8px; margin-bottom:12px; }
-#modal h2 { color:#f0c060; font-size:20px; margin-bottom:4px; }
-#modal h3 { color:#888; font-size:13px; font-weight:normal; margin-bottom:12px; }
+#modal { background:var(--bg-panel); border:1px solid var(--border-subtle); border-radius:var(--r-lg); padding:24px; max-width:580px; width:90%; max-height:82vh; overflow-y:auto; position:relative; backdrop-filter:blur(12px); }
+#modal .close { position:absolute; top:10px; right:16px; background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; transition:color var(--ease); }
+#modal .close:hover { color:var(--c-accent); }
+#modal img { max-width:200px; border-radius:var(--r-md); margin-bottom:12px; }
+#modal h2 { color:var(--c-accent); font-size:20px; margin-bottom:4px; text-shadow:var(--shadow-text); }
+#modal h3 { color:var(--text-muted); font-size:13px; font-weight:normal; margin-bottom:12px; }
 #modal .detail-row { display:flex; gap:8px; margin:8px 0; flex-wrap:wrap; }
-#modal .detail-tag { background:#0f0f1a; padding:3px 10px; border-radius:4px; font-size:12px; display:inline-block; margin:2px; }
-#modal .detail-tag.clickable { cursor:pointer; }
-#modal .detail-tag.clickable:hover { background:#f0c060; color:#0f0f1a; }
-#modal .detail-text { font-size:13px; line-height:1.7; color:#bbb; margin:10px 0; padding:10px; background:#0f0f1a; border-radius:6px; }
-#modal .section-title { font-size:12px; color:#f0c060; font-weight:bold; margin:12px 0 4px; text-transform:uppercase; letter-spacing:1px; }
+#modal .detail-tag { background:var(--bg-deep); padding:3px 10px; border-radius:var(--r-sm); font-size:12px; display:inline-block; margin:2px; }
+#modal .detail-tag.clickable { cursor:pointer; transition:all var(--ease); }
+#modal .detail-tag.clickable:hover { background:var(--c-accent); color:var(--bg-deep); }
+#modal .detail-text { font-size:13px; line-height:1.7; color:var(--text-secondary); margin:10px 0; padding:10px; background:var(--bg-deep); border-radius:var(--r-md); }
+#modal .section-title { font-size:12px; color:var(--c-accent); font-weight:bold; margin:12px 0 4px; text-transform:uppercase; letter-spacing:1px; }
 
-/* === Skeleton === */
+.modal-section { margin-top:12px; border:1px solid var(--border-subtle); border-radius:var(--r-md); overflow:hidden; }
+.modal-section .section-header { padding:8px 12px; background:var(--bg-card); color:var(--text-secondary); font-size:12px; cursor:pointer; user-select:none; transition:background var(--ease); display:flex; justify-content:space-between; align-items:center; }
+.modal-section .section-header:hover { background:var(--bg-hover); color:var(--c-accent); }
+.modal-section .section-header.collapsed { border-bottom:none; }
+.modal-section .section-body { padding:8px 12px; transition:max-height 0.25s ease, padding 0.25s ease; max-height:600px; overflow:hidden; }
+.modal-section .section-body.collapsed { max-height:0; padding-top:0; padding-bottom:0; }
+
 .skeleton { animation:pulse 1.5s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity:.3; } 50% { opacity:.6; } }
-.skel-row { height:40px; background:#1e1e30; margin-bottom:4px; border-radius:4px; }
-.skel-cell { height:180px; background:#1e1e30; border-radius:8px; }
+.skel-row { height:40px; background:var(--bg-hover); margin-bottom:4px; border-radius:var(--r-sm); }
+.skel-cell { height:180px; background:var(--bg-hover); border-radius:var(--r-lg); }
 
-/* === Scrollbar === */
 ::-webkit-scrollbar { width:6px; }
-::-webkit-scrollbar-track { background:#0f0f1a; }
-::-webkit-scrollbar-thumb { background:#2a2a3a; border-radius:3px; }
+::-webkit-scrollbar-track { background:var(--bg-deep); }
+::-webkit-scrollbar-thumb { background:var(--border-subtle); border-radius:3px; }
 
-/* === States === */
-.empty { text-align:center; padding:60px 20px; color:#555; }
-.empty .hint { font-size:13px; color:#444; margin-top:8px; }
+.empty { text-align:center; padding:60px 20px; color:var(--text-muted); }
+.empty .hint { font-size:13px; color:var(--text-muted); margin-top:8px; }
+.section-subhead { margin-top:24px; margin-bottom:12px; color:var(--text-secondary); font-size:14px; }
+.hero-icon { width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle; }
+.hero-icon-sm { width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px; }
+tr.clickable { cursor:pointer; }
 </style>
 </head>
 <body>
@@ -117,10 +159,14 @@ body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background:#0f
     <a href="#powers" data-tab="powers"><span class="icon">✨</span> 技能/饰品</a>
     <a href="#companions" data-tab="companions"><span class="icon">🐾</span> 伙伴/任务</a>
     <a href="#comps" data-tab="comps"><span class="icon">📊</span> 流派攻略</a>
+    <a href="#predict" data-tab="predict"><span class="icon">🎯</span> 胜率预测</a>
     <a href="#other" data-tab="other"><span class="icon">🌀</span> 异变/时光</a>
     <a href="#search" data-tab="search"><span class="icon">🔍</span> 全局搜索</a>
   </nav>
   <div class="stats-bar" id="stats-bar">加载中...</div>
+  <div style="padding:8px 16px;border-top:1px solid var(--border-subtle);text-align:center;">
+    <button onclick="doRefresh()" style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-muted);font-size:11px;padding:4px 12px;cursor:pointer;transition:all var(--ease);">🔄 刷新数据</button>
+  </div>
 </aside>
 
 <div id="main">
@@ -153,35 +199,109 @@ const $statsBar = $('#stats-bar');
 // =============================================================================
 const STORE = {};
 
-async function fetchAll() {
-  const ep = u => fetch(u).then(r => r.json());
-  const [cards, heroes, minions, trinkets, companions, qr,
-         anomalies, timewarps, heroStats, heroPowers, comps, trinketTips, heroStrats,
-         playerHeroes, playerSummary] =
-    await Promise.all([
-      ep('/api/cards'), ep('/api/heroes'), ep('/api/minions'),
-      ep('/api/trinkets'), ep('/api/companions'), ep('/api/quests_rewards'),
-      ep('/api/anomalies'), ep('/api/timewarps'), ep('/api/hero_stats'),
-      ep('/api/hero_powers'), ep('/api/comps'), ep('/api/trinket_tips'),
-      ep('/api/hero_strategies'), ep('/api/player/heroes'), ep('/api/player/summary'),
+const ep = u => fetch(u).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); });
+let _dataLoaded = false;
+let _playerLoading = false;
+let _stratsLoading = false;
+let _fetchError = null;
+let _playerError = null;
+let _stratsError = null;
+
+async function fetchBase() {
+  try {
+    const [cards, heroes, minions, trinkets, companions, qr,
+           anomalies, timewarps, heroStats, heroPowers, comps] =
+      await Promise.all([
+        ep('/api/cards'), ep('/api/heroes'), ep('/api/minions'),
+        ep('/api/trinkets'), ep('/api/companions'), ep('/api/quests_rewards'),
+        ep('/api/anomalies'), ep('/api/timewarps'), ep('/api/hero_stats'),
+        ep('/api/hero_powers'), ep('/api/comps'),
+      ]);
+
+    Object.assign(STORE, {
+      cards, heroes, minions, trinkets, companions,
+      quests: qr.quests || [], rewards: qr.rewards || [],
+      anomalies, timewarps, heroStats, heroPowers, comps,
+    });
+
+    // Build lookup indexes
+    STORE.cardById = {};
+    cards.forEach(c => STORE.cardById[c.str_id] = c);
+    STORE.heroById = {};
+    heroes.forEach(h => STORE.heroById[h.str_id] = h);
+
+    _fetchError = null;
+    _dataLoaded = true;
+  } catch (e) {
+    _fetchError = `数据加载失败: ${e.message}`;
+    console.error('fetchBase:', e);
+  }
+}
+
+async function fetchPlayerData() {
+  if (_playerLoading) return;
+  _playerLoading = true;
+  try {
+    const [playerHeroes, playerSummary, playerRecent, playerCards] = await Promise.all([
+      ep('/api/player/heroes'), ep('/api/player/summary'),
+      ep('/api/player/recent'), ep('/api/player/cards'),
     ]);
+    Object.assign(STORE, { playerHeroes, playerSummary, playerRecent, playerCards });
+    $statsBar.innerHTML = `卡牌 ${STORE.cards.length} · 英雄 ${STORE.heroes.length} · 随从 ${STORE.minions.length}<br>流派 ${STORE.comps.length} · 环境数据 ${STORE.heroStats.length} 英雄 · 个人对局 ${playerSummary.total_games || 0}`;
+    _playerError = null;
+  } catch (e) {
+    _playerError = `个人数据加载失败: ${e.message}`;
+    console.error('fetchPlayerData:', e);
+  } finally { _playerLoading = false; }
+}
 
-  Object.assign(STORE, {
-    cards, heroes, minions, trinkets, companions,
-    quests: qr.quests || [], rewards: qr.rewards || [],
-    anomalies, timewarps, heroStats, heroPowers,
-    comps, trinketTips,
-    heroTips: heroStrats.tips || {}, curves: heroStrats.curves || [],
-    playerHeroes, playerSummary,
-  });
+async function fetchStrategyData() {
+  if (_stratsLoading) return;
+  _stratsLoading = true;
+  try {
+    const [trinketTips, heroStrats] = await Promise.all([
+      ep('/api/trinket_tips'), ep('/api/hero_strategies'),
+    ]);
+    Object.assign(STORE, {
+      trinketTips,
+      heroTips: heroStrats.tips || {}, curves: heroStrats.curves || [],
+    });
+    _stratsError = null;
+  } catch (e) {
+    _stratsError = `攻略数据加载失败: ${e.message}`;
+    console.error('fetchStrategyData:', e);
+  } finally { _stratsLoading = false; }
+}
 
-  $statsBar.innerHTML = `卡牌 ${cards.length} · 英雄 ${heroes.length} · 随从 ${minions.length}<br>流派 ${comps.length} · 环境数据 ${heroStats.length} 英雄 · 个人对局 ${playerSummary.total_games || 0}`;
+async function ensurePlayerData() { if (!STORE.playerSummary && !_playerError) await fetchPlayerData(); }
+async function ensureStrategyData() { if (!STORE.trinketTips && !_stratsError) await fetchStrategyData(); }
 
-  // Build lookup indexes
-  STORE.cardById = {};
-  cards.forEach(c => STORE.cardById[c.str_id] = c);
-  STORE.heroById = {};
-  heroes.forEach(h => STORE.heroById[h.str_id] = h);
+function refreshAll() {
+  _playerError = null; _stratsError = null; _fetchError = null;
+  return Promise.all([
+    fetchBase(),
+    STORE.playerSummary ? fetchPlayerData() : Promise.resolve(),
+    STORE.trinketTips ? fetchStrategyData() : Promise.resolve(),
+  ]);
+}
+
+async function doRefresh() {
+  const btn = event.target;
+  btn.textContent = '⏳ 刷新中...';
+  btn.disabled = true;
+  await refreshAll();
+  viewCache = {};
+  if (!_fetchError) activateTab(currentTab);
+  else $content.innerHTML = errorBanner(_fetchError);
+  btn.textContent = '🔄 刷新数据';
+  btn.disabled = false;
+}
+
+function errorBanner(msg) {
+  return `<div style="text-align:center;padding:40px 20px;">
+    <div style="color:var(--c-danger);font-size:16px;margin-bottom:12px;">⚠️ ${esc(msg)}</div>
+    <button onclick="refreshAll().then(()=>{viewCache={};activateTab(currentTab)})" style="padding:8px 20px;background:var(--c-accent);color:var(--bg-deep);border:none;border-radius:var(--r-md);font-size:13px;font-weight:bold;cursor:pointer;">🔄 重试</button>
+  </div>`;
 }
 
 // =============================================================================
@@ -355,15 +475,22 @@ const TABS = {
       </div>`;
 
       if (mode === 'personal') {
-        if (!STORE.playerHeroes || !STORE.playerHeroes.length) {
+        if (!STORE.playerHeroes) {
+          if (_playerError) {
+            html += errorBanner(_playerError);
+          } else {
+            html += '<div class="empty skeleton"><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div></div>';
+            ensurePlayerData().then(() => { viewCache.heroes = null; if (currentTab === 'heroes') activateTab('heroes'); });
+          }
+        } else if (!STORE.playerHeroes.length) {
           html += '<div class="empty">暂无个人对局数据<div class="hint">使用 POST /api/games 记录对局以查看个人统计</div></div>';
         } else {
           let list = STORE.playerHeroes;
           if (q) list = list.filter(h => h.name_cn.toLowerCase().includes(q));
           const rows = list.map((h, i) => {
             const hero = STORE.heroById[h.hero_card_id];
-            const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
-            return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
+            const img = hero ? `<img src="${esc(hero.img)}" class="hero-icon" onerror="this.style.display='none'">` : '';
+            return `<tr class="clickable" data-cid="${h.hero_card_id}">
               <td class="rank">${i + 1}</td>
               <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
               <td>${h.games_played}</td>
@@ -383,9 +510,9 @@ const TABS = {
         else {
           const rows = list.map((h, i) => {
             const hero = STORE.heroById[h.hero_card_id];
-            const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
+            const img = hero ? `<img src="${esc(hero.img)}" class="hero-icon" onerror="this.style.display='none'">` : '';
             const bars = placementBarsHTML(h.placements || []);
-            return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
+            return `<tr class="clickable" data-cid="${h.hero_card_id}">
               <td class="rank">${i + 1}</td>
               <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
               <td>${h.avg_position.toFixed(2)}</td>
@@ -406,15 +533,111 @@ const TABS = {
   player: {
     filtersKey() { return '_'; },
     render(q) {
-      if (!STORE.playerSummary || !STORE.playerSummary.total_games) {
-        return '<div class="empty">暂无个人对局数据<div class="hint">使用 POST /api/games 记录对局以查看个人统计</div></div>';
-      }
       const s = STORE.playerSummary;
-      let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">';
-      html += `<div class="comp-card" style="border-left-color:#4caf50;"><h3>总局数</h3><div style="font-size:28px;color:#4caf50;font-weight:bold;">${s.total_games || 0}</div></div>`;
-      html += `<div class="comp-card" style="border-left-color:#f0c060;"><h3>最爱英雄</h3><div style="font-size:16px;color:#f0c060;">${esc(s.favorite_hero_name || '-')}</div></div>`;
-      html += `<div class="comp-card" style="border-left-color:#2196F3;"><h3>最佳英雄</h3><div style="font-size:16px;">${esc(s.best_hero_name || '-')}</div><div class="sub" style="font-size:12px;color:#888;">均排名 ${s.best_hero_avg || '-'}</div></div>`;
+      const loading = !s;
+
+      let html = '';
+
+      // Game recording form
+      html += `<details style="margin-bottom:16px;background:var(--bg-card);border-radius:var(--r-lg);padding:12px 16px;border:1px solid var(--border-subtle);">
+        <summary style="cursor:pointer;color:var(--text-secondary);font-size:13px;">📝 手动记录一局</summary>
+        <div id="record-form" style="margin-top:10px;display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+          <div style="position:relative;">
+            <input type="text" id="rec-hero" placeholder="搜索英雄..." autocomplete="off"
+              style="padding:6px 10px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-primary);font-size:12px;width:180px;">
+            <div id="rec-hero-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--r-md);max-height:200px;overflow-y:auto;z-index:10;"></div>
+          </div>
+          <select id="rec-placement" style="padding:6px 10px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-primary);font-size:12px;">
+            <option value="">排名</option>
+            ${[1,2,3,4,5,6,7,8].map(i => `<option value="${i}">#${i}</option>`).join('')}
+          </select>
+          <select id="rec-comp" style="padding:6px 10px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-primary);font-size:12px;max-width:140px;">
+            <option value="">流派(可选)</option>
+            ${(STORE.comps || []).map(c => `<option value="${esc(c.name || '')}">${esc(c.name || '')}</option>`).join('')}
+          </select>
+          <input type="number" id="rec-mmr" placeholder="MMR变化" style="padding:6px 10px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-primary);font-size:12px;width:100px;">
+          <button onclick="recordGame()" style="padding:6px 16px;background:var(--c-accent);color:var(--bg-deep);border:none;border-radius:var(--r-md);font-size:12px;font-weight:bold;cursor:pointer;">提交</button>
+          <span id="rec-msg" style="font-size:11px;color:var(--c-positive);display:none;"></span>
+        </div>
+      </details>`;
+
+      if (loading) {
+        if (_playerError) {
+          html += errorBanner(_playerError);
+        } else {
+          html += '<div class="empty skeleton"><div style="max-width:400px;margin:0 auto;">' +
+            Array(4).fill('<div class="skel-row"></div>').join('') + '</div></div>';
+          ensurePlayerData().then(() => { viewCache.player = null; if (currentTab === 'player') activateTab('player'); });
+        }
+        return html;
+      }
+
+      if (!s.total_games) {
+        html += '<div class="empty">暂无个人对局数据<div class="hint">通过上方表单或导入 Firestone 数据开始记录</div></div>';
+        return html;
+      }
+
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">';
+      html += `<div class="comp-card accent-green"><h3>总局数</h3><div class="stat-big green">${s.total_games || 0}</div></div>`;
+      html += `<div class="comp-card"><h3>最爱英雄</h3><div class="stat-big gold">${esc(s.favorite_hero_name || '-')}</div></div>`;
+      html += `<div class="comp-card accent-blue"><h3>最佳英雄</h3><div style="font-size:16px;">${esc(s.best_hero_name || '-')}</div><div class="stat-sub">均排名 ${s.best_hero_avg || '-'}</div></div>`;
+      html += `<div class="comp-card"><h3>前四率</h3><div class="stat-big gold">${(s.top4_rate*100).toFixed(1)}%</div></div>`;
+      html += `<div class="comp-card accent-green"><h3>吃鸡率</h3><div class="stat-big green">${(s.top1_rate*100).toFixed(1)}%</div></div>`;
       html += '</div>';
+
+      // Top cards
+      if (STORE.playerCards && STORE.playerCards.length) {
+        const topCards = STORE.playerCards.slice(0, 20);
+        html += '<h3 class="section-subhead">🃏 常用终局卡牌</h3>';
+        html += '<div class="card-grid" style="grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));">';
+        html += topCards.map(c => {
+          const img = c.img ? `<img src="${esc(c.img)}" onerror="this.style.display='none'" loading="lazy">` : '';
+          return `<div class="card-cell" data-cid="${c.card_id}" style="padding:8px;">
+            ${img}
+            <div class="name" style="font-size:11px;">${esc(c.name_cn)}</div>
+            <div class="sub">${c.count}次</div>
+          </div>`;
+        }).join('');
+        html += '</div>';
+      }
+
+      // Personal hero stats table
+      if (STORE.playerHeroes && STORE.playerHeroes.length) {
+        html += '<h3 class="section-subhead">👑 英雄表现排行</h3>';
+        html += '<table class="hero-table"><thead><tr><th>#</th><th>英雄</th><th>场次</th><th>均排名</th><th>前四率</th><th>吃鸡</th></tr></thead><tbody>';
+        html += STORE.playerHeroes.map((h, i) => {
+          const hero = STORE.heroById[h.hero_card_id];
+          const img = hero && hero.img ? `<img src="${esc(hero.img)}" class="hero-icon-sm" onerror="this.style.display='none'">` : '';
+          return `<tr class="clickable" data-cid="${h.hero_card_id}">
+            <td class="rank">${i + 1}</td>
+            <td>${img}${esc(h.name_cn)}</td>
+            <td>${h.games_played}</td>
+            <td>${h.avg_placement.toFixed(2)}</td>
+            <td>${h.top4_rate}%</td>
+            <td>${h.top1_count}</td>
+          </tr>`;
+        }).join('');
+        html += '</tbody></table>';
+      }
+
+      // Recent games
+      if (STORE.playerRecent && STORE.playerRecent.length) {
+        html += '<h3 class="section-subhead">📋 最近对局</h3>';
+        html += '<table class="hero-table"><thead><tr><th>日期</th><th>英雄</th><th>排名</th><th>MMR变化</th></tr></thead><tbody>';
+        html += STORE.playerRecent.map(r => {
+          const img = r.hero_img ? `<img src="${esc(r.hero_img)}" class="hero-icon-sm" onerror="this.style.display='none'">` : '';
+          const mmrColor = r.mmr_change > 0 ? 'var(--c-positive)' : r.mmr_change < 0 ? 'var(--c-danger)' : 'var(--text-muted)';
+          const mmrSign = r.mmr_change > 0 ? '+' : '';
+          const date = (r.played_at || '').slice(0, 10);
+          return `<tr class="clickable" data-cid="${r.hero_card_id}">
+            <td style="color:var(--text-muted);font-size:12px;">${date}</td>
+            <td>${img}${esc(r.hero_name)}</td>
+            <td style="font-weight:bold;">#${r.placement}</td>
+            <td style="color:${mmrColor};">${mmrSign}${r.mmr_change}</td>
+          </tr>`;
+        }).join('');
+        html += '</tbody></table>';
+      }
       return html;
     },
   },
@@ -445,7 +668,8 @@ const TABS = {
       if (q) list = list.filter(m => m.name_cn.toLowerCase().includes(q));
 
       html += `<div class="result-count">${list.length} 张随从</div>`;
-      html += `<div class="card-grid">${list.map(minionCellHTML).join('')}</div>`;
+      if (list.length) html += `<div class="card-grid">${list.map(minionCellHTML).join('')}</div>`;
+      else html += '<div class="empty">没有匹配的随从<div class="hint">尝试调整星级或种族筛选条件</div></div>';
       return html;
     },
   },
@@ -522,13 +746,17 @@ const TABS = {
       if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
 
       html += `<div class="result-count">${list.length} 张</div>`;
-      html += `<div class="card-grid">${list.map(c => {
-        let extra = '';
-        if (c.mana_cost) extra += `<div class="sub">💰${c.mana_cost} 费</div>`;
-        if (c.lesser !== undefined && c.lesser !== null) extra += `<div class="sub">${c.lesser ? '🔹低阶' : '🔸高阶'}</div>`;
-        if (c.tier && f.cat === 'timewarps') extra += `<span class="tier">⭐${c.tier}</span>`;
-        return cardCellHTML(c, extra);
-      }).join('')}</div>`;
+      if (list.length) {
+        html += `<div class="card-grid">${list.map(c => {
+          let extra = '';
+          if (c.mana_cost) extra += `<div class="sub">💰${c.mana_cost} 费</div>`;
+          if (c.lesser !== undefined && c.lesser !== null) extra += `<div class="sub">${c.lesser ? '🔹低阶' : '🔸高阶'}</div>`;
+          if (c.tier && f.cat === 'timewarps') extra += `<span class="tier">⭐${c.tier}</span>`;
+          return cardCellHTML(c, extra);
+        }).join('')}</div>`;
+      } else {
+        html += '<div class="empty">没有匹配的卡牌<div class="hint">尝试调整筛选条件</div></div>';
+      }
       return html;
     },
   },
@@ -552,10 +780,14 @@ const TABS = {
       if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
 
       html += `<div class="result-count">${list.length} 张</div>`;
-      html += `<div class="card-grid">${list.map(c => {
-        let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
-        return cardCellHTML(c, extra);
-      }).join('')}</div>`;
+      if (list.length) {
+        html += `<div class="card-grid">${list.map(c => {
+          let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
+          return cardCellHTML(c, extra);
+        }).join('')}</div>`;
+      } else {
+        html += '<div class="empty">没有匹配的卡牌<div class="hint">尝试切换分类筛选</div></div>';
+      }
       return html;
     },
   },
@@ -571,24 +803,72 @@ const TABS = {
       );
       if (!list.length) return '<div class="empty">暂无数据</div>';
 
+      const diffMap = {Easy:'简单', Medium:'中等', Hard:'困难'};
+      const statusBadge = s => s === 'CORE' ? 'core' : '';
+
       return list.map(c => {
+        const cards = (c.cards || []).filter(cc => {
+          const card = STORE.cardById[cc.cardId || cc];
+          return card && card.img;  // only show cards with images
+        });
+        const displayCards = cards.slice(0, 7);
+        const overflow = cards.length > 7 ? cards.length - 7 : 0;
+
+        // Mini board HTML
+        let boardHTML = '<div class="mini-board">';
+        displayCards.forEach(cc => {
+          const cid = cc.cardId || cc;
+          const card = STORE.cardById[cid];
+          const img = card ? card.img : '';
+          const name = card ? card.name_cn : (cc.name || '?');
+          boardHTML += `<div class="mini-slot ${statusBadge(cc.status)}" data-cid="${cid}" title="${esc(name)}">
+            ${img ? `<img src="${esc(img)}" onerror="this.style.display='none'" loading="lazy">` : ''}
+            <div class="ms-name">${esc(name)}</div>
+            ${cc.status === 'CORE' ? '<div class="ms-core-badge">核</div>' : ''}
+          </div>`;
+        });
+        // Empty placeholder slots
+        for (let i = displayCards.length; i < 7; i++) {
+          boardHTML += `<div class="mini-slot" style="border-style:dashed;opacity:0.4;"></div>`;
+        }
+        if (overflow > 0) {
+          boardHTML += `<div class="mini-slot"><div class="ms-overflow">+${overflow}</div></div>`;
+        }
+        boardHTML += '</div>';
+
         const tips = c.tips || [];
         return `<div class="comp-card">
-          <h3>${esc(c.name || '未知流派')}</h3>
+          <h3>${esc(c.name || '未知流派')} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">${c.power_level || '?'}级</span></h3>
           <div class="meta">
-            <span>📌 ${esc(c.power_level || '?')}</span>
-            <span>🎯 ${esc(c.difficulty || '?')}</span>
-            <span>📋 ${esc(c.patch || '?')}</span>
+            <span>🎯 ${diffMap[c.difficulty] || c.difficulty || '?'}</span>
             ${c.forced_tribes && c.forced_tribes.length ? `<span>🏹 ${c.forced_tribes.join(', ')}</span>` : ''}
+            <span>${cards.length}张核心卡</span>
           </div>
-          <div class="cards-list">${(c.cards || []).map(cc => {
-            const cid = cc.cardId || cc;
-            const card = STORE.cardById[cid];
-            return card ? `<span class="cc" data-cid="${cid}">${esc(card.name_cn || cc.name)}</span>` : '';
-          }).join('')}</div>
-          ${tips.length ? `<ul class="tips">${tips.map(t => `<li>${esc(t.tip || t.summary || t)}${t.author ? ` <span style="color:#666;font-size:10px;">— ${esc(t.author)}</span>` : ''}</li>`).join('')}</ul>` : ''}
+          ${boardHTML}
+          ${tips.length ? `<details style="margin-top:8px;"><summary style="color:var(--text-muted);font-size:12px;cursor:pointer;">💡 攻略提示 (${tips.length}条)</summary><ul class="tips">${tips.map(t => `<li>${esc(t.tip || t.summary || t)}${t.author ? ` <span style="color:var(--text-muted);font-size:10px;">— ${esc(t.author)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
+          <div class="actions">
+            <a href="/team-builder#${(c.cards||[]).map(cc=>cc.cardId||cc).filter(Boolean).join(',')}" target="_blank">📋 加载到阵容编辑器 (${(c.cards||[]).length}张)</a>
+          </div>
         </div>`;
       }).join('');
+    },
+  },
+
+  // ----- Predict -----
+  predict: {
+    filtersKey() { return '_'; },
+    render(q) {
+      if (!STORE.heroes || !STORE.heroes.length) return '<div class="empty">加载中...</div>';
+
+      let html = '<div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;">';
+      html += `<select id="pred-hero" onchange="predictHero()" style="padding:6px 10px;background:var(--bg-input);border:1px solid var(--border-subtle);border-radius:var(--r-md);color:var(--text-primary);font-size:13px;max-width:200px;">
+        <option value="">选择英雄...</option>
+        ${STORE.heroes.map(h => `<option value="${h.str_id}">${esc(h.name_cn)}</option>`).join('')}
+      </select>`;
+      html += '</div>';
+
+      html += '<div id="predict-result"><div class="empty">选择英雄查看个人胜率预测<div class="hint">基于你的历史对局数据分析</div></div></div>';
+      return html;
     },
   },
 
@@ -606,10 +886,14 @@ const TABS = {
       if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
 
       html += `<div class="result-count">${list.length} 张</div>`;
-      html += `<div class="card-grid">${list.map(c => {
-        let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
-        return cardCellHTML(c, extra);
-      }).join('')}</div>`;
+      if (list.length) {
+        html += `<div class="card-grid">${list.map(c => {
+          let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
+          return cardCellHTML(c, extra);
+        }).join('')}</div>`;
+      } else {
+        html += '<div class="empty">没有匹配的卡牌<div class="hint">尝试切换分类筛选</div></div>';
+      }
       return html;
     },
   },
@@ -643,6 +927,21 @@ const TABS = {
 // =============================================================================
 // Card Detail Modal
 // =============================================================================
+let _compByCard = null;
+function compsByCard() {
+  if (_compByCard) return _compByCard;
+  _compByCard = {};
+  (STORE.comps || []).forEach(comp => {
+    (comp.cards || []).forEach(cc => {
+      const cid = cc.cardId || cc;
+      if (!cid) return;
+      if (!_compByCard[cid]) _compByCard[cid] = [];
+      if (!_compByCard[cid].find(c => c.name === comp.name)) _compByCard[cid].push(comp);
+    });
+  });
+  return _compByCard;
+}
+
 function showDetail(strId) {
   const card = STORE.cardById[strId];
   if (!card) return;
@@ -652,55 +951,119 @@ function showDetail(strId) {
   const ttip = STORE.trinketTips[strId];
   const typeNames = { hero:'英雄', minion:'随从', hero_power:'英雄技能', companion:'伙伴',
     trinket:'饰品', quest:'任务', reward:'任务奖励', anomaly:'异变', timewarp:'时光法术', tavern:'酒馆法术' };
+  const ctype = typeNames[card.card_type] || card.card_type;
 
-  let parts = '';
-
-  // Hero stats
-  if (heroStat) {
-    parts += `<div class="detail-row">
-      <span class="detail-tag">🏆 均排名 ${heroStat.avg_position.toFixed(2)}</span>
-      <span class="detail-tag">📊 ${heroStat.data_points.toLocaleString()} 场</span>
-    </div>`;
-    if (heroStat.placements && heroStat.placements.length) {
-      parts += placementBarsHTML(heroStat.placements, { labels: true, style: 'margin:8px 0', minHeight: 'min-height:24px' });
-    }
-  }
-
-  // Stats row
-  if (card.armor) parts += `<span class="detail-tag">🛡 护甲 ${card.armor}</span>`;
-  if (card.health && card.card_type === 'hero') parts += `<span class="detail-tag">❤ 血量 ${card.health}</span>`;
+  // --- Stats tags ---
+  let statTags = '';
+  if (card.armor) statTags += `<span class="detail-tag">🛡 护甲 ${card.armor}</span>`;
+  if (card.health && card.card_type === 'hero') statTags += `<span class="detail-tag">❤ 血量 ${card.health}</span>`;
   if ((card.card_type === 'minion' || card.card_type === 'companion') && (card.attack || card.health)) {
-    parts += `<span class="detail-tag">⚔${card.attack || 0} / ❤${card.health || 0}</span>`;
+    statTags += `<span class="detail-tag">⚔${card.attack || 0} / ❤${card.health || 0}</span>`;
   }
-  if (card.mana_cost) parts += `<span class="detail-tag">💰 ${card.mana_cost} 费</span>`;
+  if (card.mana_cost) statTags += `<span class="detail-tag">💰 ${card.mana_cost} 费</span>`;
   if (card.lesser !== undefined && card.lesser !== null) {
-    parts += `<span class="detail-tag">${card.lesser ? '🔹 低阶' : '🔸 高阶'}</span>`;
+    statTags += `<span class="detail-tag">${card.lesser ? '🔹 低阶' : '🔸 高阶'}</span>`;
   }
   if (card.minion_types_cn && card.minion_types_cn.length) {
-    parts += `<div class="detail-row">${card.minion_types_cn.map(t => `<span class="detail-tag">${t}</span>`).join('')}</div>`;
+    statTags += `<div class="detail-row">${card.minion_types_cn.map(t => `<span class="detail-tag">${t}</span>`).join('')}</div>`;
+  }
+
+  // --- Sections to build ---
+  let sections = '';
+
+  // Hero personal stats
+  if (card.card_type === 'hero') {
+    const pStats = (STORE.playerHeroes || []).find(h => h.hero_card_id === strId);
+    if (pStats && pStats.games_played > 0) {
+      sections += `<div class="modal-section">
+        <div class="section-header" data-toggle="personal-stats" style="color:var(--c-positive);">👤 我的战绩 (${pStats.games_played}场) ▾</div>
+        <div class="section-body" id="personal-stats">
+          <div class="detail-row">
+            <span class="detail-tag">🏆 均排名 ${pStats.avg_placement.toFixed(2)}</span>
+            <span class="detail-tag">📊 ${pStats.games_played} 场</span>
+            <span class="detail-tag">📈 前四率 ${pStats.top4_rate}%</span>
+            <span class="detail-tag">👑 吃鸡 ${pStats.top1_count}次</span>
+          </div>
+        </div>
+      </div>`;
+    }
+    // Hero comp breakdown placeholder
+      sections += `<div class="modal-section" id="hero-comp-section">
+        <div class="section-header" data-toggle="hero-comp" style="color:var(--c-accent);">📊 流派表现 ▾</div>
+        <div class="section-body" id="hero-comp">
+          <div style="color:var(--text-muted);font-size:12px;padding:8px;">加载中...</div>
+        </div>
+      </div>`;
+  }
+
+  // Hero environment stats
+  if (heroStat) {
+    let bars = '';
+    if (heroStat.placements && heroStat.placements.length) {
+      bars = placementBarsHTML(heroStat.placements, { labels: true, style: 'margin:8px 0', minHeight: 'min-height:24px' });
+    }
+    sections += `<div class="modal-section">
+      <div class="section-header" data-toggle="hero-stats">📊 环境数据 ▾</div>
+      <div class="section-body" id="hero-stats">
+        <div class="detail-row">
+          <span class="detail-tag">🏆 均排名 ${heroStat.avg_position.toFixed(2)}</span>
+          <span class="detail-tag">📊 ${heroStat.data_points.toLocaleString()} 场</span>
+        </div>${bars}
+      </div>
+    </div>`;
+  }
+
+  // Related comps (reverse lookup)
+  const relatedComps = compsByCard()[strId] || [];
+  if (relatedComps.length) {
+    sections += `<div class="modal-section">
+      <div class="section-header" data-toggle="related-comps">📋 所属流派 (${relatedComps.length}) ▾</div>
+      <div class="section-body" id="related-comps">
+        ${relatedComps.map(c => `<span class="detail-tag" style="margin:3px;">${esc(c.name || '未知流派')}</span>`).join('')}
+      </div>
+    </div>`;
   }
 
   // Hero relationships
   if (card.card_type === 'hero') {
     const hero = STORE.heroById[strId];
     if (hero) {
+      let relTags = '';
       if (hero.buddy_id) {
         const buddy = STORE.companions.find(c => c.str_id === hero.buddy_id);
-        if (buddy) parts += `<span class="detail-tag clickable" data-cid="${buddy.str_id}">🐾 伙伴: ${esc(buddy.name_cn)}</span>`;
+        if (buddy) relTags += `<span class="detail-tag clickable" data-cid="${buddy.str_id}">🐾 伙伴: ${esc(buddy.name_cn)}</span>`;
       }
       if (hero.hp_ids) hero.hp_ids.forEach(hpid => {
         const hp = STORE.heroPowers.find(p => p.str_id === hpid);
-        if (hp) parts += `<span class="detail-tag clickable" data-cid="${hp.str_id}">✨ ${esc(hp.name_cn)} ${hp.mana_cost ? `(${hp.mana_cost}费)` : ''}</span>`;
+        if (hp) relTags += `<span class="detail-tag clickable" data-cid="${hp.str_id}">✨ ${esc(hp.name_cn)} ${hp.mana_cost ? `(${hp.mana_cost}费)` : ''}</span>`;
       });
+      if (relTags) {
+        sections += `<div class="modal-section">
+          <div class="section-header" data-toggle="hero-rel">🔗 关联卡牌 ▾</div>
+          <div class="section-body" id="hero-rel">${relTags}</div>
+        </div>`;
+      }
     }
   }
 
-  // Tips
+  // Hero tips
   if (heroTips && heroTips.tips && heroTips.tips.length) {
-    parts += `<div class="section-title">攻略提示</div><ul class="tips">${heroTips.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+    sections += `<div class="modal-section">
+      <div class="section-header" data-toggle="hero-tips">💡 攻略提示 (${heroTips.tips.length}) ▾</div>
+      <div class="section-body" id="hero-tips">
+        <ul class="tips">${heroTips.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+      </div>
+    </div>`;
   }
+
+  // Trinket tips
   if (ttip && ttip.tips && ttip.tips.length) {
-    parts += `<div class="section-title">饰品提示</div><ul class="tips">${ttip.tips.map(t => `<li>${esc(t.summary || t.tip || '')}</li>`).join('')}</ul>`;
+    sections += `<div class="modal-section">
+      <div class="section-header" data-toggle="trinket-tips">💎 饰品提示 (${ttip.tips.length}) ▾</div>
+      <div class="section-body" id="trinket-tips">
+        <ul class="tips">${ttip.tips.map(t => `<li>${esc(t.summary || t.tip || '')}</li>`).join('')}</ul>
+      </div>
+    </div>`;
   }
 
   $modal.innerHTML = `
@@ -709,14 +1072,56 @@ function showDetail(strId) {
       ${card.img ? `<img src="${esc(card.img)}" onerror="this.style.display='none'" style="max-width:200px;border-radius:8px;">` : ''}
       <div style="flex:1;min-width:200px;">
         <h2>${esc(card.name_cn)}</h2>
-        <h3>${esc(card.name || '')} · ${typeNames[card.card_type] || card.card_type}</h3>
-        ${card.tier ? `<span class="tier" style="font-size:14px;">⭐${card.tier} 星</span>` : ''}
-        <div style="margin:6px 0;">${parts}</div>
+        <h3>${esc(card.name || '')} · ${ctype}${card.tier ? ` · ⭐${card.tier}星` : ''}</h3>
+        ${statTags ? `<div style="margin:8px 0;">${statTags}</div>` : ''}
         ${card.text_cn ? `<div class="detail-text">${esc(card.text_cn)}</div>` : ''}
+        ${sections}
       </div>
     </div>`;
 
+  // Bind toggle events
+  $modal.querySelectorAll('.section-header').forEach(hdr => {
+    hdr.addEventListener('click', () => {
+      const body = document.getElementById(hdr.dataset.toggle);
+      if (body) {
+        body.classList.toggle('collapsed');
+        hdr.classList.toggle('collapsed');
+      }
+    });
+  });
+
   $modalOverlay.classList.add('show');
+  // Async load hero comp breakdown
+  if (card.card_type === 'hero') {
+    fetch(`/api/player/hero_comps?hero_id=${encodeURIComponent(strId)}`)
+      .then(r => r.json())
+      .then(data => {
+        const container = document.getElementById('hero-comp');
+        if (!container) return;
+        if (!data || !data.length) {
+          container.innerHTML = '<div style="color:var(--text-muted);font-size:12px;padding:8px;">暂无流派数据<div class="hint" style="font-size:11px;">当对局终局阵容与已知流派匹配时（需≥2张核心卡重合），自动统计</div></div>';
+          return;
+        }
+        let html = '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
+        html += '<tr style="color:var(--text-muted);border-bottom:1px solid var(--border-subtle);"><th style="text-align:left;padding:4px 8px;">流派</th><th style="text-align:right;padding:4px 8px;">场次</th><th style="text-align:right;padding:4px 8px;">均排名</th><th style="text-align:right;padding:4px 8px;">前四率</th></tr>';
+        data.forEach(d => {
+          const color = d.avg_placement <= 3.5 ? 'var(--c-positive)' : d.avg_placement <= 4.5 ? 'var(--c-accent)' : 'var(--c-danger)';
+          html += `<tr style="border-bottom:1px solid rgba(26,26,42,0.45);">
+            <td style="padding:4px 8px;">${esc(d.comp_name)}</td>
+            <td style="text-align:right;padding:4px 8px;">${d.games}</td>
+            <td style="text-align:right;padding:4px 8px;color:${color};font-weight:bold;">${d.avg_placement.toFixed(2)}</td>
+            <td style="text-align:right;padding:4px 8px;">${d.top4_rate}%</td>
+          </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+      })
+      .catch(() => {
+        const container = document.getElementById('hero-comp');
+        if (container) container.innerHTML = '<div style="color:var(--text-muted);font-size:12px;padding:8px;">加载失败</div>';
+      });
+  }
+
 }
 
 function closeModal() { $modalOverlay.classList.remove('show'); }
@@ -741,13 +1146,139 @@ $content.addEventListener('click', e => {
 });
 
 // =============================================================================
+// Predict
+// =============================================================================
+async function predictHero() {
+  const heroId = document.getElementById('pred-hero').value;
+  const container = document.getElementById('predict-result');
+  if (!heroId) {
+    container.innerHTML = '<div class="empty">选择英雄查看个人胜率预测<div class="hint">基于你的历史对局数据分析</div></div>';
+    return;
+  }
+
+  container.innerHTML = '<div class="empty skeleton"><div class="skel-row"></div><div class="skel-row"></div></div>';
+
+  try {
+    const resp = await fetch(`/api/player/predict?hero_id=${encodeURIComponent(heroId)}`);
+    const data = await resp.json();
+
+    if (!data.games) {
+      container.innerHTML = `<div class="empty">暂无该英雄的对局数据<div class="hint">${data.msg || ''}</div></div>`;
+      return;
+    }
+
+    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px;">';
+    html += `<div class="comp-card accent-green"><h3>场次</h3><div class="stat-big green">${data.games}</div></div>`;
+    html += `<div class="comp-card"><h3>均排名</h3><div class="stat-big gold">${data.avg_placement.toFixed(2)}</div></div>`;
+    html += `<div class="comp-card accent-green"><h3>前四率</h3><div class="stat-big green">${data.top4_rate}%</div></div>`;
+    html += `<div class="comp-card"><h3>吃鸡率</h3><div class="stat-big gold">${data.top1_rate}%</div></div>`;
+    html += '</div>';
+
+    // Placement distribution
+    html += '<h3 class="section-subhead">📊 排名分布</h3>';
+    html += placementBarsHTML(data.placement_dist, { labels: true, style: 'margin:8px 0;height:48px;', minHeight: 'min-height:32px' });
+
+    // Best comps
+    if (data.best_comps && data.best_comps.length) {
+      html += '<h3 class="section-subhead">🏗️ 最佳流派搭配</h3>';
+      html += '<table class="hero-table"><thead><tr><th>流派</th><th>场次</th><th>均排名</th><th>前四率</th></tr></thead><tbody>';
+      data.best_comps.forEach(d => {
+        const color = d.avg_placement <= 3.5 ? 'var(--c-positive)' : d.avg_placement <= 4.5 ? 'var(--c-accent)' : 'var(--c-danger)';
+        html += `<tr>
+          <td>${esc(d.comp_name)}</td>
+          <td>${d.games}</td>
+          <td style="color:${color};font-weight:bold;">${d.avg_placement.toFixed(2)}</td>
+          <td>${d.top4_rate}%</td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+    }
+
+    container.innerHTML = html;
+  } catch (e) {
+    container.innerHTML = `<div class="empty" style="color:var(--c-danger);">加载失败: ${esc(e.message)}</div>`;
+  }
+}
+
+// =============================================================================
+// Game Recording
+// =============================================================================
+function recordGame() {
+  const heroInput = document.getElementById('rec-hero');
+  const placement = document.getElementById('rec-placement').value;
+  const comp = document.getElementById('rec-comp').value;
+  const mmrChange = parseInt(document.getElementById('rec-mmr').value) || 0;
+  const msg = document.getElementById('rec-msg');
+
+  if (!heroInput._selectedId || !placement) {
+    msg.style.display = 'inline'; msg.style.color = 'var(--c-danger)';
+    msg.textContent = '请选择英雄和排名';
+    return;
+  }
+
+  fetch('/api/games', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ hero_card_id: heroInput._selectedId, placement: parseInt(placement), starting_comp: comp, mmr_change: mmrChange }),
+  }).then(r => r.json()).then(data => {
+    if (data.ok) {
+      msg.style.display = 'inline'; msg.style.color = 'var(--c-positive)';
+      msg.textContent = '已记录！刷新数据中...';
+      setTimeout(() => {
+        refreshAll().then(() => {
+          viewCache = {};
+          const q = $search.value.trim().toLowerCase();
+          $content.innerHTML = TABS[currentTab].render(q);
+          msg.textContent = '已记录 #' + data.game_id;
+        });
+      }, 500);
+    }
+  }).catch(() => {
+    msg.style.display = 'inline'; msg.style.color = 'var(--c-danger)';
+    msg.textContent = '提交失败';
+  });
+}
+
+// Hero autocomplete for record form
+document.addEventListener('input', e => {
+  if (e.target.id !== 'rec-hero') return;
+  const val = e.target.value.trim().toLowerCase();
+  const suggestions = document.getElementById('rec-hero-suggestions');
+  if (!val || val.length < 1) { suggestions.style.display = 'none'; return; }
+  const matches = (STORE.heroes || []).filter(h => h.name_cn.toLowerCase().includes(val)).slice(0, 8);
+  if (!matches.length) { suggestions.style.display = 'none'; return; }
+  suggestions.innerHTML = matches.map(h =>
+    `<div style="padding:6px 10px;cursor:pointer;font-size:12px;color:var(--text-primary);"
+       onmouseover="this.style.background='var(--bg-hover)'"
+       onmouseout="this.style.background='none'"
+       onclick="document.getElementById('rec-hero').value='${esc(h.name_cn)}';document.getElementById('rec-hero')._selectedId='${h.str_id}';document.getElementById('rec-hero-suggestions').style.display='none'">
+       ${esc(h.name_cn)}
+    </div>`
+  ).join('');
+  suggestions.style.display = 'block';
+});
+document.addEventListener('click', e => {
+  if (e.target.id !== 'rec-hero') {
+    document.getElementById('rec-hero-suggestions').style.display = 'none';
+  }
+});
+
+// =============================================================================
 // Boot
 // =============================================================================
 async function boot() {
   $content.innerHTML = '<div class="empty skeleton"><div style="max-width:600px;margin:0 auto;">' +
     Array(6).fill('<div class="skel-row"></div>').join('') + '</div>';
-  await fetchAll();
-  onHashChange(); // renders initial tab from URL hash
+  await fetchBase();
+  if (_fetchError) {
+    $content.innerHTML = errorBanner(_fetchError);
+    return;
+  }
+  $statsBar.innerHTML = `卡牌 ${STORE.cards.length} · 英雄 ${STORE.heroes.length} · 随从 ${STORE.minions.length}<br>流派 ${STORE.comps.length} · 环境数据 ${STORE.heroStats.length} 英雄`;
+  onHashChange();
+  // Preload in background
+  fetchPlayerData();
+  fetchStrategyData();
 }
 boot();
 </script>

@@ -6,6 +6,7 @@ import os
 from .registry import get_registry
 from .meta_registry import get_meta_registry
 from .player_stats import get_player_stats
+from .firestone_names import get_name as fs_name
 
 
 class BoardHandler(http.server.SimpleHTTPRequestHandler):
@@ -46,6 +47,17 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             self._serve_json(self._get_player_cards())
         elif parsed.path == "/api/player/comps":
             self._serve_json(self._get_player_comps())
+        elif parsed.path == "/api/player/recent":
+            self._serve_json(self._get_player_recent())
+        elif parsed.path == "/api/player/hero_comps":
+            qs = urllib.parse.parse_qs(parsed.query)
+            hero_id = qs.get("hero_id", [""])[0]
+            self._serve_json(self._get_player_hero_comps(hero_id))
+        elif parsed.path == "/api/player/predict":
+            qs = urllib.parse.parse_qs(parsed.query)
+            hero_id = qs.get("hero_id", [""])[0]
+            comp = qs.get("comp", [""])[0]
+            self._serve_json(self._get_player_predict(hero_id, comp))
         elif parsed.path == "/" or parsed.path == "/panel":
             self._serve_panel()
         elif parsed.path == "/team-builder":
@@ -156,6 +168,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             "card_type": "trinket",
             "text_cn": c.text_cn, "mana_cost": c.mana_cost,
             "lesser": c.lesser, "img": c.img,
+            "extra": getattr(c, "extra", []),
         } for c in reg.cards.values() if c.card_type == "trinket"]
 
     def _get_companions(self):
@@ -188,6 +201,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             "card_type": "timewarp",
             "text_cn": c.text_cn, "tier": c.tier,
             "lesser": c.lesser, "mana_cost": c.mana_cost, "img": c.img,
+            "extra": getattr(c, "extra", []),
         } for c in reg.cards.values() if c.card_type == "timewarp"]
 
     def _get_hero_stats(self):
@@ -255,13 +269,40 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         stats = ps.get_card_stats()
         for s in stats:
             card = reg.get(s["card_id"])
-            s["name_cn"] = card.name_cn if card else s["card_id"]
+            s["name_cn"] = (card.name_cn if card else None) or fs_name(s["card_id"]) or s["card_id"]
             s["img"] = card.img if card else ""
         return stats
 
     def _get_player_comps(self):
         ps = get_player_stats()
         return ps.get_comp_stats()
+
+    def _get_player_hero_comps(self, hero_id: str):
+        if not hero_id:
+            return []
+        ps = get_player_stats()
+        return ps.get_hero_comp_breakdown(hero_id)
+
+    def _get_player_predict(self, hero_id: str, comp: str):
+        if not hero_id:
+            return {"games": 0, "msg": "请指定英雄"}
+        ps = get_player_stats()
+        reg = get_registry()
+        result = ps.get_prediction(hero_id, comp)
+        card = reg.get(hero_id)
+        result["hero_name"] = card.name_cn if card else hero_id
+        result["hero_img"] = card.img if card else ""
+        return result
+
+    def _get_player_recent(self):
+        ps = get_player_stats()
+        reg = get_registry()
+        rows = ps.get_recent_games(20)
+        for r in rows:
+            card = reg.get(r["hero_card_id"])
+            r["hero_name"] = card.name_cn if card else r["hero_card_id"]
+            r["hero_img"] = card.img if card else ""
+        return rows
 
     def log_message(self, format, *args):
         pass  # suppress logs
