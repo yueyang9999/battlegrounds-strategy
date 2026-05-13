@@ -528,11 +528,12 @@ const TABS = {
             <span>📋 ${esc(c.patch || '?')}</span>
             ${c.forced_tribes && c.forced_tribes.length ? `<span>🏹 ${c.forced_tribes.join(', ')}</span>` : ''}
           </div>
-          <div class="cards-list">${(c.cards || []).map(cid => {
+          <div class="cards-list">${(c.cards || []).map(cc => {
+            const cid = cc.cardId || cc;
             const card = STORE.cardById[cid];
-            return card ? `<span class="cc" data-cid="${cid}">${esc(card.name_cn)}</span>` : '';
+            return card ? `<span class="cc" data-cid="${cid}">${esc(card.name_cn || cc.name)}</span>` : '';
           }).join('')}</div>
-          ${tips.length ? `<ul class="tips">${tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+          ${tips.length ? `<ul class="tips">${tips.map(t => `<li>${esc(t.tip || t.summary || t)}${t.author ? ` <span style="color:#666;font-size:10px;">— ${esc(t.author)}</span>` : ''}</li>`).join('')}</ul>` : ''}
         </div>`;
       }).join('');
     },
@@ -646,7 +647,7 @@ function showDetail(strId) {
     parts += `<div class="section-title">攻略提示</div><ul class="tips">${heroTips.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
   }
   if (ttip && ttip.tips && ttip.tips.length) {
-    parts += `<div class="section-title">饰品提示</div><ul class="tips">${ttip.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+    parts += `<div class="section-title">饰品提示</div><ul class="tips">${ttip.tips.map(t => `<li>${esc(t.summary || t.tip || '')}</li>`).join('')}</ul>`;
   }
 
   $modal.innerHTML = `

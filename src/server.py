@@ -97,6 +97,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "hero",
             "armor": c.armor, "health": c.health,
             "hp_ids": c.hp_ids, "buddy_id": c.buddy_id,
             "img": c.img,
@@ -106,6 +107,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "hero_power",
             "text_cn": c.text_cn, "mana_cost": c.mana_cost, "img": c.img,
         } for c in reg.cards.values() if c.card_type == "hero_power"]
 
@@ -113,6 +115,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "minion",
             "tier": c.tier, "attack": c.attack, "health": c.health,
             "minion_types_cn": c.minion_types_cn,
             "text_cn": c.text_cn, "mechanics": c.mechanics, "img": c.img,
@@ -122,6 +125,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "trinket",
             "text_cn": c.text_cn, "mana_cost": c.mana_cost,
             "lesser": c.lesser, "img": c.img,
         } for c in reg.cards.values() if c.card_type == "trinket"]
@@ -130,6 +134,7 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "companion",
             "tier": c.tier, "attack": c.attack, "health": c.health,
             "text_cn": c.text_cn, "img": c.img,
             "buddy_hero_id": c.buddy_hero_id,
@@ -137,21 +142,22 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
 
     def _get_quests_rewards(self):
         reg = get_registry()
-        quests = [{"str_id": c.str_id, "name_cn": c.name_cn, "text_cn": c.text_cn, "img": c.img}
+        quests = [{"str_id": c.str_id, "name_cn": c.name_cn, "card_type": "quest", "text_cn": c.text_cn, "img": c.img}
                   for c in reg.cards.values() if c.card_type == "quest"]
-        rewards = [{"str_id": c.str_id, "name_cn": c.name_cn, "text_cn": c.text_cn, "img": c.img}
+        rewards = [{"str_id": c.str_id, "name_cn": c.name_cn, "card_type": "reward", "text_cn": c.text_cn, "img": c.img}
                    for c in reg.cards.values() if c.card_type == "reward"]
         return {"quests": quests, "rewards": rewards}
 
     def _get_anomalies(self):
         reg = get_registry()
-        return [{"str_id": c.str_id, "name_cn": c.name_cn, "text_cn": c.text_cn, "img": c.img}
+        return [{"str_id": c.str_id, "name_cn": c.name_cn, "card_type": "anomaly", "text_cn": c.text_cn, "img": c.img}
                 for c in reg.cards.values() if c.card_type == "anomaly"]
 
     def _get_timewarps(self):
         reg = get_registry()
         return [{
             "str_id": c.str_id, "name_cn": c.name_cn,
+            "card_type": "timewarp",
             "text_cn": c.text_cn, "tier": c.tier,
             "lesser": c.lesser, "mana_cost": c.mana_cost, "img": c.img,
         } for c in reg.cards.values() if c.card_type == "timewarp"]
