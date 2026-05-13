@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>酒馆战棋攻略面板</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background:#0f0f1a; color:#ccc; display:flex; height:100vh; overflow:hidden; }
+
+/* === Sidebar === */
+#sidebar { width:200px; min-width:200px; background:#161625; display:flex; flex-direction:column; border-right:1px solid #2a2a3a; }
+#sidebar .logo { padding:20px 16px 12px; font-size:18px; font-weight:bold; color:#f0c060; border-bottom:1px solid #2a2a3a; }
+#sidebar .logo span { font-size:12px; color:#888; display:block; font-weight:normal; margin-top:2px; }
+#sidebar nav { flex:1; padding:8px 0; }
+#sidebar nav a { display:flex; align-items:center; gap:8px; padding:10px 20px; color:#999; text-decoration:none; font-size:14px; border-left:3px solid transparent; transition:all .15s; }
+#sidebar nav a:hover { color:#ddd; background:#1e1e30; }
+#sidebar nav a.active { color:#f0c060; background:#1e1e30; border-left-color:#f0c060; }
+#sidebar .stats-bar { padding:12px 16px; border-top:1px solid #2a2a3a; font-size:11px; color:#666; }
+
+/* === Main === */
+#main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+#topbar { padding:12px 24px; background:#161625; border-bottom:1px solid #2a2a3a; display:flex; align-items:center; gap:12px; min-height:48px; }
+#topbar input { flex:1; max-width:400px; padding:8px 14px; background:#0f0f1a; border:1px solid #3a3a4a; border-radius:6px; color:#ccc; font-size:13px; outline:none; }
+#topbar input:focus { border-color:#f0c060; }
+#topbar input::placeholder { color:#555; }
+#tab-label { font-size:16px; font-weight:bold; color:#ddd; white-space:nowrap; }
+
+#content { flex:1; overflow-y:auto; padding:20px 24px; scroll-behavior:smooth; }
+
+/* === Cards Grid === */
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; }
+.card-cell { background:#161625; border-radius:8px; padding:10px; cursor:pointer; border:1px solid transparent; transition:all .15s; text-align:center; }
+.card-cell:hover { border-color:#f0c060; transform:translateY(-2px); background:#1e1e32; }
+.card-cell img { width:100%; max-width:120px; height:auto; border-radius:4px; background:#0f0f1a; min-height:80px; object-fit:contain; }
+.card-cell .name { font-size:13px; color:#ddd; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-cell .sub { font-size:11px; color:#777; margin-top:2px; }
+.card-cell .tier { display:inline-block; background:#f0c060; color:#0f0f1a; font-size:11px; padding:1px 6px; border-radius:3px; font-weight:bold; margin-top:3px; }
+.card-cell .atk { color:#4caf50; font-size:11px; }
+.card-cell .hp { color:#f44336; font-size:11px; margin-left:4px; }
+.card-cell .type-tags { display:flex; gap:2px; justify-content:center; flex-wrap:wrap; margin-top:4px; }
+.card-cell .type-tag { font-size:10px; padding:1px 5px; border-radius:3px; background:#2a2a3a; color:#888; }
+
+/* === Hero Table === */
+.hero-table { width:100%; border-collapse:collapse; font-size:13px; }
+.hero-table th { text-align:left; padding:10px 12px; background:#161625; color:#888; font-weight:normal; border-bottom:1px solid #2a2a3a; position:sticky; top:0; z-index:1; }
+.hero-table td { padding:8px 12px; border-bottom:1px solid #1a1a2a; }
+.hero-table tr:hover td { background:#1a1a30; }
+.hero-table .rank { color:#f0c060; font-weight:bold; }
+
+/* === Filters === */
+.filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.filters button { padding:6px 14px; background:#1e1e30; border:1px solid #3a3a4a; border-radius:6px; color:#999; font-size:12px; cursor:pointer; transition:all .15s; }
+.filters button:hover { border-color:#f0c060; color:#ddd; }
+.filters button.active { background:#f0c060; color:#0f0f1a; border-color:#f0c060; font-weight:bold; }
+.result-count { font-size:12px; color:#666; margin-bottom:12px; }
+
+/* === Comp Cards === */
+.comp-card { background:#161625; border-radius:10px; padding:16px 20px; margin-bottom:12px; border-left:3px solid #f0c060; }
+.comp-card h3 { color:#f0c060; font-size:16px; margin-bottom:6px; }
+.comp-card .meta { font-size:12px; color:#888; margin-bottom:8px; }
+.comp-card .meta span { margin-right:16px; }
+.comp-card .cards-list { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+.comp-card .cards-list .cc { background:#0f0f1a; padding:4px 10px; border-radius:4px; font-size:12px; color:#ccc; cursor:pointer; }
+.comp-card .cards-list .cc:hover { background:#f0c060; color:#0f0f1a; }
+.comp-card .tips { font-size:12px; color:#aaa; }
+.comp-card .tips li { margin:3px 0 3px 18px; }
+
+/* === Placement Distribution === */
+.placement-bars { display:flex; gap:2px; align-items:flex-end; height:36px; }
+.placement-bars .pb { flex:1; border-radius:2px 2px 0 0; min-width:8px; transition:height .3s; }
+.pb.f1 { background:#4caf50; } .pb.f2 { background:#8bc34a; }
+.pb.f3 { background:#cddc39; } .pb.f4 { background:#ffc107; }
+.pb.f5 { background:#ff9800; } .pb.f6 { background:#f44336; }
+.pb.f7 { background:#9c27b0; } .pb.f8 { background:#607d8b; }
+
+/* === Modal === */
+#modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; justify-content:center; align-items:center; }
+#modal-overlay.show { display:flex; }
+#modal { background:#1a1a2e; border:1px solid #3a3a4a; border-radius:12px; padding:24px; max-width:580px; width:90%; max-height:82vh; overflow-y:auto; position:relative; }
+#modal .close { position:absolute; top:10px; right:16px; background:none; border:none; color:#888; font-size:22px; cursor:pointer; }
+#modal .close:hover { color:#f0c060; }
+#modal img { max-width:200px; border-radius:8px; margin-bottom:12px; }
+#modal h2 { color:#f0c060; font-size:20px; margin-bottom:4px; }
+#modal h3 { color:#888; font-size:13px; font-weight:normal; margin-bottom:12px; }
+#modal .detail-row { display:flex; gap:8px; margin:8px 0; flex-wrap:wrap; }
+#modal .detail-tag { background:#0f0f1a; padding:3px 10px; border-radius:4px; font-size:12px; display:inline-block; margin:2px; }
+#modal .detail-tag.clickable { cursor:pointer; }
+#modal .detail-tag.clickable:hover { background:#f0c060; color:#0f0f1a; }
+#modal .detail-text { font-size:13px; line-height:1.7; color:#bbb; margin:10px 0; padding:10px; background:#0f0f1a; border-radius:6px; }
+#modal .section-title { font-size:12px; color:#f0c060; font-weight:bold; margin:12px 0 4px; text-transform:uppercase; letter-spacing:1px; }
+
+/* === Skeleton === */
+.skeleton { animation:pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity:.3; } 50% { opacity:.6; } }
+.skel-row { height:40px; background:#1e1e30; margin-bottom:4px; border-radius:4px; }
+.skel-cell { height:180px; background:#1e1e30; border-radius:8px; }
+
+/* === Scrollbar === */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:#0f0f1a; }
+::-webkit-scrollbar-thumb { background:#2a2a3a; border-radius:3px; }
+
+/* === States === */
+.empty { text-align:center; padding:60px 20px; color:#555; }
+.empty .hint { font-size:13px; color:#444; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="logo">酒馆战棋<span>攻略分析面板</span></div>
+  <nav id="nav">
+    <a href="#heroes" data-tab="heroes"><span class="icon">👑</span> 英雄排行</a>
+    <a href="#minions" data-tab="minions"><span class="icon">⚔️</span> 随从图鉴</a>
+    <a href="#powers" data-tab="powers"><span class="icon">✨</span> 技能/饰品</a>
+    <a href="#companions" data-tab="companions"><span class="icon">🐾</span> 伙伴/任务</a>
+    <a href="#comps" data-tab="comps"><span class="icon">📊</span> 流派攻略</a>
+    <a href="#other" data-tab="other"><span class="icon">🌀</span> 异变/时光</a>
+    <a href="#search" data-tab="search"><span class="icon">🔍</span> 全局搜索</a>
+  </nav>
+  <div class="stats-bar" id="stats-bar">加载中...</div>
+</aside>
+
+<div id="main">
+  <div id="topbar">
+    <span id="tab-label">英雄排行</span>
+    <input type="text" id="quick-search" placeholder="在当前页签中搜索...">
+  </div>
+  <div id="content"><div class="empty skeleton">加载中...</div></div>
+</div>
+
+<div id="modal-overlay"><div id="modal"></div></div>
+
+<script>
+// =============================================================================
+// App Shell
+// =============================================================================
+const $ = (sel, el) => (el || document).querySelector(sel);
+const $$ = (sel, el) => [...(el || document).querySelectorAll(sel)];
+
+const $nav = $('#nav');
+const $content = $('#content');
+const $tabLabel = $('#tab-label');
+const $search = $('#quick-search');
+const $modalOverlay = $('#modal-overlay');
+const $modal = $('#modal');
+const $statsBar = $('#stats-bar');
+
+// =============================================================================
+// Data Store
+// =============================================================================
+const STORE = {};
+
+async function fetchAll() {
+  const ep = u => fetch(u).then(r => r.json());
+  const [cards, heroes, minions, trinkets, companions, qr,
+         anomalies, timewarps, heroStats, heroPowers, comps, trinketTips, heroStrats] =
+    await Promise.all([
+      ep('/api/cards'), ep('/api/heroes'), ep('/api/minions'),
+      ep('/api/trinkets'), ep('/api/companions'), ep('/api/quests_rewards'),
+      ep('/api/anomalies'), ep('/api/timewarps'), ep('/api/hero_stats'),
+      ep('/api/hero_powers'), ep('/api/comps'), ep('/api/trinket_tips'),
+      ep('/api/hero_strategies'),
+    ]);
+
+  Object.assign(STORE, {
+    cards, heroes, minions, trinkets, companions,
+    quests: qr.quests || [], rewards: qr.rewards || [],
+    anomalies, timewarps, heroStats, heroPowers,
+    comps, trinketTips,
+    heroTips: heroStrats.tips || {}, curves: heroStrats.curves || [],
+  });
+
+  $statsBar.innerHTML = `卡牌 ${cards.length} · 英雄 ${heroes.length} · 随从 ${minions.length}<br>流派 ${comps.length} · 环境数据 ${heroStats.length} 英雄`;
+
+  // Build lookup indexes
+  STORE.cardById = {};
+  cards.forEach(c => STORE.cardById[c.str_id] = c);
+  STORE.heroById = {};
+  heroes.forEach(h => STORE.heroById[h.str_id] = h);
+}
+
+// =============================================================================
+// Filter State (persists across re-renders, survives DOM replacement)
+// =============================================================================
+const filterState = {
+  minions: { tier: 'all', type: 'all' },
+  powers: { cat: 'powers', lesser: 'all', mana: 'all', tribe: 'all', tw_tier: 'all' },
+  companions: { cat: 'companions' },
+  other: { cat: 'anomalies' },
+};
+
+function setFilterState(tabId, key, val) {
+  if (filterState[tabId]) filterState[tabId][key] = val;
+}
+
+// Tribe list for trinket/timewarp filters (from minion_types_cn)
+function tribeOptions() {
+  const set = new Set();
+  STORE.trinkets.forEach(t => (t.extra || []).forEach(e => { if (e.startsWith('minionType')) set.add(e.replace('minionType','')); }));
+  STORE.timewarps.forEach(t => (t.extra || []).forEach(e => { if (e.startsWith('minionType')) set.add(e.replace('minionType','')); }));
+  return [...set].sort();
+}
+
+// =============================================================================
+// Router
+// =============================================================================
+let currentTab = 'heroes';
+let viewCache = {};       // tab -> { html, filtersKey }
+
+function navigate(tabId) {
+  if (currentTab === tabId) return;
+  currentTab = tabId;
+  activateTab(tabId, true);
+}
+
+function activateTab(tabId, fromRouter) {
+  currentTab = tabId;
+
+  // Nav state
+  $$('#nav a').forEach(a => a.classList.remove('active'));
+  const link = $(`[data-tab="${tabId}"]`);
+  if (link) {
+    link.classList.add('active');
+    $tabLabel.textContent = link.textContent.trim();
+  }
+
+  // Search: clear on tab switch, keep for search tab
+  if (fromRouter) {
+    $search.value = '';
+    $search.placeholder = tabId === 'search' ? '输入关键词搜索所有卡牌...' : '在当前页签中搜索...';
+  }
+
+  // Render
+  const tab = TABS[tabId];
+  if (!tab) return;
+  const filtersKey = tab.filtersKey ? tab.filtersKey() : '_';
+  const cached = viewCache[tabId];
+  const q = $search.value.trim().toLowerCase();
+
+  if (cached && cached.filtersKey === filtersKey && !q) {
+    $content.innerHTML = cached.html;
+  } else {
+    $content.innerHTML = tab.render(q);
+    if (!q) viewCache[tabId] = { html: $content.innerHTML, filtersKey };
+  }
+  $content.scrollTop = 0;
+}
+
+// Hash routing
+function onHashChange() {
+  const tabId = (location.hash || '#heroes').slice(1);
+  if (TABS[tabId]) navigate(tabId);
+  else location.hash = '#heroes';
+}
+window.addEventListener('hashchange', onHashChange);
+
+$nav.addEventListener('click', e => {
+  const a = e.target.closest('a');
+  if (!a) return;
+  e.preventDefault();
+  location.hash = a.dataset.tab;
+});
+
+// =============================================================================
+// Search
+// =============================================================================
+let searchTimer;
+$search.addEventListener('input', function() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const tab = TABS[currentTab];
+    if (!tab) return;
+    const q = this.value.trim().toLowerCase();
+    viewCache[currentTab] = null; // invalidate cache when searching
+    $content.innerHTML = tab.render(q);
+    $content.scrollTop = 0;
+  }, 180);
+});
+
+// =============================================================================
+// Filter Delegation
+// =============================================================================
+$content.addEventListener('click', e => {
+  const btn = e.target.closest('.filters button');
+  if (!btn) return;
+  const groupId = btn.parentElement.id;
+  const val = btn.dataset.val;
+
+  // Map group ID → filterState key
+  const map = { 'minion-tier-filter': ['minions','tier'], 'minion-type-filter': ['minions','type'],
+                'powers-filter': ['powers','cat'], 'trinket-lesser': ['powers','lesser'],
+                'trinket-mana': ['powers','mana'], 'trinket-tribe': ['powers','tribe'],
+                'tw-tier': ['powers','tw_tier'], 'companions-filter': ['companions','cat'],
+                'other-filter': ['other','cat'] };
+  if (map[groupId]) setFilterState(map[groupId][0], map[groupId][1], val);
+
+  viewCache[currentTab] = null;
+  const q = $search.value.trim().toLowerCase();
+  $content.innerHTML = TABS[currentTab].render(q);
+  $content.scrollTop = 0;
+});
+
+// =============================================================================
+// Shared Components
+// =============================================================================
+function cardCellHTML(c, extra) {
+  return `<div class="card-cell" data-cid="${c.str_id}">
+    <img src="${esc(c.img) || ''}" loading="lazy" onerror="this.style.display='none'">
+    <div class="name">${esc(c.name_cn)}</div>
+    ${extra || ''}
+  </div>`;
+}
+
+function minionCellHTML(m) {
+  const tags = (m.minion_types_cn || []).map(t => `<span class="type-tag">${t}</span>`).join('');
+  return cardCellHTML(m, `
+    <div class="sub"><span class="atk">⚔${m.attack}</span><span class="hp">❤${m.health}</span></div>
+    ${tags ? `<div class="type-tags">${tags}</div>` : ''}
+    <span class="tier">⭐${m.tier}</span>`);
+}
+
+function placementBarsHTML(dist, opts) {
+  opts = opts || {};
+  const max = Math.max(...dist.map(d => d.percentage || 0), 1);
+  const showLabel = opts.labels || false;
+  return `<div class="placement-bars" style="${opts.style || ''}">${dist.map(d => {
+    const h = Math.max((d.percentage / max) * 100, 2);
+    const label = showLabel ? `<span style="font-size:9px;writing-mode:vertical-lr;position:absolute;bottom:2px;">${d.percentage.toFixed(1)}%</span>` : '';
+    return `<div class="pb f${d.rank}" style="height:${h}%;${opts.minHeight || ''}" title="#${d.rank}: ${d.percentage.toFixed(1)}%">${label}</div>`;
+  }).join('')}</div>`;
+}
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'&quot;'); }
+
+// =============================================================================
+// Tab Definitions
+// =============================================================================
+const TABS = {
+
+  // ----- Heroes -----
+  heroes: {
+    filtersKey() { return '_'; },
+    render(q) {
+      let list = STORE.heroStats;
+      if (q) list = list.filter(h => h.name_cn.toLowerCase().includes(q));
+      if (!list.length) return '<div class="empty">暂无数据</div>';
+
+      const rows = list.map((h, i) => {
+        const hero = STORE.heroById[h.hero_card_id];
+        const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
+        const bars = placementBarsHTML(h.placements || []);
+        return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
+          <td class="rank">${i + 1}</td>
+          <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
+          <td>${h.avg_position.toFixed(2)}</td>
+          <td>${h.data_points.toLocaleString()}</td>
+          <td>${bars}</td>
+        </tr>`;
+      }).join('');
+
+      return `<table class="hero-table">
+        <thead><tr><th>#</th><th>英雄</th><th>均排名</th><th>样本量</th><th>排名分布</th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+    },
+  },
+
+  // ----- Minions -----
+  minions: {
+    filtersKey() {
+      const f = filterState.minions;
+      return `${f.tier}|${f.type}`;
+    },
+    render(q) {
+      const f = filterState.minions;
+      const types = [...new Set(STORE.minions.flatMap(m => m.minion_types_cn || []))].sort();
+      const tiers = [1,2,3,4,5,6,7];
+
+      let html = `<div class="filters" id="minion-tier-filter">
+        <button data-val="all"${f.tier==='all'?' class="active"':''}>全部星级</button>
+        ${tiers.map(t => `<button data-val="${t}"${f.tier===String(t)?' class="active"':''}>⭐${t} 星</button>`).join('')}
+      </div>`;
+      html += `<div class="filters" id="minion-type-filter">
+        <button data-val="all"${f.type==='all'?' class="active"':''}>全部种族</button>
+        ${types.map(t => `<button data-val="${t}"${f.type===t?' class="active"':''}>${t}</button>`).join('')}
+      </div>`;
+
+      let list = STORE.minions;
+      if (f.tier !== 'all') list = list.filter(m => m.tier === parseInt(f.tier));
+      if (f.type !== 'all') list = list.filter(m => (m.minion_types_cn || []).includes(f.type));
+      if (q) list = list.filter(m => m.name_cn.toLowerCase().includes(q));
+
+      html += `<div class="result-count">${list.length} 张随从</div>`;
+      html += `<div class="card-grid">${list.map(minionCellHTML).join('')}</div>`;
+      return html;
+    },
+  },
+
+  // ----- Powers (Hero Powers + Trinkets + Timewarps) -----
+  powers: {
+    filtersKey() {
+      const f = filterState.powers;
+      return `${f.cat}|${f.lesser}|${f.mana}|${f.tribe}|${f.tw_tier}`;
+    },
+    render(q) {
+      const f = filterState.powers;
+      let html = `<div class="filters" id="powers-filter">
+        <button data-val="powers"${f.cat==='powers'?' class="active"':''}>英雄技能</button>
+        <button data-val="trinkets"${f.cat==='trinkets'?' class="active"':''}>饰品</button>
+        <button data-val="timewarps"${f.cat==='timewarps'?' class="active"':''}>时光法术</button>
+      </div>`;
+
+      // Trinket sub-filters
+      if (f.cat === 'trinkets') {
+        const tribes = tribeOptions();
+        const manas = [...new Set(STORE.trinkets.map(t => t.mana_cost).filter(Boolean))].sort((a,b)=>a-b);
+        html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">`;
+        html += `<div class="filters" id="trinket-lesser" style="margin-bottom:0;">
+          <button data-val="all"${f.lesser==='all'?' class="active"':''}>全部</button>
+          <button data-val="lesser"${f.lesser==='lesser'?' class="active"':''}>🔹 低阶</button>
+          <button data-val="greater"${f.lesser==='greater'?' class="active"':''}>🔸 高阶</button>
+        </div>`;
+        html += `<div class="filters" id="trinket-mana" style="margin-bottom:0;">
+          <button data-val="all"${f.mana==='all'?' class="active"':''}>全部费用</button>
+          ${manas.map(m => `<button data-val="${m}"${f.mana===String(m)?' class="active"':''}>💰${m}费</button>`).join('')}
+        </div>`;
+        if (tribes.length) {
+          html += `<div class="filters" id="trinket-tribe" style="margin-bottom:0;">
+            <button data-val="all"${f.tribe==='all'?' class="active"':''}>全部种族</button>
+            ${tribes.map(t => `<button data-val="${t}"${f.tribe===t?' class="active"':''}>${t}</button>`).join('')}
+          </div>`;
+        }
+        html += `</div>`;
+      }
+
+      // Timewarp sub-filters
+      if (f.cat === 'timewarps') {
+        html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">`;
+        html += `<div class="filters" id="trinket-lesser" style="margin-bottom:0;">
+          <button data-val="all"${f.lesser==='all'?' class="active"':''}>全部</button>
+          <button data-val="lesser"${f.lesser==='lesser'?' class="active"':''}>🔹 低阶</button>
+          <button data-val="greater"${f.lesser==='greater'?' class="active"':''}>🔸 高阶</button>
+        </div>`;
+        const tiers = [3,5];
+        html += `<div class="filters" id="tw-tier" style="margin-bottom:0;">
+          <button data-val="all"${f.tw_tier==='all'?' class="active"':''}>全部星级</button>
+          ${tiers.map(t => `<button data-val="${t}"${f.tw_tier===String(t)?' class="active"':''}>⭐${t}星</button>`).join('')}
+        </div>`;
+        html += `</div>`;
+      }
+
+      let list;
+      if (f.cat === 'trinkets') {
+        list = STORE.trinkets;
+        if (f.lesser === 'lesser') list = list.filter(c => c.lesser === true);
+        else if (f.lesser === 'greater') list = list.filter(c => c.lesser === false);
+        if (f.mana !== 'all') list = list.filter(c => c.mana_cost === parseInt(f.mana));
+        if (f.tribe !== 'all') list = list.filter(c => (c.extra || []).some(e => e === `minionType${f.tribe}`));
+      } else if (f.cat === 'timewarps') {
+        list = STORE.timewarps;
+        if (f.lesser === 'lesser') list = list.filter(c => c.lesser === true);
+        else if (f.lesser === 'greater') list = list.filter(c => c.lesser === false);
+        if (f.tw_tier !== 'all') list = list.filter(c => c.tier === parseInt(f.tw_tier));
+      } else {
+        list = STORE.heroPowers;
+      }
+
+      if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
+
+      html += `<div class="result-count">${list.length} 张</div>`;
+      html += `<div class="card-grid">${list.map(c => {
+        let extra = '';
+        if (c.mana_cost) extra += `<div class="sub">💰${c.mana_cost} 费</div>`;
+        if (c.lesser !== undefined && c.lesser !== null) extra += `<div class="sub">${c.lesser ? '🔹低阶' : '🔸高阶'}</div>`;
+        if (c.tier && f.cat === 'timewarps') extra += `<span class="tier">⭐${c.tier}</span>`;
+        return cardCellHTML(c, extra);
+      }).join('')}</div>`;
+      return html;
+    },
+  },
+
+  // ----- Companions / Quests / Rewards -----
+  companions: {
+    filtersKey() { return filterState.companions.cat; },
+    render(q) {
+      const cat = filterState.companions.cat;
+      let html = `<div class="filters" id="companions-filter">
+        <button data-val="companions"${cat==='companions'?' class="active"':''}>伙伴</button>
+        <button data-val="quests"${cat==='quests'?' class="active"':''}>任务</button>
+        <button data-val="rewards"${cat==='rewards'?' class="active"':''}>任务奖励</button>
+      </div>`;
+
+      let list;
+      if (cat === 'quests') list = STORE.quests;
+      else if (cat === 'rewards') list = STORE.rewards;
+      else list = STORE.companions;
+
+      if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
+
+      html += `<div class="result-count">${list.length} 张</div>`;
+      html += `<div class="card-grid">${list.map(c => {
+        let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
+        return cardCellHTML(c, extra);
+      }).join('')}</div>`;
+      return html;
+    },
+  },
+
+  // ----- Comp Strategies -----
+  comps: {
+    filtersKey() { return '_'; },
+    render(q) {
+      let list = STORE.comps;
+      if (q) list = list.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        (c.forced_tribes || []).some(t => t.includes(q))
+      );
+      if (!list.length) return '<div class="empty">暂无数据</div>';
+
+      return list.map(c => {
+        const tips = c.tips || [];
+        return `<div class="comp-card">
+          <h3>${esc(c.name || '未知流派')}</h3>
+          <div class="meta">
+            <span>📌 ${esc(c.power_level || '?')}</span>
+            <span>🎯 ${esc(c.difficulty || '?')}</span>
+            <span>📋 ${esc(c.patch || '?')}</span>
+            ${c.forced_tribes && c.forced_tribes.length ? `<span>🏹 ${c.forced_tribes.join(', ')}</span>` : ''}
+          </div>
+          <div class="cards-list">${(c.cards || []).map(cid => {
+            const card = STORE.cardById[cid];
+            return card ? `<span class="cc" data-cid="${cid}">${esc(card.name_cn)}</span>` : '';
+          }).join('')}</div>
+          ${tips.length ? `<ul class="tips">${tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+        </div>`;
+      }).join('');
+    },
+  },
+
+  // ----- Other (Anomalies + Timewarps) -----
+  other: {
+    filtersKey() { return filterState.other.cat; },
+    render(q) {
+      const cat = filterState.other.cat;
+      let html = `<div class="filters" id="other-filter">
+        <button data-val="anomalies"${cat==='anomalies'?' class="active"':''}>异变</button>
+        <button data-val="timewarps"${cat==='timewarps'?' class="active"':''}>时光法术</button>
+      </div>`;
+
+      let list = cat === 'timewarps' ? STORE.timewarps : STORE.anomalies;
+      if (q) list = list.filter(x => x.name_cn.toLowerCase().includes(q));
+
+      html += `<div class="result-count">${list.length} 张</div>`;
+      html += `<div class="card-grid">${list.map(c => {
+        let extra = c.tier ? `<span class="tier">⭐${c.tier}</span>` : '';
+        return cardCellHTML(c, extra);
+      }).join('')}</div>`;
+      return html;
+    },
+  },
+
+  // ----- Search -----
+  search: {
+    filtersKey() { return '_'; },
+    render(q) {
+      if (!q) return '<div class="empty">输入关键词搜索所有卡牌<div class="hint">支持中文名、英文名、卡牌描述</div></div>';
+
+      const results = STORE.cards.filter(c =>
+        c.name_cn.toLowerCase().includes(q) ||
+        (c.name || '').toLowerCase().includes(q) ||
+        (c.text_cn || '').toLowerCase().includes(q)
+      );
+      if (!results.length) return '<div class="empty">未找到匹配卡牌</div>';
+
+      const typeNames = { hero:'英雄', minion:'随从', hero_power:'技能', companion:'伙伴',
+        trinket:'饰品', quest:'任务', reward:'任务奖励', anomaly:'异变', timewarp:'时光法术', tavern:'酒馆' };
+
+      return `<div class="result-count">找到 ${results.length} 张卡牌</div>
+        <div class="card-grid">${results.map(c => {
+          let extra = `<div class="sub">${typeNames[c.card_type] || c.card_type}</div>`;
+          if (c.tier) extra += `<span class="tier">⭐${c.tier}</span>`;
+          return cardCellHTML(c, extra);
+        }).join('')}</div>`;
+    },
+  },
+};
+
+// =============================================================================
+// Card Detail Modal
+// =============================================================================
+function showDetail(strId) {
+  const card = STORE.cardById[strId];
+  if (!card) return;
+
+  const heroStat = STORE.heroStats.find(h => h.hero_card_id === strId);
+  const heroTips = STORE.heroTips[strId];
+  const ttip = STORE.trinketTips[strId];
+  const typeNames = { hero:'英雄', minion:'随从', hero_power:'英雄技能', companion:'伙伴',
+    trinket:'饰品', quest:'任务', reward:'任务奖励', anomaly:'异变', timewarp:'时光法术', tavern:'酒馆法术' };
+
+  let parts = '';
+
+  // Hero stats
+  if (heroStat) {
+    parts += `<div class="detail-row">
+      <span class="detail-tag">🏆 均排名 ${heroStat.avg_position.toFixed(2)}</span>
+      <span class="detail-tag">📊 ${heroStat.data_points.toLocaleString()} 场</span>
+    </div>`;
+    if (heroStat.placements && heroStat.placements.length) {
+      parts += placementBarsHTML(heroStat.placements, { labels: true, style: 'margin:8px 0', minHeight: 'min-height:24px' });
+    }
+  }
+
+  // Stats row
+  if (card.armor) parts += `<span class="detail-tag">🛡 护甲 ${card.armor}</span>`;
+  if (card.health && card.card_type === 'hero') parts += `<span class="detail-tag">❤ 血量 ${card.health}</span>`;
+  if ((card.card_type === 'minion' || card.card_type === 'companion') && (card.attack || card.health)) {
+    parts += `<span class="detail-tag">⚔${card.attack || 0} / ❤${card.health || 0}</span>`;
+  }
+  if (card.mana_cost) parts += `<span class="detail-tag">💰 ${card.mana_cost} 费</span>`;
+  if (card.lesser !== undefined && card.lesser !== null) {
+    parts += `<span class="detail-tag">${card.lesser ? '🔹 低阶' : '🔸 高阶'}</span>`;
+  }
+  if (card.minion_types_cn && card.minion_types_cn.length) {
+    parts += `<div class="detail-row">${card.minion_types_cn.map(t => `<span class="detail-tag">${t}</span>`).join('')}</div>`;
+  }
+
+  // Hero relationships
+  if (card.card_type === 'hero') {
+    const hero = STORE.heroById[strId];
+    if (hero) {
+      if (hero.buddy_id) {
+        const buddy = STORE.companions.find(c => c.str_id === hero.buddy_id);
+        if (buddy) parts += `<span class="detail-tag clickable" data-cid="${buddy.str_id}">🐾 伙伴: ${esc(buddy.name_cn)}</span>`;
+      }
+      if (hero.hp_ids) hero.hp_ids.forEach(hpid => {
+        const hp = STORE.heroPowers.find(p => p.str_id === hpid);
+        if (hp) parts += `<span class="detail-tag clickable" data-cid="${hp.str_id}">✨ ${esc(hp.name_cn)} ${hp.mana_cost ? `(${hp.mana_cost}费)` : ''}</span>`;
+      });
+    }
+  }
+
+  // Tips
+  if (heroTips && heroTips.tips && heroTips.tips.length) {
+    parts += `<div class="section-title">攻略提示</div><ul class="tips">${heroTips.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  }
+  if (ttip && ttip.tips && ttip.tips.length) {
+    parts += `<div class="section-title">饰品提示</div><ul class="tips">${ttip.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  }
+
+  $modal.innerHTML = `
+    <button class="close" id="modal-close">✕</button>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      ${card.img ? `<img src="${esc(card.img)}" onerror="this.style.display='none'" style="max-width:200px;border-radius:8px;">` : ''}
+      <div style="flex:1;min-width:200px;">
+        <h2>${esc(card.name_cn)}</h2>
+        <h3>${esc(card.name || '')} · ${typeNames[card.card_type] || card.card_type}</h3>
+        ${card.tier ? `<span class="tier" style="font-size:14px;">⭐${card.tier} 星</span>` : ''}
+        <div style="margin:6px 0;">${parts}</div>
+        ${card.text_cn ? `<div class="detail-text">${esc(card.text_cn)}</div>` : ''}
+      </div>
+    </div>`;
+
+  $modalOverlay.classList.add('show');
+}
+
+function closeModal() { $modalOverlay.classList.remove('show'); }
+$modalOverlay.addEventListener('click', e => { if (e.target === $modalOverlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Click delegation for card detail from content + modal
+$content.addEventListener('click', e => {
+  const cell = e.target.closest('[data-cid]');
+  if (cell) showDetail(cell.dataset.cid);
+});
+$modal.addEventListener('click', e => {
+  if (e.target.id === 'modal-close') closeModal();
+  const tag = e.target.closest('[data-cid]');
+  if (tag) showDetail(tag.dataset.cid);
+});
+
+// Comp card click
+$content.addEventListener('click', e => {
+  const cell = e.target.closest('.comp-card .cc[data-cid]');
+  if (cell) { e.stopPropagation(); showDetail(cell.dataset.cid); }
+});
+
+// =============================================================================
+// Boot
+// =============================================================================
+async function boot() {
+  $content.innerHTML = '<div class="empty skeleton"><div style="max-width:600px;margin:0 auto;">' +
+    Array(6).fill('<div class="skel-row"></div>').join('') + '</div>';
+  await fetchAll();
+  onHashChange(); // renders initial tab from URL hash
+}
+boot();
+</script>
+</body>
+</html>

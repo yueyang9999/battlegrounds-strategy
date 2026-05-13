@@ -28,8 +28,9 @@ python -m src.server              # 启动面板服务 (http://localhost:8765)
 - `src/analyze.py` — 策略分析引擎
 - `src/output.py` — Markdown 攻略生成
 - `src/cli.py` — 命令行入口
-- `src/server.py` — 面板 API 服务
-- `src/panel.html` — 棋盘 UI 面板 (待完成)
+- `src/server.py` — 面板 API 服务 + 页面路由 (/panel, /team-builder)
+- `src/panel.html` — 前端分析面板 (英雄排行/随从图鉴/流派攻略)
+- `src/team-builder.html` — 阵容编辑器 (自由组合英雄/技能/饰品/随从)
 - `output/` — 生成的攻略文件
 
 ## 编码规范

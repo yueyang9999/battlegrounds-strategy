@@ -31,8 +31,16 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             self._serve_json(self._get_hero_stats())
         elif parsed.path == "/api/hero_powers":
             self._serve_json(self._get_hero_powers())
+        elif parsed.path == "/api/comps":
+            self._serve_json(self._get_comps())
+        elif parsed.path == "/api/trinket_tips":
+            self._serve_json(self._get_trinket_tips())
+        elif parsed.path == "/api/hero_strategies":
+            self._serve_json(self._get_hero_strategies())
         elif parsed.path == "/" or parsed.path == "/panel":
             self._serve_panel()
+        elif parsed.path == "/team-builder":
+            self._serve_page("team-builder.html")
         elif parsed.path.startswith("/images/"):
             # Proxy card images
             card_id = parsed.path.replace("/images/", "")
@@ -56,8 +64,11 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(body)
 
     def _serve_panel(self):
-        panel_path = os.path.join(os.path.dirname(__file__), "panel.html")
-        with open(panel_path, "r", encoding="utf-8") as f:
+        self._serve_page("panel.html")
+
+    def _serve_page(self, filename):
+        page_path = os.path.join(os.path.dirname(__file__), filename)
+        with open(page_path, "r", encoding="utf-8") as f:
             html = f.read()
         body = html.encode("utf-8")
         self.send_response(200)
@@ -160,6 +171,18 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             })
         result.sort(key=lambda x: x["avg_position"])
         return result
+
+    def _get_comps(self):
+        meta = get_meta_registry()
+        return meta.get_comp_strategies()
+
+    def _get_trinket_tips(self):
+        meta = get_meta_registry()
+        return meta.trinket_tips
+
+    def _get_hero_strategies(self):
+        meta = get_meta_registry()
+        return {"tips": meta.hero_tips, "curves": meta.curves}
 
     def log_message(self, format, *args):
         pass  # suppress logs
