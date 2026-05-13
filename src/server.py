@@ -5,6 +5,7 @@ import urllib.parse
 import os
 from .registry import get_registry
 from .meta_registry import get_meta_registry
+from .player_stats import get_player_stats
 
 
 class BoardHandler(http.server.SimpleHTTPRequestHandler):
@@ -37,6 +38,14 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
             self._serve_json(self._get_trinket_tips())
         elif parsed.path == "/api/hero_strategies":
             self._serve_json(self._get_hero_strategies())
+        elif parsed.path == "/api/player/heroes":
+            self._serve_json(self._get_player_heroes())
+        elif parsed.path == "/api/player/summary":
+            self._serve_json(self._get_player_summary())
+        elif parsed.path == "/api/player/cards":
+            self._serve_json(self._get_player_cards())
+        elif parsed.path == "/api/player/comps":
+            self._serve_json(self._get_player_comps())
         elif parsed.path == "/" or parsed.path == "/panel":
             self._serve_panel()
         elif parsed.path == "/team-builder":
@@ -53,6 +62,25 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(404)
         else:
             super().do_GET()
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/api/games":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode("utf-8"))
+            ps = get_player_stats()
+            game_id = ps.record_game(
+                hero_card_id=data["hero_card_id"],
+                placement=data["placement"],
+                starting_comp=data.get("starting_comp", ""),
+                final_board=data.get("final_board"),
+                turn_actions=data.get("turn_actions"),
+                mmr_change=data.get("mmr_change", 0),
+            )
+            self._serve_json({"ok": True, "game_id": game_id})
+        else:
+            self.send_error(404)
 
     def _serve_json(self, data):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -189,6 +217,51 @@ class BoardHandler(http.server.SimpleHTTPRequestHandler):
     def _get_hero_strategies(self):
         meta = get_meta_registry()
         return {"tips": meta.hero_tips, "curves": meta.curves}
+
+    def _get_player_heroes(self):
+        ps = get_player_stats()
+        reg = get_registry()
+        stats = ps.get_hero_stats()
+        result = []
+        for s in stats:
+            card = reg.get(s["hero_card_id"])
+            top4_rate = round(s["top4_count"] / s["games_played"] * 100, 1) if s["games_played"] else 0
+            result.append({
+                "hero_card_id": s["hero_card_id"],
+                "name_cn": card.name_cn if card else s["hero_card_id"],
+                "img": card.img if card else "",
+                "games_played": s["games_played"],
+                "avg_placement": round(s["avg_placement"], 2),
+                "top4_rate": top4_rate,
+                "top1_count": s["top1_count"],
+            })
+        return result
+
+    def _get_player_summary(self):
+        ps = get_player_stats()
+        reg = get_registry()
+        s = ps.get_summary()
+        if s.get("favorite_hero_id"):
+            card = reg.get(s["favorite_hero_id"])
+            s["favorite_hero_name"] = card.name_cn if card else ""
+        if s.get("best_hero_id"):
+            card = reg.get(s["best_hero_id"])
+            s["best_hero_name"] = card.name_cn if card else ""
+        return s
+
+    def _get_player_cards(self):
+        ps = get_player_stats()
+        reg = get_registry()
+        stats = ps.get_card_stats()
+        for s in stats:
+            card = reg.get(s["card_id"])
+            s["name_cn"] = card.name_cn if card else s["card_id"]
+            s["img"] = card.img if card else ""
+        return stats
+
+    def _get_player_comps(self):
+        ps = get_player_stats()
+        return ps.get_comp_stats()
 
     def log_message(self, format, *args):
         pass  # suppress logs

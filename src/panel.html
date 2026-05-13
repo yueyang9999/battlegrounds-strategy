@@ -112,6 +112,7 @@ body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background:#0f
   <div class="logo">酒馆战棋<span>攻略分析面板</span></div>
   <nav id="nav">
     <a href="#heroes" data-tab="heroes"><span class="icon">👑</span> 英雄排行</a>
+    <a href="#player" data-tab="player"><span class="icon">👤</span> 我的战绩</a>
     <a href="#minions" data-tab="minions"><span class="icon">⚔️</span> 随从图鉴</a>
     <a href="#powers" data-tab="powers"><span class="icon">✨</span> 技能/饰品</a>
     <a href="#companions" data-tab="companions"><span class="icon">🐾</span> 伙伴/任务</a>
@@ -155,13 +156,14 @@ const STORE = {};
 async function fetchAll() {
   const ep = u => fetch(u).then(r => r.json());
   const [cards, heroes, minions, trinkets, companions, qr,
-         anomalies, timewarps, heroStats, heroPowers, comps, trinketTips, heroStrats] =
+         anomalies, timewarps, heroStats, heroPowers, comps, trinketTips, heroStrats,
+         playerHeroes, playerSummary] =
     await Promise.all([
       ep('/api/cards'), ep('/api/heroes'), ep('/api/minions'),
       ep('/api/trinkets'), ep('/api/companions'), ep('/api/quests_rewards'),
       ep('/api/anomalies'), ep('/api/timewarps'), ep('/api/hero_stats'),
       ep('/api/hero_powers'), ep('/api/comps'), ep('/api/trinket_tips'),
-      ep('/api/hero_strategies'),
+      ep('/api/hero_strategies'), ep('/api/player/heroes'), ep('/api/player/summary'),
     ]);
 
   Object.assign(STORE, {
@@ -170,9 +172,10 @@ async function fetchAll() {
     anomalies, timewarps, heroStats, heroPowers,
     comps, trinketTips,
     heroTips: heroStrats.tips || {}, curves: heroStrats.curves || [],
+    playerHeroes, playerSummary,
   });
 
-  $statsBar.innerHTML = `卡牌 ${cards.length} · 英雄 ${heroes.length} · 随从 ${minions.length}<br>流派 ${comps.length} · 环境数据 ${heroStats.length} 英雄`;
+  $statsBar.innerHTML = `卡牌 ${cards.length} · 英雄 ${heroes.length} · 随从 ${minions.length}<br>流派 ${comps.length} · 环境数据 ${heroStats.length} 英雄 · 个人对局 ${playerSummary.total_games || 0}`;
 
   // Build lookup indexes
   STORE.cardById = {};
@@ -185,6 +188,7 @@ async function fetchAll() {
 // Filter State (persists across re-renders, survives DOM replacement)
 // =============================================================================
 const filterState = {
+  heroes: { mode: 'meta' },
   minions: { tier: 'all', type: 'all' },
   powers: { cat: 'powers', lesser: 'all', mana: 'all', tribe: 'all', tw_tier: 'all' },
   companions: { cat: 'companions' },
@@ -289,7 +293,8 @@ $content.addEventListener('click', e => {
   const val = btn.dataset.val;
 
   // Map group ID → filterState key
-  const map = { 'minion-tier-filter': ['minions','tier'], 'minion-type-filter': ['minions','type'],
+  const map = { 'heroes-mode-filter': ['heroes','mode'],
+	                'minion-tier-filter': ['minions','tier'], 'minion-type-filter': ['minions','type'],
                 'powers-filter': ['powers','cat'], 'trinket-lesser': ['powers','lesser'],
                 'trinket-mana': ['powers','mana'], 'trinket-tribe': ['powers','tribe'],
                 'tw-tier': ['powers','tw_tier'], 'companions-filter': ['companions','cat'],
@@ -341,28 +346,76 @@ const TABS = {
 
   // ----- Heroes -----
   heroes: {
+    filtersKey() { return filterState.heroes.mode; },
+    render(q) {
+      const mode = filterState.heroes.mode;
+      let html = `<div class="filters" id="heroes-mode-filter">
+        <button data-val="meta"${mode==='meta'?' class="active"':''}>📊 环境数据</button>
+        <button data-val="personal"${mode==='personal'?' class="active"':''}>👤 个人数据</button>
+      </div>`;
+
+      if (mode === 'personal') {
+        if (!STORE.playerHeroes || !STORE.playerHeroes.length) {
+          html += '<div class="empty">暂无个人对局数据<div class="hint">使用 POST /api/games 记录对局以查看个人统计</div></div>';
+        } else {
+          let list = STORE.playerHeroes;
+          if (q) list = list.filter(h => h.name_cn.toLowerCase().includes(q));
+          const rows = list.map((h, i) => {
+            const hero = STORE.heroById[h.hero_card_id];
+            const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
+            return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
+              <td class="rank">${i + 1}</td>
+              <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
+              <td>${h.games_played}</td>
+              <td>${h.avg_placement.toFixed(2)}</td>
+              <td>${h.top4_rate}%</td>
+              <td>${h.top1_count}</td>
+            </tr>`;
+          }).join('');
+          html += `<table class="hero-table">
+            <thead><tr><th>#</th><th>英雄</th><th>场次</th><th>均排名</th><th>前四率</th><th>吃鸡</th></tr></thead>
+            <tbody>${rows}</tbody></table>`;
+        }
+      } else {
+        let list = STORE.heroStats;
+        if (q) list = list.filter(h => h.name_cn.toLowerCase().includes(q));
+        if (!list.length) html += '<div class="empty">暂无数据</div>';
+        else {
+          const rows = list.map((h, i) => {
+            const hero = STORE.heroById[h.hero_card_id];
+            const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
+            const bars = placementBarsHTML(h.placements || []);
+            return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
+              <td class="rank">${i + 1}</td>
+              <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
+              <td>${h.avg_position.toFixed(2)}</td>
+              <td>${h.data_points.toLocaleString()}</td>
+              <td>${bars}</td>
+            </tr>`;
+          }).join('');
+          html += `<table class="hero-table">
+            <thead><tr><th>#</th><th>英雄</th><th>均排名</th><th>样本量</th><th>排名分布</th></tr></thead>
+            <tbody>${rows}</tbody></table>`;
+        }
+      }
+      return html;
+    },
+  },
+
+  // ----- Player Stats -----
+  player: {
     filtersKey() { return '_'; },
     render(q) {
-      let list = STORE.heroStats;
-      if (q) list = list.filter(h => h.name_cn.toLowerCase().includes(q));
-      if (!list.length) return '<div class="empty">暂无数据</div>';
-
-      const rows = list.map((h, i) => {
-        const hero = STORE.heroById[h.hero_card_id];
-        const img = hero ? `<img src="${esc(hero.img)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;vertical-align:middle;" onerror="this.style.display='none'">` : '';
-        const bars = placementBarsHTML(h.placements || []);
-        return `<tr data-cid="${h.hero_card_id}" style="cursor:pointer">
-          <td class="rank">${i + 1}</td>
-          <td>${img} <span style="margin-left:8px;">${esc(h.name_cn)}</span></td>
-          <td>${h.avg_position.toFixed(2)}</td>
-          <td>${h.data_points.toLocaleString()}</td>
-          <td>${bars}</td>
-        </tr>`;
-      }).join('');
-
-      return `<table class="hero-table">
-        <thead><tr><th>#</th><th>英雄</th><th>均排名</th><th>样本量</th><th>排名分布</th></tr></thead>
-        <tbody>${rows}</tbody></table>`;
+      if (!STORE.playerSummary || !STORE.playerSummary.total_games) {
+        return '<div class="empty">暂无个人对局数据<div class="hint">使用 POST /api/games 记录对局以查看个人统计</div></div>';
+      }
+      const s = STORE.playerSummary;
+      let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">';
+      html += `<div class="comp-card" style="border-left-color:#4caf50;"><h3>总局数</h3><div style="font-size:28px;color:#4caf50;font-weight:bold;">${s.total_games || 0}</div></div>`;
+      html += `<div class="comp-card" style="border-left-color:#f0c060;"><h3>最爱英雄</h3><div style="font-size:16px;color:#f0c060;">${esc(s.favorite_hero_name || '-')}</div></div>`;
+      html += `<div class="comp-card" style="border-left-color:#2196F3;"><h3>最佳英雄</h3><div style="font-size:16px;">${esc(s.best_hero_name || '-')}</div><div class="sub" style="font-size:12px;color:#888;">均排名 ${s.best_hero_avg || '-'}</div></div>`;
+      html += '</div>';
+      return html;
     },
   },
 

@@ -3,6 +3,7 @@ import sqlite3
 
 CARDS_DB = "bg_cards.db"
 META_DB = "bg_meta.db"
+PLAYER_DB = "bg_player.db"
 
 
 def get_cards_conn() -> sqlite3.Connection:
@@ -223,3 +224,27 @@ def _build_card_row(card: dict, group: str):
         js(card.get("trinketTags") or card.get("timeWarpTags") or []),
         group,
     )
+
+
+def get_player_conn() -> sqlite3.Connection:
+    conn = sqlite3.connect(PLAYER_DB)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA encoding='UTF-8'")
+    return conn
+
+
+def create_player_tables(conn: sqlite3.Connection):
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS game_records (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            hero_card_id    TEXT NOT NULL,
+            placement       INTEGER NOT NULL CHECK(placement BETWEEN 1 AND 8),
+            starting_comp   TEXT DEFAULT '',
+            final_board     TEXT DEFAULT '[]',
+            turn_actions    TEXT DEFAULT '{}',
+            mmr_change      INTEGER DEFAULT 0,
+            played_at       TEXT DEFAULT (datetime('now'))
+        );
+    """)
+    conn.commit()
