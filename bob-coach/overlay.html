@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bob教练</title>
+<link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+
+<!-- ====== 根容器（默认穿透点击） ====== -->
+<div id="app">
+
+  <!-- 建议徽章：升本/搜牌/危险 -->
+  <div id="suggestion-badge" class="hidden">
+    <span id="sug-text"></span>
+    <div id="sug-reason" class="reason-tooltip hidden"></div>
+  </div>
+
+  <!-- 选牌高亮：随从商店卡片高亮边框 + 角标 -->
+  <div id="card-highlights"></div>
+
+  <!-- 拔线按钮 -->
+  <div id="disconnect-btn" class="interactive" title="拔线跳过动画">
+    <div id="dc-dot" class="dc-dot online"></div>
+    <div id="dc-ring" class="dc-ring"></div>
+    <span id="dc-label">拔线</span>
+  </div>
+
+  <!-- 齿轮菜单 -->
+  <div id="gear-menu" class="interactive">
+    <div id="gear-icon" class="gear-icon">&#9881;</div>
+    <div id="gear-dropdown" class="gear-dropdown hidden">
+      <div class="gear-item" data-action="toggle-demo">&#9654; Demo 模式</div>
+      <div class="gear-item" data-action="next-turn">&#9654; 下一回合</div>
+      <div class="gear-item" data-action="toggle-panel">&#9776; 教练面板</div>
+      <div class="gear-item" data-action="open-settings">&#9878; 设置</div>
+      <div class="gear-item" data-action="open-about">&#9432; 关于</div>
+      <div class="gear-item" data-action="quit">&#10005; 退出</div>
+    </div>
+  </div>
+
+  <!-- 阵容路线图面板（侧边抽屉） -->
+  <div id="comp-panel" class="comp-panel hidden">
+    <div id="comp-handle" class="comp-handle" title="点击展开教练面板">
+      <span id="comp-handle-icon">&#9664;</span>
+    </div>
+    <div id="comp-content" class="comp-content">
+      <div class="comp-header">
+        <span id="comp-name">--</span>
+        <span id="comp-match" class="comp-match-badge">匹配度 --</span>
+        <button id="comp-close-btn" class="btn-close interactive" style="margin-left:auto" title="关闭面板">&times;</button>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">当前阵容</div>
+        <div id="current-board" class="mini-board"></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">推荐阵容</div>
+        <div id="target-board" class="mini-board"></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">缺卡提示</div>
+        <div id="missing-cards" class="missing-list"></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">站位建议</div>
+        <div id="position-tip" class="position-tip"></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">图例说明</div>
+        <div class="legend-list">
+          <div class="legend-item">
+            <span class="legend-badge core">核</span>
+            <span>红色高亮 — 流派核心卡，优先选取</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-badge power">战</span>
+            <span>蓝色高亮 — 战力提升卡，中期推荐</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-badge triple">碰</span>
+            <span>金橙高亮 — 可凑三连，碰高本核心</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="comp-section" id="comp-alt-section" style="display:none">
+        <div class="comp-section-title">备选流派</div>
+        <div id="alt-comps" class="alt-comps"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 决策详细面板（C5 层级3） -->
+  <div id="tactical-board" class="tactical-board hidden">
+    <div class="tactical-header">
+      <span id="tactical-title">决策分析</span>
+      <button id="tactical-close" class="interactive btn-close">&times;</button>
+    </div>
+    <div id="tactical-body" class="tactical-body"></div>
+  </div>
+
+  <!-- 首次协议对话框 -->
+  <div id="agreement-overlay" class="modal-overlay hidden">
+    <div class="agreement-modal interactive">
+      <h2>Bob教练 开源教学插件</h2>
+      <div class="agreement-body">
+        <p><strong>本插件仅为学习辅助工具</strong>，不会自动操作您的游戏。</p>
+        <p>本插件开源免费，遵循暴雪插件政策：</p>
+        <ul>
+          <li>不注入游戏进程</li>
+          <li>不修改游戏内存</li>
+          <li>不自动点击/键盘输入</li>
+          <li>仅以覆盖层形式显示教学建议</li>
+        </ul>
+        <p style="color:#f0c060;margin-top:12px">选择使用模式：</p>
+      </div>
+      <div class="agreement-buttons">
+        <button id="btn-local-mode" class="btn btn-primary">本地模式<br><small>不上传任何数据</small></button>
+        <button id="btn-cloud-mode" class="btn btn-secondary">云端优化模式<br><small>匿名分享对战数据</small></button>
+      </div>
+      <label class="agreement-check">
+        <input type="checkbox" id="agreement-checkbox">
+        我已阅读并同意免责声明，了解本插件不执行自动操作
+      </label>
+      <p class="agreement-disabled-note" id="agreement-disabled-note">请先勾选同意声明</p>
+    </div>
+  </div>
+
+  <!-- 设置面板 -->
+  <div id="settings-overlay" class="modal-overlay hidden">
+    <div class="settings-modal interactive">
+      <div class="tactical-header">
+        <span>设置</span>
+        <button id="settings-close" class="btn-close">&times;</button>
+      </div>
+      <div class="settings-body">
+        <div id="font-preview" class="font-preview hidden">字体样式大小 — 预览效果</div>
+        <div class="setting-row">
+          <label>窗口透明度</label>
+          <input type="range" id="set-transparency" min="0.3" max="1.0" step="0.05" value="0.85">
+          <span id="transparency-val">85%</span>
+        </div>
+        <div class="setting-row">
+          <label>提示透明度</label>
+          <input type="range" id="set-tip-opacity" min="0.15" max="0.85" step="0.05" value="0.3">
+          <span id="tip-opacity-val">30%</span>
+        </div>
+        <div class="setting-row">
+          <label>字体</label>
+          <select id="set-font-family">
+            <option value="default">系统默认</option>
+            <option value="serif">宋体</option>
+            <option value="sans-serif">黑体</option>
+            <option value="monospace">等宽</option>
+            <option value="cursive">手写体</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label>字号</label>
+          <input type="range" id="set-font-size" min="10" max="20" step="1" value="13">
+          <span id="font-size-val">13px</span>
+        </div>
+        <div class="setting-row">
+          <label>拔线快捷键</label>
+          <select id="set-shortcut">
+            <option value="F1">F1</option><option value="F2">F2</option>
+            <option value="F3">F3</option><option value="F4">F4</option>
+            <option value="F5">F5</option><option value="F6">F6</option>
+            <option value="F7">F7</option><option value="F8">F8</option>
+            <option value="F9">F9</option><option value="F10">F10</option>
+            <option value="F11">F11</option><option value="F12">F12</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label>拔线按钮</label>
+          <input type="checkbox" id="set-show-dc-btn" checked>
+          <span style="font-size:11px;color:var(--text-muted)">在覆盖层上显示拔线悬浮按钮</span>
+        </div>
+        <div class="setting-row" id="dc-scope-row">
+          <label>快捷键范围</label>
+          <select id="set-dc-scope">
+            <option value="always">始终生效</option>
+            <option value="visible">仅按钮显示时生效</option>
+          </select>
+          <span style="font-size:11px;color:var(--text-muted)">按钮隐藏时快捷键是否仍可触发拔线</span>
+        </div>
+        <div class="setting-row">
+          <label>语言</label>
+          <select id="set-language">
+            <option value="zh-CN">中文</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label>攻略筛选</label>
+          <select id="set-freshness-filter">
+            <option value="all">显示全部攻略</option>
+            <option value="fresh">仅显示新鲜 (80+)</option>
+            <option value="no_outdated">隐藏过时攻略</option>
+          </select>
+        </div>
+        <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+            <label style="min-width:auto">数据版本</label>
+            <button id="btn-check-update" class="btn btn-primary" style="font-size:11px;padding:4px 10px">检查更新</button>
+          </div>
+          <div id="sync-status" class="sync-status" style="font-size:10px;color:var(--text-muted);width:100%">
+            <div>卡牌版本: <span id="sync-cards-ver">--</span></div>
+            <div>环境数据: <span id="sync-hero-date">--</span></div>
+            <div>流派数量: <span id="sync-comp-count">--</span></div>
+            <div>上次检查: <span id="sync-last-check">--</span></div>
+          </div>
+        </div>
+        <div id="sync-update-banner" class="sync-update-banner hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:var(--c-accent);font-weight:bold;font-size:12px">发现更新内容</span>
+            <div style="display:flex;gap:6px">
+              <button id="btn-apply-update" class="btn btn-primary" style="font-size:10px;padding:3px 8px">应用更新</button>
+              <button id="btn-dismiss-update" class="btn btn-cancel" style="font-size:10px;padding:3px 8px">忽略</button>
+            </div>
+          </div>
+          <pre id="sync-update-text" style="font-size:10px;color:var(--text-secondary);margin-top:4px;white-space:pre-line"></pre>
+        </div>
+        <div class="setting-row">
+          <label>云端数据</label>
+          <input type="checkbox" id="set-cloud">
+          <span style="font-size:11px;color:var(--text-muted)">启用后匿名分享对战特征数据</span>
+        </div>
+        <div class="setting-row" id="cloud-data-row" style="display:none">
+          <label>数据管理</label>
+          <span style="font-size:11px;color:var(--text-muted)">已分享 0 局数据</span>
+          <button class="btn btn-danger-sm">清除云端记录</button>
+        </div>
+      </div>
+      <div class="settings-footer">
+        <button id="btn-save-settings" class="btn btn-primary">保存</button>
+        <button id="btn-cancel-settings" class="btn btn-cancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 关于面板 -->
+  <div id="about-overlay" class="modal-overlay hidden">
+    <div class="about-modal interactive">
+      <div class="tactical-header">
+        <span>关于 Bob教练</span>
+        <button id="about-close" class="btn-close">&times;</button>
+      </div>
+      <div class="about-body">
+        <p><strong>Bob教练 v0.1.0</strong></p>
+        <p>酒馆战棋开源教学插件</p>
+        <p style="margin-top:8px;font-size:12px;color:var(--text-muted)">
+          开源协议: MIT<br>
+          GitHub: github.com/yueyang9999/battlegrounds-strategy<br>
+          本插件遵循暴雪插件政策，不执行任何自动操作。
+        </p>
+        <p style="margin-top:8px;font-size:11px;color:var(--text-danger)">
+          免责声明：本插件仅为学习辅助工具。使用本插件产生的任何游戏账号风险由用户自行承担。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 拔线进度提示 -->
+  <div id="dc-toast" class="dc-toast hidden">
+    <div id="dc-toast-text"></div>
+    <div class="dc-progress-bar"><div id="dc-progress-fill" class="dc-progress-fill"></div></div>
+    <button id="dc-manual-btn" class="btn btn-danger-sm interactive hidden">手动重连</button>
+  </div>
+
+  <!-- 退出确认对话框 -->
+  <div id="quit-overlay" class="modal-overlay hidden">
+    <div class="quit-modal interactive">
+      <h3>退出 Bob教练</h3>
+      <p style="margin:10px 0;font-size:12px;color:var(--text-secondary)">选择退出方式：</p>
+      <div class="quit-buttons">
+        <button id="btn-quit-app" class="btn btn-primary" style="background:linear-gradient(135deg,#8b3a3a,#c0392b)">退出应用</button>
+        <button id="btn-quit-tray" class="btn btn-secondary">最小化到托盘</button>
+        <button id="btn-quit-cancel" class="btn btn-cancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo 模式指示器 -->
+  <div id="demo-indicator" class="demo-indicator hidden">
+    <span>DEMO</span>
+    <span id="demo-turn">回合 1</span>
+  </div>
+
+</div>
+
+<script src="overlay.js"></script>
+</body>
+</html>

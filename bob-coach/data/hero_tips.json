@@ -1,0 +1,6038 @@
+{
+  "tips": {
+    "TB_BaconShop_HERO_16": {
+      "name": "挂机的阿凯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在 首位 2 回合 替代 升到 AFK 尝试 冻结 资源生成卡 那个 你 然后 使用 在 你的 发现 回合 到 升到 酒馆 2.我 通常 遵循 上 通过 升到 酒馆 3 在 6 铸币 和 然后 打出 通常 但是 它 取决于 什么 酒馆 你 获得 在 酒馆 2.如果 你不 获得 价值 开始 仍然 推荐 升本 到 2 在 5 铸币 在大多数 情况. 作为 为了 选取 尝试 选取 随从 好 本身 和 不 寻找 特定 组合.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "在早期 回合 你 是 寻找 到 找到 2 费用法术 到 冻结 他们 直到 回合 3 然后 你可以 发现 你的 3 掉落 同时 也 获得 额外 随从.",
+          "date": "2024-12-12",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 518,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_21": {
+      "name": "伟大的阿卡扎曼扎拉克",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 使用 英雄技能 到 给你 节奏 前期 和 通常 剧毒 2/3 后期 它 可以 是 改变战局 在 右侧 对局! 非常好 配合 星元自动机 因为 你可以 隔离 一个 配合 嘲讽 和 召唤 3/3 复制 给予 你 大量 身材 和 成长 到 你的 策略.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "[[星元自动机]] 是 很棒 配合 这个 英雄. 前期 你 经常 使用 兽群战术. 开始 在中期 对局 它 主要 是 烈毒打击 如果 你 没有 特定 信息",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_76": {
+      "name": "奥拉基尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "等级 一点 更多 激进地 比 在 正常 英雄 和 利用 你的 英雄技能 早期/中期. 朝着 后期 假设 对手 将 站位 大约 你的 圣盾 嘲讽 所以 获得 一些 额外 嘲讽 同时 你 也 打出 大约 潜在 顺劈 如果 那是 可用 在 对局.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "有 很棒 配合 配合 任一 顺劈 和 卡牌 那个 触发 同时 攻击 如 巨大的金刚鹦鹉. 英雄技能 可以 也 是 使用 配合 [[执念诗心龙]] 或 [[泰蕾苟萨]] 到 获得 永久 圣盾",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 2,
+            "validRefs": 2,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "执念诗心龙",
+                "cardId": "BG29_813",
+                "tier": 4
+              },
+              {
+                "name": "泰蕾苟萨",
+                "cardId": "BG21_015",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_56": {
+      "name": "阿莱克丝塔萨",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 升到等级 4 尽快 尽可能 到 使 大部分 你的 英雄技能 理想情况 也 配合 曲线 哪里 你可以 press 英雄技能 尽快 作为 你 获得 那里! 理想情况 打出 龙 但是 如果 对局 leads 你 在 另一个 方向 你可以 仍然 打出 一些东西 else 和 使用 英雄技能 为了 一些 额外 潜在 价值.你应该 总是 英雄技能 因为 最差 你 总是 获得 你的 money 回!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "这个 英雄技能 可以 仅 生成 好 outcomes 如果 你 使用 它 作为 早期 作为 尽可能 为了 做 那个 你 经常 需要 升到 酒馆 4 期间 回合 5 或 6 意味着 仅 staying 下 在 酒馆 2 为了 1 回合 期间 前期. 卡牌 到 寻找 是 [[执念诗心龙]] 和 其他 Dragon 配合",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "执念诗心龙",
+                "cardId": "BG29_813",
+                "tier": 4
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_201": {
+      "name": "费林大使",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 选取 随从 那个 是 好 本身 不要 大约 组合(至少 为了 2 和 4 stars). 如果 你不 击中 6 掉落 那个 creates 你的 gameplan 选取 一些东西 那个 adds utility 或 有 大量 身材 本身 和 打出 通常 之后 你 去 到 酒馆 4 你不 总是 需要 速冲到 6. 这个 英雄 是 非常 好 配合 hand buff 效果!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 找 太 多 为了 配合 但是 为了 强 standalone 卡牌 那个 帮助 你 同时 升本. 经常 你可以 获得 away 配合 升本 快速 因为 你的 英雄技能 可以 recover 足够 节奏",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_59": {
+      "name": "阿兰娜·逐星",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 在 开局 和 是 一点 更贪 一旦 你 获得 你的 英雄技能 升到. 优先 随从 那个 是 粘性 比如 亡语 复生 或 风怒 到 完成 你的 英雄技能 更快.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "最佳 方式 到 获得 更多 随从 在 你的 场面 攻击 是 having 大量 召唤 如 [[无害的骨颅]]. 保留 你的 eyes open 为了 他们 前期",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "无害的骨颅",
+                "cardId": "BG28_300",
+                "tier": 1
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_72": {
+      "name": "巴罗夫领主",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "就 赢下 bets LOL",
+          "date": "2024-10-15",
+          "patch": 208591,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 576,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208591,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "其中之一 key lessons 关于 打出 Barov 是 \"购买 好 卡牌 不错 卡牌\". 你 gotta convert 优势 你的 铸币 create 成为 更强 随从 和 升本 快速. 购买 坏 卡牌 基本上 使 你的 优势 uselss. 如果 在 doubt 就 bet 在 对手 那个 是 least invested 在 他们的 场面 (meaning person 在 更低 酒馆等级)",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_70": {
+      "name": "比格沃斯先生",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "理想情况 打出 defensive 直到 一个 玩家 dies. 那个 是 不要 总是 尽可能 所以 有时 它的 okay 到 打出 如 正常 英雄 但是 知道 这个: 之前 玩家 dies 你 是 worst 英雄 在 对局. 更多 玩家 die 更强 你 变成 所以 打出 accordingly!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "保留 在 记住 那个 你 基本上 更差 Patchwork. 你可以 仍然 有 一些 fun 对局 虽然 如果 你 survice 中期. 英雄技能 应该 不要 是 counted 在 到 save 你 但是 保留 improving 你的 advanatages",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_103": {
+      "name": "亡语者布莱克松",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "同时 我 不 认为 你 想要 强制 quillboar 你应该 拿取 buff 为了 blood gems 因为 它的 所以 容易 对你 到 生成 他们. 我 如 购买 随从 那个 可以 potentially 是 buff 早期 和 专注 所有 gems 在 它. 不 保留 gems 在 你的 hand waiting 为了 最佳 随从 到 来 因为 你可以 总是 move gems 如果 needed!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你的 英雄技能 是 仅 非常好 如果 效果 的 gems 打出 是 buff 足够 否则 spending 你的 铸币 在 其他 卡牌 是 经常 更好. 保留 在 记住 那个 Quillboar 是 不要 仅 种族 那个 可以 是 使用 到 利用 的 这个 英雄技能.",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_43": {
+      "name": "恐龙大师布莱恩",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "不 购买 坏 随从 和 不 overstay 低 酒馆 到 获得 布莱恩·铜须 快速. 在 ideal 对局 你 获得 battlecryes 同时 打出 作为 close 到 正常 曲线 作为 尽可能 也许 deviating slightly 在 末位 回合 和 使 上 为了 它 通过 节奏 你是 获得. 一旦 你 有 布莱恩·铜须 确保 到 首位 稳住 你的 场面 之前 速冲 更高 tiers 你不 想要 die 配合 small 场面 在早期 对局. 酒馆 4 是 best 为了 获得 身材 一般来说 因为 强力 neutrals 如 Assistant Guard 或 Inspiring Underdog.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "布莱恩·铜须",
+                "cardId": "BG_LOE_077",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 使 坏 打出 到 获得 你的 布莱恩·铜须 仅 对你 到 不要 有 卡牌 到 使用 他 配合. 回合 之前 你 获得 你的 布莱恩·铜须 保留 战吼 在 hand 替代 打出 他们 到 directly 使用 布莱恩·铜须 在 他们. 布莱恩·铜须 是 英雄 那个 needs 种族 那个 可以 benefit 从 having 布莱恩·铜须 所以 he 是 多 更好 在 对局 配合 种族 作为: 鱼人 龙 元素 或 恶魔",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "布莱恩·铜须",
+                "cardId": "BG_LOE_077",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_001": {
+      "name": "布鲁坎",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "这个 英雄 打出 best 前期 通过 使 annoying boards 通过 给予 你的 随从 亡语:召唤 1/1. 后期 你 几乎 总是 想要 使用 闪电祈咒 到 break 对手 圣盾 和 给予 自己 edge 在 战斗.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Brukans 闪电祈咒 是 很棒 针对 任何 有点 圣盾 heavy 场面 如 机械. 英雄技能 可以 也 是 使用 配合 [[执念诗心龙]] 或 [[泰蕾苟萨]] 到 获得 永久 buff 特别是 通过 doubling 你的 biggest 龙 攻击力 可以 是 很棒 组合 配合 一些 Dragon 饰品",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 2,
+            "validRefs": 2,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "执念诗心龙",
+                "cardId": "BG29_813",
+                "tier": 4
+              },
+              {
+                "name": "泰蕾苟萨",
+                "cardId": "BG21_015",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG26_HERO_101": {
+      "name": "霍格船长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "开始 对局 配合 intention 的 打出 海盗 但是 不要强玩 他们 如果 你 获得 非常 little 到 none.我 如 升本 在 2 因为 Ripsnarl 是 所以 强力 和 也 即将 3 快速 因为 强力 海盗 那里. Super 好 配合 Doubloon Grifter 和 Coast Guard 因为 你可以 获得 大量 价值 同时 购买 entire 酒馆!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "大部分时间 铸币 reduction 可以 是 使用 到 使 购买 便宜 法术 尽可能 同时 否则 打出 宁可 正常 和 boring 对局. 如果 那个 不能 是 achieved 拿不到 baited 通过 randomly 购买 海盗. 很棒 配合 配合 [[Doubloon Grifter||",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG21_HERO_000": {
+      "name": "凯瑞尔·罗姆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 staying 一个 更多 开启 1 仅 配合 很棒 duplicate 理想情况 圣盾. 否则 等级 通常 到 2 和 也许 consider 升到 酒馆 3 在 6 铸币 因为 那个 允许你 到 fit 英雄技能. 打出 通常 大部分 对局 但是 尝试 fit 英雄技能 当 你 认为 你 有 场面 主要 的 随从 那个 你 intend 在 保留 它 adds 大量 身材!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "在 order 对你 英雄技能 到 生成 你 优势 你 需要 使用 它 早期 和 经常 意味着 rafaarm curving. 有 很棒 配合 配合 任何 的 圣盾 随从 在 酒馆 1 如果 机械 是 在 对局",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_78": {
+      "name": "齐恩瓦拉",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "即使 你 没有 到 最终 作为 元素 每个 对局 当 你 选取 这个 英雄 你应该 知道 大多数 对局 将 最终 如 那个. 理想情况 你 购买 大量 便宜 元素 和 不 甚至 pay 为了 升本 advancing 通过 酒馆 同时 构建 强力 场面.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "尝试 spend 作为 little 铸币 作为 尽可能 在 升本. 在中期 对局 你 仅 做 它 如果 它 花费 更少 然后 2 铸币 作为 购买 元素 是 oftentimes 就 更好 option 到 生成 经济 优势.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BGDUO_HERO_222": {
+      "name": "古",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 认为 最佳 方式 到 打出 这个 英雄 combination 是 一个 玩家 升本 更多 激进地 和 被 served 强力 发现 和 一个 玩家 打出 更多 节奏 oriented 和 尝试 到 赢下 战斗 或 minimize 伤害 taken. 一旦 你 是 完成 获得 价值 从 英雄技能 它的 best 如果 玩家 那个 是 ahead 帮助 其他 一个 构建 强力 场面 也.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BGDUO_HERO_223": {
+      "name": "加尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 认为 最佳 方式 到 打出 这个 英雄 combination 是 一个 玩家 升本 更多 激进地 和 被 served 强力 发现 和 一个 玩家 打出 更多 节奏 oriented 和 尝试 到 赢下 战斗 或 minimize 伤害 taken. 一旦 你 是 完成 获得 价值 从 英雄技能 它的 best 如果 玩家 那个 是 ahead 帮助 其他 一个 构建 强力 场面 也.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG21_HERO_020": {
+      "name": "厨师曲奇",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "去 为了 身材 超过 配合 早期 和 仅 构建于 制胜手段 一旦 你 获得 随从 那个 可以 support 它! 如果 你 没有 价值 开始 Cookie 可以 仍然 提供 你 一些 铸币 或 强力 随从 到 smoothen 你的 曲线. 3 在 3 是 非常 强 但是 打出 任何 曲线 有效 用这个英雄 根据 什么 你是 offered.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "期间 前期 odds 的 获得 更高 tier 随从 increases 如果 你 英雄技能 随从 的 相同 种族. 更多 不同 种族 你的 英雄技能 更差 你的 average outcome 变成",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_29": {
+      "name": "克苏恩",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 直到 你 获得 好 场面 然后 英雄技能 每个 回合. 你可以 仍然 英雄技能 如果 它的 最佳 打出 那个 回合(例如:5gold 和 你 没有 价值 开始 那个 允许你 到 双倍 购买) 但是 不 去 超出 你的 方式 到 press 它 每个 回合. 你应该 press 它 每个 回合 如果 你 构建 大约 龙 配合 Whelp Smuggler 但是 因为 你 会 如 到 maximize 血量 在 那个 情况. 有效 amazingly 配合 Drakkari 它 doubles 你的 英雄技能 和 它的 成长 per 回合!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Oftentimes 打出 对局 没有 focusing 在 英雄技能 是最佳选择. [[Drakari Enchanter]] 有 很棒 配合 和 可以 使 HP worthwhile",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 0,
+            "status": "outdated",
+            "tipAgeDays": 569,
+            "totalRefs": 2,
+            "validRefs": 0,
+            "missingRefs": [
+              {
+                "name": "Drakari"
+              },
+              {
+                "name": "Enchanter"
+              }
+            ],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_33": {
+      "name": "馆长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 复生 amalgam 为了 技能 提升 保留 在 记住 那个 它 将 有效 在大多数 构建 直到 后期 和 最佳 part 关于 它 是 那个 它 可以 拿取 buff 那个 其他 随从 不需要 或 不能 receive.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Amalgam + [[坎格尔的学徒]] 是 什么 使 这个 英雄 赢下 对局. 更少 召唤 (野兽/Undeads 更好 为了 这个 剧毒 scam 出",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "坎格尔的学徒",
+                "cardId": "BGS_012",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_52": {
+      "name": "死亡之翼",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 best 配合 圣盾 和 顺劈.其他 比 那个 优先 血量 因为 你 获得 攻击力 从 你的 英雄技能 无论如何.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 配合 早期 圣盾 随从 前期. 如果 这些 是 不要 可用 (机械) 你 是 更好 的 打出 其他 英雄",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_666": {
+      "name": "Diablo",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 遵循 基础 曲线 因为 被 太 强 在 回合 4 leads 到 10 prizes 哪里 被 average 你是 仍然 即将 赢下 大多数 战斗 因为 额外 随从 和 仍然 获得 如 8 prizes. 回合 8 是 大多数 重要 在 对局 对你 所以 确保 那个 你 不要 仅 有 好 方向 但是 也 大量 技能 为了 那个 回合. 保留 大多数 prizes 从 回合 4 为了 回合 8 但是 使用 ones 你 获得 在 8 如果 needed 到 kill 其余 的 玩家.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_36": {
+      "name": "舞者达瑞尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 推荐 打出 通常 和 就 使用 hats 到 improve 你的 前期. 它的 不值得 为了 一些 buff 到 卖场面 就 为了 buff 随从.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "就 打出 正常 对局 同时 使用 免费 节奏 英雄技能 provides 到 使 激进 打出 如 升本 配合 reduced risk",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG28_HERO_801": {
+      "name": "荷利戴医生",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 fit 你的 英雄技能 作为 许多 times 尽可能 但是 不 做 stuff 如 卖出 token 在 1 到 英雄技能. 这个 英雄 可以 打出 任何 曲线 和 其中之一 它的 主要 strengths 是 如何 versatile 它 是 但是 它 preffers gameplan 那个 buys 大量 随从 早期 和 使 大 场面 快速.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 可以 帮助 你 fill 在 回合 哪里 你 会 有 剩余 铸币 但是 否则 它 将 和 应该 不要 see 多 使用",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_002": {
+      "name": "德雷克塔尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 升到 为了 圣盾 构建 用这个英雄 到 capitalize 在 bonus 攻击力. 随从 那个 召唤 是 也 非常好 到 stack 上 伤害.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "这个 英雄 aim 是 为了 英雄技能 到 是 强 在中期 对局. 经常 这个 happens 通过 putting 召唤 在 前方 同时 putting 圣盾 在 回.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_01": {
+      "name": "艾德温·范克里夫",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 在 开局 和 去 为了 buff 中期/后期 或 当 你 有 一个 铸币 左侧 超过. Best 到 buff 圣盾/顺劈!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "更少 你 使用 英雄技能 更好 你的 对局 通常 是. 基本上 仅 使用 它 配合 任何 剩余 铸币",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_42": {
+      "name": "伊莉斯·逐星",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 英雄 使用技能 直到 它 花费 5 那是 太 多 大部分时间. 我 一般 使用 首位 英雄技能 为了节奏 和 然后 如果 对局 去 badly 我 使用 他们 为了 更多 节奏 否则 我 尝试 发现 5 或 6 掉落 和 snowball 对局 从 那里!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "使用 这个 英雄技能 到 使 强 打出 甚至 如 升本 在 回合 4 到 酒馆 3 同时 activating 1 铸币 HP. 之后 英雄技能 花费 5 铸币 它 可以 仅 是 使用 在 edge 情况",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BGDUO_HERO_101": {
+      "name": "软泥教授弗洛普",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "ideal 策略 这里 是 到 帮助 你的 teammate 获得 强 high 酒馆 随从 在 他们的 场面 以便 你可以 也 复制 它. 前期 你的 英雄技能 是 很棒 节奏 tool 那个 允许你 到 激进升本.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG24_HERO_204": {
+      "name": "强化机器人",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 有时 你 获得 好 随从 offered 它的 相当 versatile 英雄 那个 不 确实 改变 你的 playstyle.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "拿取 什么 英雄技能 给你 但是 一般 你 就 act 如 你 没有 英雄技能",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG25_HERO_105": {
+      "name": "乐队经理精英牛头人酋长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 遵循 基础 曲线 和 英雄 使用技能 尽可能多 作为 尽可能. difference 之间 基础 曲线 和 升到 3 在 3 是 minimal 你 获得 一个 额外 3 掉落 替代 两个 2 掉落 有时 可以 甚至 是 更差 比 两个 掉落!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Veranus 伙伴 是最佳选择 伙伴 到 击中 作为 它 可以 帮助 你 生成 directional 5/6/7 掉落 到 carry 你的 对局",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_64": {
+      "name": "尤朵拉船长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "如有可能 开始 英雄 使用技能 在 回合 1. 你的 下一个 objective 是 找到 铸币. 回合 2 你 想要 购买 随从 和 英雄技能 回合 3 你 想要 等级 购买 铸币 和 英雄技能. 这个 允许你 到 去 到 酒馆 3 在 回合 4 和 铸币 出 末位 英雄技能 给予 你 大量 节奏. 没有 铸币 卖出 你的 随从 和 通常 仍然 correct 到 去 3 在 4 因为 如何 多 技能 它 给你. Continue 英雄 使用技能 每个 回合 之后 和 在 8 你将会 有 下一个 金色+发现. 首位 set 的 英雄技能 是 为了节奏/技能 和 第二个 一个 到 给你 方向 为了 对局",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "配合 Eudora 你 想要 开始 英雄 使用技能 开始 回合 1. Stay 下 在 酒馆 1 Tier 为了 额外 回合 到 然后 等级 2 times 在 row 到 触发 你的 首位 Treasure 在 回合 4 和 酒馆 3 到 发现 早期 4 掉落. 之后 那个 你应该 也 invest 成为 生成 2nd treasure 到 potentially 发现 6 掉落 在 回合 8 配合 它. 升到 为了 3rd Dig 是 barely ever 值得",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_40": {
+      "name": "芬利·莫格顿爵士",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "选取 这个 英雄 如果 你 有 没有 tier 1 options. 很棒 优势 是 那个 你可以 see 开始 酒馆 之前 你 使 你的 选取 但是 不 使 你的 选取 仅 大约 开始 酒馆.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "好 选取 在 任何 英雄 那个 通常 struggles 基于 他们的 低 护甲 价值 和 坏 选取 配合 英雄 那个 有 high 护甲 价值",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_55": {
+      "name": "菌菇术士弗洛格尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "不 等级 太 quickly! 专注 构建 场面 和 stay 一点 更多 在 酒馆 2/3 如果 对局 是 升到 badly. 也 因为 你是 可能 构建 鱼人 尝试 不要 购买 太 许多 的 其他 随从 因为 你将会 必须 卖出 他们 稍后(如果 你 有 option 到).",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "拿不到 baited 通过 坏 鱼人! Flurgle s 首位 的 所有 经济 宁可 然后 murloc 英雄 meaning 那个 he 有效 很棒 在 任何 流派 那个 打出 大量 卡牌. 所以 它 有效 很棒 配合 卡牌 如 [[布莱恩·铜须]]",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "布莱恩·铜须",
+                "cardId": "BG_LOE_077",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_02": {
+      "name": "迦拉克隆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在大多数 situations 我 如 英雄 使用技能 从 回合 1 到 获得 大 随从 快速. 有时 你可以 购买 随从 在 1 等级 在 2 和 开始 英雄 使用技能 在 回合 3 根据 对局.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 想要 开始 英雄 使用技能 回合 1 直到 你 找到 任一 很棒 passive 成长 很棒 节奏 或 两者. 因为 如果 你 做了 不要 你不能 overcome disadvantage 你 gained 通过 英雄 使用技能. 经常 这个 意味着 那个 有 没有 4 掉落 那个 是 确实 值得. 有 一些 5 掉落 那个 可以 有效 比如 lightfang 但是 一般 你 想要 是 升到 为了 premium 6 掉落. Oftentimes 你 是 specifically aiming 为了 [[Atrocitie]] 或 [[Whirling Lass o-matic]]",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 0,
+            "status": "outdated",
+            "tipAgeDays": 569,
+            "totalRefs": 4,
+            "validRefs": 0,
+            "missingRefs": [
+              {
+                "name": "Atrocitie"
+              },
+              {
+                "name": "Whirling"
+              },
+              {
+                "name": "Lass"
+              },
+              {
+                "name": "o-matic"
+              }
+            ],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_283": {
+      "name": "狂风之翼",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "根据 对局 认为 什么 你 想要 发现 和 在 什么 sequence. 这个 通常 将 帮助 你 understand 如果 你 想要 选取 铸币 或 +2/+2 之后 首位 发现 为了 任一 发现 4 5 或 6 配合 2nd 发现. cool 曲线 是 到 去 发现>2gold>发现 和 打出 基础 升本. 那个 允许你 到 购买 随从 在 8 铸币 当 升本 从 酒馆 3 到 4 和 smoothens 出 曲线 对你 到 就 速冲 6 和 snowball 对局(Best 在 metagames 哪里 你 想要 rush6/discover6).",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "主要 Scenario 这个 环境 是 升到 3 在 3 同时 开始 配合 发现.那里 3 alternate scenarios 对你 flights paths 到 认为 关于 : 1. Token 开始 (3/1/3) 2. Non Token 开始 (2/3/2) 3. 圣盾 开始 (1/2/3/2/3)",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_10": {
+      "name": "贸易亲王加里维克斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "经济 是 king. 购买 每个 随从 那个 给你 更多 铸币 超过 2 回合. Key 是 到 是 强 尽可能多 前期 因为 所有人 是 即将 尝试 伤害/kill 你. 之下 升本 可以 有时 有效 但是 有时 拿取 一点 的 伤害 到 是 酒馆 4 更快 是 值得 因为 你可以 稳住 更轻松 那里.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "前期 就 尝试 circle 作为 许多 卡牌 作为 尽可能. [[Tad]] 或 [[耐心的侦查员]] 是 很棒 帮助 这里. 在后期 对局 主要 流派 配合 [[布莱恩·铜须 Bronzbeard]] 是 非常好 作为 最佳 使用 你的 英雄技能",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 38,
+            "status": "outdated",
+            "tipAgeDays": 569,
+            "totalRefs": 4,
+            "validRefs": 3,
+            "missingRefs": [
+              {
+                "name": "Bronzbeard"
+              }
+            ],
+            "validCards": [
+              {
+                "name": "塔德",
+                "cardId": "BG22_202",
+                "tier": 2
+              },
+              {
+                "name": "耐心的侦查员",
+                "cardId": "BG24_715",
+                "tier": 2
+              },
+              {
+                "name": "布莱恩·铜须",
+                "cardId": "BG_LOE_077",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_15": {
+      "name": "堕落的乔治",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 使用 shield 或 两个 在 一些 大 随从 早期 到 放置 自己 在 好 spot 和 然后 打出 通常 和 使用 shields 当 你 有 剩余 铸币 或 在 强力 targets 比如 顺劈 或 high 攻击力 随从. 保留 在 记住 到 不要 fully relly 在 你的 英雄技能 因为 对手 可以 打出 Blaster 针对 你!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "基本上 打出 英雄 作为 你 没有 英雄技能 前期. 你 基本上 仅 英雄技能 随从 那个 你 expect 到 stay 大约 直到 后期. 英雄技能 是 更多 关于 winning 后期 宁可 然后 它 给予 你 帮助 前期. 更多 Shields 或 召唤 是 可用 在 对局 更差 乔治 得到 (机械/亡灵/野兽)",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_95": {
+      "name": "格雷布",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 abuse 节奏 你 获得 从 一些 随从 那个 召唤 到 等级 至少 到 酒馆 5 和 构建 一些东西 粘性 和 synergistic 从 那里. 复生 是 不要 总是 很棒 因为 reborned 随从 是 即将 是 taunted.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "仅 好 如果 种族 配合 大量 召唤 如 野兽 或 undeads 是 在 对局. 英雄 有 很棒 配合 配合 他们 早期 和 后期",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_242": {
+      "name": "古夫·符文图腾",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 但是 不 等级 太 slowly 以便 你可以 使用 你的 英雄技能 价值 尽可能多 作为 尽可能. 更快 你 获得 到 酒馆 4-5 更多 随从 你 将 获得 从 英雄技能.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 打出 开始 的 对局 没有 英雄技能 所以 一旦 你 获得 你的 英雄技能 到 触发 它 opten needs 到 是 使用 到 provide 足够 节奏 对你 到 survice. 之后 你 将 有 reached 更高 tier 哪里 购买 好 high 卡牌 可以 开始 给予 你 方向 的 英雄技能",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG23_HERO_305": {
+      "name": "劫匪之王托瓦格尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 如 获得 tokens 和 价值 generators 早期 到 给予 myself 更轻松 方式 到 cast 首位 英雄技能. 之后 我 尝试 snowball 成为 即将 4 和 升到 为了 第二个 英雄技能. 从 那里 仅 英雄技能 为了价值 当 酒馆 shops 是 值得 否则 打出 通常 和 拿不到 distracted 通过 太 许多 卡牌 找到 gameplan 和 去 为了 它!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "threshold 到 使用 英雄技能 是 经常 如果 你 想要 2 或 更多 卡牌 从 特定 酒馆. 不 是 太贪",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_67": {
+      "name": "钩牙船长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Best approach 是 到 打出 通常 和 然后 当 你 获得 一些 high tier 随从 那个 有 好 战吼 或 一个 time 效果 使用 它 和 然后 英雄技能 它 为了 一些 额外 价值. 可以 也 是 好 到 去 为了 三连 在 一些 situations.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "前期 你 就 想要 保留 英雄 使用技能 1 掉落 为了 生成 任何 的 战吼 1 掉落 那个 可以 生成 你 价值. 稍后 在 对局 最佳 使用 的 HP 是 high tier battlecrie 随从 到 也许 获得 offered 额外 价值.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_08": {
+      "name": "伊利丹·怒风",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "是 careful 不要 到 有 随从 你不 想要 die 在首位 或 末位! 尝试 打出 构建 大约 顺劈/圣盾 为了 best usage 的 英雄技能.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 配合 卡牌 如 巨大的金刚鹦鹉 或 顺劈.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "巨大的金刚鹦鹉",
+                "cardId": "BGS_078",
+                "tier": 4
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG26_HERO_102": {
+      "name": "因葛，钢铁颂歌",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Super 好 节奏 英雄 feel 免费 到 打出 一点 更多 激进地 配合 升本 和 三连 ing 成为 high 技能 随从 因为 你的 英雄技能 是 在 它的 best 在早期 中期!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 基本上 打出 对局 作为 如果 你 没有 英雄技能 但是 有时 获得 bonus 效果 那个 帮助你 save 一些 HP 不 expect 多",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_200": {
+      "name": "伊妮·积雷",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "你可以 之下 等级 slightly 配合 这个 英雄 到 利用 你的 英雄技能 前期 和 然后 遵循 上 通过 使用 你的 强力 场面 到 升到 6 和 去 为了 终局. 一些 策略 可以 就 停在 4 所有 对局 虽然 它 取决于 环境 对局.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "最佳 方式 为了 这个 英雄 到 生成 价值 快速 是 打出 任一 野兽 或 undeads 早期 不要 机械. Mech 效果 主要 来 成为 打出 更多 期间 中期",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_702": {
+      "name": "典狱长",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "构建 大约 召唤 随从 但是 确保 到 有 圣盾 或 顺劈 到 放置 你的 buff 在 一旦 你的 英雄技能 变成 大 足够.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "仅 使用 配合 剩余 铸币 否则 就 打出 正常",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_71": {
+      "name": "詹迪斯·巴罗夫",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 当 你 获得 好 战吼 或 随从 那个 你 会 是 happy 到 保留 switching 和 购买 超过 和 超过. Shes 一般 组合 英雄 那个 是 好 当 你 有 一些 broken 组合 可用 在 环境. 不太好 在 每个 situation.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 配合 强力 战吼. 保留 在 记住 那个 战吼 support 应该 给你 强 价值 所以 不 overcommit",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_37": {
+      "name": "加拉克苏斯大王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "你 不需要 到 强制 恶魔 1 大 demon 是 足够 以便 你 有 英雄技能 target 在大多数 回合. 也 因为 英雄技能 是 不要 那个 好 不 forcefully 使用 它 每个 回合 使用 它 仅 当 appropriate.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "基本上 waste 的 铸币 在 任何 流派 甚至 恶魔. 所以 仅 使用 它 配合 剩余 铸币",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BGDUO_HERO_104": {
+      "name": "郭雅夫人",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "可能 最佳 support 英雄 在 Duos mode 尝试 英雄技能 每个 回合 和 专注 feeding 你的 teammate 和 hope 他们 知道 什么 到 做 之后!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_60": {
+      "name": "凯尔萨斯·逐日者",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "非常好 在 对局 哪里 你可以 循环 大量 随从 如 海盗 或 元素 但是 也 好 当 你 有 圣盾 那个 你可以 buff. 一旦 你 获得 足够 技能 你可以 等级 更快 和 是 一点 贪 护甲 将 也 帮助 你!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 配合 配合 任何 Magnetics 尽可能 保留 generasting 身材 到 magnetize",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_68": {
+      "name": "天空上尉库拉格",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在 past 大多数 对手 是 英雄 使用技能 在 7 铸币 到 等级 从 2 到 4. 现在 我 认为 best 是 到 保留 它 为了 当 你 升到 酒馆 5 和 使用 它 那里 为了 非常 强力 回合.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Best 使用 为了 巨大 节奏 spike 一旦 你 任一 升到 酒馆 4 或 酒馆 5 根据 你的 prior 场面.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_280": {
+      "name": "库尔特鲁斯·陨烬",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常/安全 前期 和 然后 去 为了 策略 哪里 你 想要 购买 和 卖出 大量 随从. Kurtrus 将 帮助 任一 给你 强 duplicate 或 三连 如果 你 获得 幸运. Best 配合 元素/海盗.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Genenerally speaking 英雄技能 是 不要 专注 的 你的 gameplan. 它 可以 使 difference 如果 你 是 已经 自然 interested 在 购买 至少 2 随从.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG23_HERO_304": {
+      "name": "瓦丝琪女士",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 let 你的 英雄技能 给你 slight 提升. 你 有 没有 obligation 到 打出 Naga 因为 having 法术迸发 在 场面 不 actually matter 为了 你的 英雄技能. 在 5本 你可以 获得 永久 圣盾 为了 1 铸币 那是 非常强 在 任何 构建!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 应该 更多 是 使用 为了 早期 节奏 同时 不要 stopping 你的 通常 好 打出. 前期 [[Thaumaturgist]] 和 [[Volcanic Visitor]] 是 你的 best outs 的 这个 同时 后期 [[闪鳞纳迦]] 可以 是 vital 出",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 13,
+            "status": "outdated",
+            "tipAgeDays": 517,
+            "totalRefs": 4,
+            "validRefs": 1,
+            "missingRefs": [
+              {
+                "name": "Thaumaturgist"
+              },
+              {
+                "name": "Volcanic"
+              },
+              {
+                "name": "Visitor"
+              }
+            ],
+            "validCards": [
+              {
+                "name": "闪鳞纳迦",
+                "cardId": "BG23_008",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_25": {
+      "name": "巫妖巴兹亚尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "非常 好 在 demon 对局 由于 Rewinder! 通常 我 如 staying 一点 更多 在 酒馆 1 到 使 场面 和 升到 2 在 5 铸币 同时 英雄 使用技能 随从. 升本 在 6 铸币 和 打出 2 花费 英雄 曲线 有效 如果 你 获得 很棒 shops.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "使用 它 早期 为了节奏 和 然后 stop 使用 它 如果 你 没有 [[灵魂回溯者]] 保留 在 记住 那个 效果 也 有效 在 更高 花费 法术",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "灵魂回溯者",
+                "cardId": "BG26_174",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_22": {
+      "name": "巫妖王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "非常好 到 英雄技能 leeroy 后期. 直到 然后 尝试 获得价值 英雄 使用技能 亡语 或 随从 配合 好 效果. 也 好 配合 成长 策略 如 永恒骑士 或 星元自动机.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 2,
+            "validRefs": 2,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              },
+              {
+                "name": "永恒骑士",
+                "cardId": "BG25_008",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "[[星元自动机]] 是 很棒 配合 这个 英雄. 后期 [[Leeroy Jenkins]] 是 就 很棒",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 17,
+            "status": "outdated",
+            "tipAgeDays": 517,
+            "totalRefs": 3,
+            "validRefs": 1,
+            "missingRefs": [
+              {
+                "name": "Leeroy"
+              },
+              {
+                "name": "Jenkins"
+              }
+            ],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_62": {
+      "name": "玛维·影歌",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在 terms 的 升本 你可以 等级 在 2 和 然后 在 4 或 在 3 和 在 4 不 stay 太 多 在 1 但是 尝试 打出 根据 到 什么 shops 你是 获得 到 maximize number 的 英雄技能 使用. 不 是 太贪 配合 三连 如果 你是 losing 大量 战斗 它的 okay 到 拿取 3 或 4 掉落 替代 升到 为了 5 或 6s.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "有 很棒 配合 在 允许 你 到 获得 high 费用法术 为了 便宜. 一般 如果 你 找到 对子 你的 升本 曲线 可以 是 slower 如果 你不 找到 早期 对子 宁可 速升本",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_58": {
+      "name": "玛里苟斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 使 价值 超出 没有 通过 英雄 使用技能 经济 随从 或 战吼 那个 你 就 打出. 另一个 thing 你可以 做 是 hunt 特定 随从 如果 有 确实 crazy 强 一个 在 环境.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "前期 它 有 很棒 使用 在 upgrading battlecrie 随从 成为 随从 配合 更高 身材. 如果 你 已经 击中 such 随从 你可以 也 reroll 酒馆 directly 到 获得 随从 你 如. 后期 它 可以 是 使用 到 reroll powerfull 节奏 随从 从 hier tiers 成为 方向",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG30_HERO_304": {
+      "name": "经理马林",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "根据 如何 你的 前期 打出 出 任一 选取 饰品 那个 使 你 很多 更多 强力 在 moment 或 那个 给你 快速 方式 到 等级 和 使用 那个 到 速升本 或 选取 饰品 那个 使 你 更强 long term 和 确保 你不 拿取 伤害 现在. 英雄 是 非常 versatile 和 有时 你可以 天胡 一些 amazing options!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 是 太贪 配合 你的 饰品 和 尝试 不要 到 锁定 到 种族 但是 settle 为了 不错 neutral 饰品",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_49": {
+      "name": "米尔豪斯·法力风暴",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "如果 你 获得 确实 坏 酒馆 和 你的 场面 是 强 足够 为了 回合 就 等级. 它的 更大 risk 到 开始 刷新. 这个 英雄 打出 在 它的 best 在 6 哪里 你 有 大多数 随从 shown 到 你 per 刷新 但是 在大多数 metas he 可以 是 super 好 在 4 和 5 也!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Settle 为了 首位 strategie 那个 允许你 到 \"就 购买 大量 卡牌\" 作为 那个 是 一般 大多数 高效",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_17": {
+      "name": "米尔菲丝·法力风暴",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "理想情况 你 最终 打出 大约 圣盾 机械 配合 magnets 但是 保留 在 记住 你不 总是 需要 强制 机械 甚至 用这个英雄. 有时 对局 leads 你 在 不同 方向.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "仅 好 usecase 为了 英雄技能 是 为了 早期 节奏 通过 购买 机械. 之后 应该 就 打出 如 英雄技能 做 不要 exist",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_38": {
+      "name": "穆克拉",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 保留 bananas 为了 不错 随从(甚至 buff 好 酒馆 1 有效 在大多数 情况). 一旦 你 有 好 随从 打出 所有 bananas 在 它 和 然后 打出 大多数 我的 bannanas 一旦 我 获得 他们. 节奏 是最佳选择 utilization 的 你的 英雄技能 不 waste 它 和 使用 它 到 激进升本!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "使用 你的 bananas 前期 在 好 随从(optimally 圣盾 到 save HP 但是 一般 就 打出 如 大多数 其他 英雄 会. 如果 你不能 找到 圣盾 你 就 gotta settle 在 一些东西 else 通过 回合 3/4",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG23_HERO_303": {
+      "name": "摩洛克·福尔摩斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 remember 什么 所有人 bought 在 回合 1. 其他 比 那个 使用 铸币 到 等级 agressively 如果 needed 或 就 购买 强 场面. 从 那里 snowball intro 制胜手段.开始 每个 回合 配合 英雄 使用技能 因为 它 两者 给你 信息 在 你的 下一个 对手 和 也 可能 改变 你的 回合 根据 是否 或 不要 你 获得 铸币.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "这个 英雄 做 好地 如果 你 pay attention 特别是 回合 1 和 2 作为 你 将 可能 是 ask 关于 随从 bought 在 那些 回合 作为 他们 是 经常 kept.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_301": {
+      "name": "吞噬者穆坦努斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 首位 构建 一个 大 随从. 从 那里 你可以 构建 场面 那个 synergizes 配合 那个 一个 随从 和 可以 去 crazy!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "就 打出 正常 同时 保留 大约 一些 额外 身材 通过 使用 英雄技能. 很棒 在 convering 临时 成为 永久 statts",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_202": {
+      "name": "阮大师",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 认为 的 short term 而不是 升到 太 long. 如果 你 选取 short term 英雄技能 每个 回合 你是 更多 可能 到 赢下. 贪 选取 是 通常 bait.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "拿不到 forced 在 到 weird 升本 curves 为了 仅 slight advantages 从 heropowers. 也 保留 在 记住 那个 英雄技能 不能 是 picked 2 回合 在 row. 所以 如果 两者 是 useless 选取 一个 你 least 想要 see 下一个 回合",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_57": {
+      "name": "诺兹多姆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在早期 对局 使用 英雄技能 到 获得 经济 或 强力 随从 followed 通过 强力 场面 和 然后 使用 那个 到 获得 到 你的 制胜手段. 英雄技能 是 更多 useful 在早期 part 的 对局 所以 不 依赖 它 太 多 稍后.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "有 很棒 配合 在早期 对局 配合 2 铸币 法术 在 回合 1 和 3. 就 购买 它 然后 刷新 成为 更高 quality shops 或 成为 铸币",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_93": {
+      "name": "恩佐斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "在 早期 中期 就 尝试 是 强 因为 你不能 总是 构建 大约 你的 英雄技能. 有时 它的 就 即将 是 1 铸币 2/2 和 那是 okay.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 是 afraid 到 卖出 你的 fish 它 need arises 哪里 你 得到了 好 流派 升到 没有 它. 打出 相当 正常 一般 和 不 overcommit 到 配合",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_74": {
+      "name": "林地守护者欧穆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "激进升本 同时 打出 efficiently. 法术 made Omu 很多 更好 因为 它的 容易 到 找到 1 或 2 费用法术 到 fill 你的 前期 曲线. 稳住 在 任一 酒馆 3/4/5 根据 环境 和 如何 激进 你的 对局 是 和 然后 continue 升本 直到 你 击中 制胜手段.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "有效 很棒 配合 2 铸币 法术 或 [[南海卖艺者]] 在 回合 2. 这个 英雄 requires proper planning 的 你的 升本 曲线",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "南海卖艺者",
+                "cardId": "BG26_135",
+                "tier": 1
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_305": {
+      "name": "奥妮克希亚",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 构建 亡语/复生 oriented 到 充分利用 你的 英雄技能. 是 careful 那个 有时 你的 英雄技能 是 即将 interrupt 你的 亡语/复生 所以 站位 accordingly!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 将 获得 大多数 召唤 通过 打出 野兽 或 亡灵 boards 但是 英雄技能 有 antisynergy 配合 复生 所以 保留 这个 在 记住 同时 打出 英雄. 这个 方式 输掉 你 对局",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG23_HERO_201": {
+      "name": "厄祖玛特",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 等级 一点 更多 激进地 如果 你 有 好 场面.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 是 就 pure 节奏 但是 做 不要 改变 任何 meaningful 关于 你的 gameplay besides saving 一些 血量",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_18": {
+      "name": "海盗帕奇斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 不要 购买 non pirate 随从 因为 它的 即将 使 强制 海盗 方式 更难. 如果 你 获得 没有 海盗 在 所有 它的 fine 到 去 为了 另一个 构建 但是 不 转向 回 成为 海盗 之后.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "这个 英雄 让你 fully 锁定 到 前期 海盗. 英雄 使用技能 为了 random 海盗 是 更好 然后 购买 卡牌 在 许多 instances. 就 一般 尝试 购买 作为 许多 海盗 作为 高效 作为 尽可能",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_34": {
+      "name": "帕奇维克",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 一点 更多 贪 比 usual(更多 升本) 到 利用 你的 额外 HP.你可以 认为 的 这个 英雄 作为 having 没有 英雄技能 但是 30 护甲 替代 那是 sometime 好 足够!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 一般 打出 正常 但是 你可以 使用 你的 额外 血量 为了 获得 away 配合 升本 作为 额外 血量 reduces 你的 risk 的 dying 同时 doing 所以",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG25_HERO_100": {
+      "name": "普崔塞德教授",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "首位 英雄技能 我 如 到 使用 在 酒馆 3 或 4 和 尝试 获得 铸币 generator. 如果 对局 是 升到 好地 使用 其他 2 英雄技能 在 5 和 6 如果 对局 去 badly 使用 一个 或 甚至 两者 英雄技能 为了节奏. 可以 也 使用 英雄技能 在 回合 2 在 一些 situations 哪里 你 会 宁可 构建 早期 场面 presence 和 等级 之后. alternative 策略 是 到 英雄技能 在 回合 2 hoping 你 获得 super 大 随从 那个 可以 carry 你的 前期 和 然后 速升本 到 4/5 和 英雄技能 那里 之前 即将 6 为了 你的 末位 英雄技能.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "铸币 + 复生 开始 被 可用 在 酒馆 3/4 (的 英雄技能) 所以 保留 那个 在 记住 到 decide timing 的 你的 英雄技能. 它 可以 也 是 worth 英雄 使用技能 在 回合 2 为了 复生 egg 到 let 那个 carry 你 成为 中期",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_39": {
+      "name": "疯狂金字塔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "optimal number 为了 这个 英雄技能 是 +5 血量. 在 那个 数量 或 甚至 更高 如果 你 想要 是 一点 贪 你应该 开始 英雄 使用技能 每个 回合 到 使 你的 场面 粘性.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "这个 是 前期 英雄技能. 它 有 little 到 没有 impact 稍后 在 所以 它 是 vital 到 不要 是 太贪 和 开始 使用 它 一旦 你 获得 到 +4 到 +5 血量",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_007": {
+      "name": "艾萨拉女王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "当 你 是 获得 close 到 activating 你的 英雄技能 尝试 计划 ahead 和 认为 什么 是 大多数 optimal 方式 的 获得 攻击力 那个 也 允许你 到 发现 一个 随从.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 基本上 打出 它 作为 相当 正常 对局 配合 一些 Naga outs. 不 就 randomly overcommit 到 一些 random 娜迦",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_45": {
+      "name": "至尊盗王拉法姆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "同时 你可以 打出 classic Rafaam 曲线 和 英雄技能 每个 回合 你可以 也 等级 在 2 在 一些 instances 和 英雄技能+购买 随从+购买 法术 在 5 铸币 根据 你的 开始 和 随从/法术 offered. 尝试 认为 ahead 和 也 avoid 卖出 随从 到 英雄技能 特别是 之前 你 有 7 随从 因为 那个 是 通常 不值得 它.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 仍然 提供 你 铸币 即使 你 是 不要 能够 kill 随从 所以 你 不需要 到 是 afraid 到 就 使用 你的 英雄技能",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_11": {
+      "name": "炎魔之王拉格纳罗斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 slightly 之下 等级 和 finish 你的 英雄技能 然后 buff 圣盾 或 顺劈!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你 就 打出 如 你 会 在 其他 英雄 和 拿取 一些 额外 身材 一旦 英雄技能 activates",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_75": {
+      "name": "拉卡尼休",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 英雄技能 尽可能多 作为 尽可能 和 做 两个 things 中期: 找到 好 随从 到 buff 如 圣盾 或 顺劈 和 也 尝试 构建 大约 卡牌 那个 benefits 从 你 casting 法术 如 Naala/Azerite 为了 额外 提升!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "使用 当 高效! 否则 就 skip 英雄技能. 它 是 best 到 concentrate 你的 身材 所以 你可以 easiy 转型 在 稍后 gamestages",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_12": {
+      "name": "鼠王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 强度 同时 having 强力 场面. 不 是 贪 配合 发现 因为 升本 同时 保留 血量 是 更多 重要.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "前期 missing 英雄技能 hurts. 它 是 主要 总是 就 highly 高效. 稍后 在 对局 使用 它 当 它 fits 种族 wise",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_41": {
+      "name": "雷诺·杰克逊",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 和 英雄技能 carry 如 布莱恩·铜须 或 6 掉落. 如果 你不能 获得 一个 和 你 开始 拿取 太 多 伤害 你可以 英雄技能 节奏 随从 就 到 stay alive 一些 更多.",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "布莱恩·铜须",
+                "cardId": "BG_LOE_077",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "基本上 任何 早期 5 可以 有 很棒 使用 配合 这个 英雄技能. 任一 大量 节奏 或 long term 方向. general midset 是: 不 是 太贪 和 let 完美 是 enemy 的 好",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_100": {
+      "name": "洛卡拉",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Best 到 构建 大约 圣盾 或 high 血量 随从.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "[[Defiant Shipright]] 是 你的 best friend 但是 一般 你可以 也 拿取 好 优势 的 前期 机械.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 0,
+            "status": "outdated",
+            "tipAgeDays": 569,
+            "totalRefs": 2,
+            "validRefs": 0,
+            "missingRefs": [
+              {
+                "name": "Defiant"
+              },
+              {
+                "name": "Shipright"
+              }
+            ],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_102": {
+      "name": "萨鲁法尔大王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 构建 大约 圣盾 随从 也 是 aware 那个 你的 英雄技能 有效 在 magnetic 随从 为了 buff mech 多个 times!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "拿不到 太 cute 配合 这个 或 调整 你的 升本 曲线 多. 最佳 usages remains 在 Magnetics",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG21_HERO_010": {
+      "name": "斯卡布斯·刀油",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "曲线 取决于 什么 你的 对手 是 doing. 任一 方式 尝试 打出 有点 安全 直到 你 击中 制胜手段 然后 你可以 去 crazy!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 rely 太 多 在 你的 英雄技能 但是 专注 使 扎实 打出 和 使用 英雄技能 当 它 fits",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_23": {
+      "name": "沙德沃克",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "节奏 是 name 的 对局 在 shudder 英雄技能 任一 经济 随从 或 随从 那个 获得 身材 或 给你 更多 future 身材. 尝试 有 explosive 回合 早期 以便 你不 拿取 太 多 伤害 去 一点 贪 和 然后 rinse 和 repeat. 尝试 不要 是 太贪!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_90": {
+      "name": "希拉斯·暗月",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "优先 ticket 卡牌 但是 不 去 太 crazy 不 购买 每个 单个 ticket 卡牌 和 如果 一些东西 好 出现 在 酒馆 购买 它 即使 它 不 来 配合 ticket.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "购买 强 卡牌 remains 更好 然后 购买 坏 卡牌 配合 Tickets. 一般 Ticket 应该 是 valued 在 slightly below 1 铸币 意味着 便宜 法术 配合 Tickets 可能 是 更多 viable 然后 购买 随从",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_27": {
+      "name": "辛达苟萨",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "购买 任一 token/价值 generator 或 lowest 血量 随从. 然后 冻结 其余 和 打出 基础 曲线 同时 购买 强 随从. 使用 你的 强 场面 到 carry 你 到 酒馆 5/6 和 那里 寻找 制胜手段.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "冻结 早期 shops 为了 强 回合 3 和 potentially 4 同时 之后 使用 它 到 保留 一些 更好 随从 大约.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG24_HERO_100": {
+      "name": "德纳修斯大帝",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 计划 到 选取 任务 那个 是 好 为了 对局 你是 打出 和 专注 finish 它 作为 快速 作为 尽可能 没有 升到 太 多 超出 你的 方式 直到 末位 回合 或 所以 的 任务.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "一般 speaking 你的 best 任务 options 是 便宜 和 容易 到 完成 ones. 更多 expansive options oftentimes 仅仅 有 太 little impact 早期 putting 你 成为 disadvantaged situation 那个 你 struggle 到 recover 从.",
+          "date": "2025-04-11",
+          "patch": 219197,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 398,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 219197,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG28_HERO_400": {
+      "name": "蛇眼",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "仅 time 你应该 不要 英雄技能 当 它的 可用 是 回合 2 如果 你 刷新 1 在 1. 就 等级 和 使用 它 在 3. 否则 总是 英雄技能 回合开始时 当 你可以 和 判断 gameplan 从 那里. 如果 升本 是 不要 高效 然后 购买 随从. 如果 购买 是 不要 好 然后 等级.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "firestone",
+          "language": "enUS",
+          "summary": "刷新 6 在 你的 首位 刷新 bumps 你的 average 站位 通过 几乎 0.3 和 刷新 3 通过 0.1.",
+          "date": "2024-10-07",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 584,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 每当 你可以 配合 2 expection. 之前 饰品 回合 配合 没有 好 buys 在 酒馆 或 回合 2 之后 你 刷新 1 在 回合 1",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG21_HERO_030": {
+      "name": "斯尼德",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 英雄 使用技能 尽可能多 作为 尽可能 一旦 你 获得 到 更高 酒馆 tiers 特别是 一旦 你 首位 获得 到 3 或 4 和 后期 在 6 掉落!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Oftentimes 英雄技能 最终 被 waste 的 铸币 作为 有 打出 那个 是 更好 可用. 不 overcommit 到 坏 heropowers",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG23_HERO_306": {
+      "name": "希尔瓦娜斯·风行者",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "你可以 任一 打出 Rafaam 曲线 在 更多 aggro 对局 或 3 在 3 和 然后 开始 buff 那些 大 随从! 打出 正常 曲线 和 英雄 使用技能 当 它 buff 大量 随从 也 feels 好.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "nice bonus 效果 在中期 对局 但是 一般 你 就 打出 正常 和 使用 它 配合 剩余 铸币",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG28_HERO_800": {
+      "name": "泰瑟兰·血望者",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 通常 在 开局 和 仅 购买 法术 你 会 购买 anyway. 你可以 开始 购买 更多 法术 比 usual 如果 你 最终 升到 为了 法术 策略 如 Azerite/Lubber/Naala 但是 否则 就 consider 你的 英雄技能 到 是 bonus.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "一般 打出 它 相当 正常 但是 保留 你的 eyes open 为了 nice 组合. 所以 就 是 flexible",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_282": {
+      "name": "塔姆辛·罗姆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Best 配合 元素/Naga 哪里 你的 smallest 随从 是 仍然 大 但是 也 很棒 配合 恶魔 或 龙.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "有效 很棒 配合 龙 在中期 对局. 经常 使用 配合 High 攻击力 低 血量 随从",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BGDUO_HERO_100": {
+      "name": "无名者",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 做 主要 你的 thing 你的 技能 来 从 fact 那个 你 是 能够 复制 好 英雄技能 和 添加 一些 护甲 到 squad. 不 complicate 它.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_000": {
+      "name": "塔维什·雷矛",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "你的 英雄技能 carries 你的 前期. 我 如 shooting high 直到 后期 当 我 shoot 低 到 击中 leeroy/queen.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "选取 High 血量 早期 (strongest 随从) 和 低 血量 后期. (scam)",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG27_HERO_801": {
+      "name": "风暴之王托里姆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 认为 基于 可用 种族 如果可以 选取 随从 那个 给你 方向 和 那个 你可以 强制 或 随从 那个 是 好 总体(Varian 例如). 之后 你 想要 打出 通常 但是 当 你 获得 close 到 你的 7 掉落 你可以 做 crazy 回合 为了 获得 它 一个 回合 更快(通过 购买 和 卖出 随从 你 会 通常 不要 purchase).",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "更多 flexible 7 掉落 更好. 不 选取 options 那个 强制 你 到 锁定 到 tribal combination 但是 可以 是 强 通过 themself",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG25_HERO_103": {
+      "name": "塔隆·血魔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Best 配合 亡灵 和 野兽 也 相当 cool 配合 星元自动机. 确保 你 有 足够 场面空间 到 召唤 所有 随从 和 总是 尝试 有 一些东西 到 英雄技能 为了 一点 的 powerspike 在 战斗 否则 你是 wasting 你的 英雄技能!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "[[星元自动机]] 和 [[Turquoise Skitterer]] 是 你的 best friends 在早期 对局.",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 17,
+            "status": "outdated",
+            "tipAgeDays": 517,
+            "totalRefs": 3,
+            "validRefs": 1,
+            "missingRefs": [
+              {
+                "name": "Turquoise"
+              },
+              {
+                "name": "Skitterer"
+              }
+            ],
+            "validCards": [
+              {
+                "name": "星元自动机",
+                "cardId": "BG_TTN_401",
+                "tier": 2
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_50": {
+      "name": "苔丝·格雷迈恩",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 之下 等级 steal 一个 好 随从 和 构建 大约 它.总是 留意 在 什么 对局 是 打出 但是 不 转向 太 多 或 你将会 最终 被 jack 的 所有 trades master 的 top8.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "Tess 是 关于 staying alive 到 allow 自己 oppertunities 到 使用 你的 herepower 所以 你可以 一般 打出 相当 保守 升本 wise 特别是 与…搭配好 组合 流派 (经常 involving 提图斯·瑞文戴尔)",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 1,
+            "validRefs": 1,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "提图斯·瑞文戴尔",
+                "cardId": "BG25_354",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_94": {
+      "name": "提克特斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "计划 为了 prize 回合 和 如何 你可以 使用 好/坏 outcome. 尝试 不要 rely 太 多 在 获得 好 prize 和 有 你的 自己 gameplay independent 的 prizes 使 他们 就 是 bonus 为了 一些东西 已经 很棒.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "最佳 tier 1 法术 是 2 铸币 或 3 refreshes. 一般 最佳 2本 法术 是 \"很棒 Deal\" 和 \"在 House\"",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_28": {
+      "name": "永恒者托奇",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "我 推荐 时光修补匠托奇 曲线 每当 尽可能. 打出 基础 曲线 直到 6 铸币 哪里 你 升到 酒馆 3 和 英雄技能. 冻结 4 掉落 如果 至少 一个 是 好 和 下一个 回合 你可以 购买 2 随从 和 英雄技能!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "早期 spike 时光修补匠托奇 曲线 (等级 回合 4 HP 冻结) provides 是 经常 足够 到 给你 优势 你可以 然后 稍后 capatalize 在.",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_003": {
+      "name": "范达尔·雷矛",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "好 配合 亡语 和 召唤 但是 可以 有效 配合 一些东西 如 剧毒 或 就 任何 流派 decently.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "使用 早期 召唤 为了节奏. 使用 这个 节奏 优势 到 找到 long term 方向. 不 锁定 到 难 到 成长 随从 在 场面",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG22_HERO_004": {
+      "name": "瓦尔登·晨拥",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "计划 你的 freezes 到 maximize chance 到 三连 不 是 贪 配合 发现 因为 如果 你是 强 你可以 就 等级 刷新 和 设置 甚至 更好 三连 为了 下一个 回合. 总是 count 如何 许多 随从 你可以 冻结 同时 仍然 获得 英雄技能 到 有效. 为了 它 到 有效 数量 frozen 随从 needs 到 是 至少 1 更低 比 随从 shown 为了 刷新 在 那个 酒馆.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "英雄技能 可以 生成 大量 tripels 和 对子. 拿不到 baited 通过 坏 ones. 你 有 更多 然后 足够 options 和 不要 足够 铸币 到 access 他们 所有",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG26_HERO_104": {
+      "name": "摇滚教父沃恩",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "为了 首位 两个 activations 的 你的 英雄技能(在 5 和 8 铸币) 确保 你 有 首位 非常 强力 2 掉落 那个 你 会 如 到 复制 和 之后 任一 5 掉落 如果 你 managed 到 击中 三连 或 至少 三连 通过 utilizing 英雄技能.我 总是 如 到 open 发现 而不是 复制 发现 法术 因为 有 大量 随从 在 对局 那个 insta 赢下 如果 你 有 两个 的 他们. 你 基本上 给予 自己 chance 在 pocket aces!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "你的 早期 英雄技能 应该 是 使用 为了节奏 同时 稍后 在 它 可以 是 使用 到 使 你的 方向 更多 扎实",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_201": {
+      "name": "沃金",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "打出 为了节奏 和 尝试 去 为了 任一 机械 或 大 顺劈 中期/后期. 你不 保留 身材 permanently 但是 它的 仍然 好 提升 到 有! 可以 打出 到 保留 身材 permanently 在 酒馆 eating 策略 有时 好 thing 到 保留 在 记住 特别是 如果 你是 能够 buff 酒馆 好地.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 早期 节奏. 后期 它 可以 任一 是 使用 到 使 大 顺劈 或 巨大 圣盾",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_14": {
+      "name": "瓦托格尔女王",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "等级 作为 快速 尽可能 到 酒馆 3/4 因为 获得 一些 high 等级 随从 一起 配合 你的 英雄技能 是 即将 给你 大量 技能 那个 然后 你可以 translate 成为 time 到 找到 你的 方向/制胜手段.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "很棒 英雄 到 速升本! 3 在 3 和 升到 早期 到 4 有效 好地 因为 英雄技能 buff 是 方式 更大 那个 方式. 很棒 配合 配合 龙 特别是",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG20_HERO_101": {
+      "name": "泽瑞拉",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "经济 曲线 成为 三连 是最佳选择 方式 到 打出 不 是 太贪 配合 三连 因为 它的 即将 花费 你 在 血量 因为 随从 你 英雄技能 是 2/2s 和 他们 通常 不 carry 战斗.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "就 是 高效 和 使用 英雄技能 在 随从 那个 任一 获得 卖出 eventually 或 有 效果",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_35": {
+      "name": "尤格-萨隆",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "有效 配合 多个 curves 根据 环境 但是 尝试 英雄技能 尽可能多 作为 尽可能 早期 和 ignore 它 中期/后期. 我 相当 多 仅 英雄技能 后期 如果 我 有 2 左侧 超过 铸币 和 我 确实 不 想要 刷新.",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "就 打出 为了节奏 和 是 高效 通过 英雄 使用技能 每个 回合 besides 回合 2. 一旦 你 击中 中期 reduce 你的 英雄技能 frequence",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_53": {
+      "name": "伊瑟拉",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "你必须 强制 龙 用这个英雄 有 更激进 方式 的 这样做 如 速冲 酒馆 3/4 或 更保守 方式 构建于 酒馆 1 之前 升到 3/4. 根据 你的 分段 和 对局 你应该 判断 当下 什么 效果更好 对你!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "如果 你 是 不要 打出 战斗开始时 龙 配合 这个 英雄 你 是 doing 一些东西 wrong. 拿不到 baited 通过 其他 dragon alternatives. 他们 是 不值得 Risk 为了 低 rewards",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_92": {
+      "name": "亚煞极",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "King 的 升本 激进地. 就 是 mindful 的 你的 血量 和 的 好 随从 在 那个 对局. 一旦 你 snatch 好 一个 你可以 构建 大约 它!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "就 打出 为了节奏 和 是 高效 通过 英雄 使用技能 每个 回合 besides 回合 2. 一旦 你 击中 中期 reduce 你的 英雄技能 frequence",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "TB_BaconShop_HERO_91": {
+      "name": "了不起的杰弗里斯",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "不 是 太贪 配合 首位 英雄技能 是 mindful 配合 第二个 英雄技能 和 贪 作为 hell 配合 第三个! 除非你 是 losing 战斗 在 情况 使用 所有 的 他们 到 stay alive 尽可能多 作为 尽可能 和 save 坏 对局!",
+          "date": "2024-09-29",
+          "patch": 208182,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 592,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 208182,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "首位 一个 到 两个 英雄技能 是 为了节奏 和 staying alive 同时 末位 英雄技能 应该 是 使用 到 完成 你的 compositon 和 三连 一些 你的 core pieces",
+          "date": "2024-10-22",
+          "patch": 209698,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 569,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 209698,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "": {
+      "name": "",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "大部分时间 它的 best 到 使用 英雄技能 早期 大 随从 到 给予 自己 足够 技能 到 速升本. 如果可以 wait 使用 它 在 金色 随从 是 使 你的 英雄技能 更好 version 的 Renos 但是 不 是 太贪!",
+          "date": "2024-12-10",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 520,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG31_HERO_006": {
+      "name": "大主教奥萨尔",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "尝试 使用 便宜/免费 法术 那个 你 是 获得 配合 帮助 的 你的 英雄技能 为了 早期 strenght 那个 你可以 然后 translate 在 升本 更多 offensively! 英雄技能 是 在 它的 best 在早期 对局 因为 稍后 在 铸币 discount 不 mean 多.",
+          "date": "2024-12-11",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 519,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "不 专注 英雄技能 太 多 但是 宁可 就 拿取 尝试 获得 快 节奏 优势",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG31_HERO_003": {
+      "name": "预言者努波顿",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "Best 卡牌 到 使用 英雄技能 在 前期 是 钻探原油 如果 你 获得 它 在 回合 3 或 4. 你 然后 基本上 pay 2 铸币 为了 1 铸币 每个 回合 为了 其余 的 对局 它的 很棒 deal. 稍后 在 我 如 使用 英雄技能 在 5 或 6 掉落 法术 因为 那些 是 通常 大多数 expensive 和 high 在 技能! 例如 range 从 Eyes 的 Earthmother 到 点金之触 或 甚至 Boundless 潜在.",
+          "date": "2024-12-11",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 519,
+            "totalRefs": 2,
+            "validRefs": 2,
+            "missingRefs": [],
+            "validCards": [
+              {
+                "name": "钻探原油",
+                "cardId": "BG28_805",
+                "tier": 2
+              },
+              {
+                "name": "点金之触",
+                "cardId": "BG28_830",
+                "tier": 5
+              }
+            ],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "拿不到 baited 成为 早期 heropowers 配合 little 效果. 寻找 high impact 法术 和 专注 duplicating 他们 但是 不 base 你的 整个 对局 大约 它",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    },
+    "BG31_HERO_005": {
+      "name": "克隆大师泽里克",
+      "tips": [
+        {
+          "author": "rdu",
+          "language": "enUS",
+          "summary": "大部分时间 它的 best 到 使用 英雄技能 早期 大 随从 到 给予 自己 足够 技能 到 速升本. 如果可以 wait 使用 它 在 金色 随从 是 使 你的 英雄技能 更好 version 的 Renos 但是 不 是 太贪!",
+          "date": "2024-12-11",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 519,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        },
+        {
+          "author": "minder",
+          "language": "enUS",
+          "summary": "是 mindful 关于 directional pieces 它 是 worth 英雄技能 但是 也 不 是 afraid 到 复制 singular 大 随从 到 推进 你的 优势",
+          "date": "2024-12-13",
+          "patch": 212067,
+          "tip": "",
+          "whenToCommit": "",
+          "freshness": {
+            "score": 50,
+            "status": "stale",
+            "tipAgeDays": 517,
+            "totalRefs": 0,
+            "validRefs": 0,
+            "missingRefs": [],
+            "validCards": [],
+            "sourcePatch": 212067,
+            "currentPatch": 241135
+          }
+        }
+      ]
+    }
+  },
+  "curves": [
+    {
+      "id": "basic",
+      "name": "Basic Curve",
+      "notes": "Stronger with a token start, turn 4 shop RNG weakness. No heropower requirement.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll",
+            "buy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fast-basic",
+      "name": "Fast Basic Curve",
+      "notes": "Stronger with a token start, turn 4 shop RNG weakness. No heropower requirement.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jeef",
+      "name": "Jeef Curve",
+      "notes": "Uses tier 1 economy and strong pairs for a flexible start to the game with its variations.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "buy",
+            "sell"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "buy",
+            "sell"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fast-jeef",
+      "name": "Fast Jeef Curve",
+      "notes": "Uses tier 1 economy and strong pairs for a flexible start to the game with its variations. Pushes levels quickly.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "buy",
+            "sell"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slow-jeef",
+      "name": "Slow Jeef Curve",
+      "notes": "Uses tier 1 economy and strong pairs for a flexible start to the game with its variations. Stays on tier 2 to solidify the board.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "buy",
+            "sell"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "buy",
+            "sell"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "warrior",
+      "name": "Warrior Curve",
+      "notes": "A highly valueable line if tier 1 economy and forced triples are strong.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "buy",
+            "sell",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "sell",
+            {
+              "type": "level",
+              "param": 2
+            },
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extended-warrior",
+      "name": "Extended Warrior Curve",
+      "notes": "A highly valueable line if tier 1 economy and forced triples are strong. This variant is a fallback option in case a triple hasn't shown up yet playing regular warrior curve.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "buy",
+            "sell",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            {
+              "type": "level",
+              "param": 3
+            },
+            "roll"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "basic-yogg",
+      "name": "Basic Yogg Curve",
+      "notes": "Uses a 2-cost heropower to get to tier 3 faster.",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "hero-power",
+            "roll"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "hero-power",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "sell",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "hero-power",
+            "sell",
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "hero-power"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aggro-yogg",
+      "name": "Aggro Yogg Curve",
+      "notes": "Uses a 2-cost heropower to get good tier 1s on board before leveling to 3 faster",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "hero-power",
+            "roll"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "sell",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "hero-power",
+            "roll",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "hero-power"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rafaam",
+      "name": "Rafaam Curve",
+      "notes": "Clean leveling using 1-cost heropower, 2-cost heropower with economy, or tavern tippers",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "buy",
+            "roll",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "hero-power"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slow-rafaam",
+      "name": "Slow Rafaam Curve",
+      "notes": "Clean leveling using 1-cost heropower, 2-cost heropower with economy, or tavern tippers. Cut off on tier 2 to get stronger",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "buy",
+            "roll",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            },
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "buy"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3-on-3",
+      "name": "3 on 3 (Level on 8)",
+      "notes": "Sacrifices early health to get very fast access to tier 3 minions, then pushes levels",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "buy",
+            {
+              "type": "level",
+              "param": 4
+            }
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll",
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3-on-3-bis",
+      "name": "3 on 3 (Level on 9)",
+      "notes": "Sacrifices early health to fill the board with tier 3 minions",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll",
+            "roll",
+            "buy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4-on-4",
+      "name": "4 on 4",
+      "notes": "Sacrifices early health to get very fast access to tier 3 minions. A fallback option in case of a bad shop after 3 on 3; requires economy",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy-token"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            {
+              "type": "level",
+              "param": 3
+            }
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            "sell",
+            {
+              "type": "level",
+              "param": 4
+            }
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "roll"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            "buy",
+            "buy",
+            "roll",
+            "roll",
+            "roll"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "toki",
+      "name": "Toki Curve",
+      "notes": "A way to use 1 cost heropowers that don't provide tempo",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy-token"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "sell",
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "hero-power",
+            "buy",
+            "buy"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            "roll",
+            "buy",
+            "roll",
+            "buy"
+          ]
+        },
+        {
+          "turn": 7,
+          "actions": [
+            {
+              "type": "level",
+              "param": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pocky",
+      "name": "Pocky Curve",
+      "notes": "A very niche use for 1 cost heropowers",
+      "steps": [
+        {
+          "turn": 1,
+          "actions": [
+            "buy-token"
+          ]
+        },
+        {
+          "turn": 2,
+          "actions": [
+            {
+              "type": "level",
+              "param": 2
+            }
+          ]
+        },
+        {
+          "turn": 3,
+          "actions": [
+            "buy",
+            "hero-power",
+            "roll"
+          ]
+        },
+        {
+          "turn": 4,
+          "actions": [
+            {
+              "type": "level",
+              "param": 3
+            },
+            "sell",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 5,
+          "actions": [
+            "buy",
+            "buy",
+            "hero-power"
+          ]
+        },
+        {
+          "turn": 6,
+          "actions": [
+            {
+              "type": "level",
+              "param": 4
+            },
+            "roll",
+            "buy"
+          ]
+        }
+      ]
+    }
+  ],
+  "_validation": {
+    "currentPatch": 241135,
+    "validatedAt": "2026-05-13T15:22:55.662Z"
+  }
+}

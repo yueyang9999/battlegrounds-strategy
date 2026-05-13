@@ -1,0 +1,4039 @@
+[
+  {
+    "compId": "beast_self_damage",
+    "name": "Beast Self-Damage",
+    "name_cn": "野兽自残流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG34_321",
+        "name": "Rabid Panther",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "狂乱的猎豹",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG29_807",
+        "name": "Trigore the Lasher",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "鞭笞者特里高雷",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_523",
+        "name": "Hunting Tiger Shark",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "猎食的虎鲨",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG27_084",
+        "name": "Sprightly Scarab",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "机变甲虫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG29_806",
+        "name": "Iridescent Skyblazer",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "炫彩灼天者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_601",
+        "name": "Wyvern Outrider",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "双足飞龙前锋",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "如果 你 有 狂乱的猎豹 尝试 保留 猎食的虎鲨 在 场面 和 触发 他 配合 重金属双头飞龙 + 提图斯·瑞文戴尔/布莱恩·铜须. 然后 循环 一些 野兽",
+        "whenToCommit": "重金属双头飞龙 + 狂乱的猎豹 + 猎食的虎鲨",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 5,
+          "validRefs": 5,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "提图斯·瑞文戴尔",
+              "cardId": "BG25_354",
+              "tier": 5
+            },
+            {
+              "name": "重金属双头飞龙",
+              "cardId": "BG26_801",
+              "tier": 4
+            },
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            },
+            {
+              "name": "猎食的虎鲨",
+              "cardId": "BG34_523",
+              "tier": 4
+            },
+            {
+              "name": "狂乱的猎豹",
+              "cardId": "BG34_321",
+              "tier": 6
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 10,
+        "valid": 10,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "beast_stegodon",
+    "name": "Beast Stegodon",
+    "name_cn": "野兽剑龙流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG33_840",
+        "name": "Stomping Stegodon",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "重踏剑龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG33_371",
+        "name": "P-0UL-TR-0N",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "P-0UL-TR-0N",
+        "freshness": {
+          "exists": false,
+          "currentTier": null
+        }
+      },
+      {
+        "cardId": "BG35_604",
+        "name": "Sewer Lord",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠头目",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_800",
+        "name": "Manasaber",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔刃豹",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG19_010",
+        "name": "Sewer Rat",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_806",
+        "name": "Sly Raptor",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "狡猾的迅猛龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG27_084",
+        "name": "Sprightly Scarab",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "机变甲虫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG28_603",
+        "name": "Boon of Beetles",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "甲虫恩泽",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "放置 重踏剑龙 在首位 你 需要 保护 你的 P-0UL TR-0N 配合 随从 如 下水道老鼠 下水道老鼠头目 魔刃豹. /!\\ 绝不要 风怒 P-0UL TR-0N !",
+        "whenToCommit": "重踏剑龙 + P-0UL TR-0N",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 4,
+          "validRefs": 4,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "下水道老鼠头目",
+              "cardId": "BG35_604",
+              "tier": 5
+            },
+            {
+              "name": "下水道老鼠",
+              "cardId": "BG19_010",
+              "tier": 2
+            },
+            {
+              "name": "重踏剑龙",
+              "cardId": "BG33_840",
+              "tier": 4
+            },
+            {
+              "name": "魔刃豹",
+              "cardId": "BG26_800",
+              "tier": 1
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 91,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 8,
+        "missing": 1
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "demon_fodder",
+    "name": "Demon Fodder ",
+    "name_cn": "Demon Fodder ",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "S",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_155",
+        "name": "Twisted Wrathguard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "扭曲的愤怒卫士",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_821",
+        "name": "Felfire Conjurer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "邪火咒龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_891",
+        "name": "Shadowdancer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "影舞者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_152",
+        "name": "Void Pup Trainer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "虚空幼犬训练师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG31_871",
+        "name": "Batty Terrorguard",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "狂蝠恐惧卫士",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG32_873",
+        "name": "Ashen Corruptor",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "灰烬腐蚀者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_151",
+        "name": "Woodland Defiler",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 10,
+        "name_cn": "林地亵渎者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_150",
+        "name": "Laboratory Assistant",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "实验室助理",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG35_153",
+        "name": "Consummate Conqueror",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "食力征服者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "你 need 2 things 生成 Fodder (扭曲的愤怒卫士 是最佳选择 林地亵渎者 实验室助理) 和 提升 你的 酒馆 (食力征服者 是最佳选择 灰烬腐蚀者 影舞者). 拿取 care 你不能 有 更多 比 7 Fodders 在 你的 下一个 酒馆 !",
+        "whenToCommit": "扭曲的愤怒卫士 + 食力征服者",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 6,
+          "validRefs": 6,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "扭曲的愤怒卫士",
+              "cardId": "BG35_155",
+              "tier": 5
+            },
+            {
+              "name": "实验室助理",
+              "cardId": "BG35_150",
+              "tier": 2
+            },
+            {
+              "name": "林地亵渎者",
+              "cardId": "BG35_151",
+              "tier": 4
+            },
+            {
+              "name": "灰烬腐蚀者",
+              "cardId": "BG32_873",
+              "tier": 5
+            },
+            {
+              "name": "食力征服者",
+              "cardId": "BG35_153",
+              "tier": 6
+            },
+            {
+              "name": "影舞者",
+              "cardId": "BG32_891",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 11,
+        "valid": 11,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "dragon_kalecgos",
+    "name": "Dragon Kalecgos",
+    "name_cn": "龙族卡雷流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BGS_041",
+        "name": "Kalecgos Arcane Aspect",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "奥术守护者卡雷苟斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG29_813",
+        "name": "Persistent Poet",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "执念诗心龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG29_815",
+        "name": "Nightbane Ignited",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "骨火巨龙夜之魇",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_633",
+        "name": "Draconic Warden",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "龙族看护员",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_822",
+        "name": "Fire-forged Evoker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "火铸唤魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_731",
+        "name": "Twilight Broodmother",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光巢母",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_632",
+        "name": "Incubation Researcher",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "孵化研究员",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG24_500",
+        "name": "Amber Guardian",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "琥珀卫士",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG33_891",
+        "name": "Magicfin Mycologist",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔鳍真菌学家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG28_GIL_836",
+        "name": "Hired Headhunter",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "猎头招聘",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_889",
+        "name": "Brood of Nozdormu",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "诺兹多姆的子嗣",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "循环 好 战吼 配合 布莱恩·铜须",
+        "whenToCommit": "布莱恩·铜须 + 卡雷苟斯",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 1,
+          "validRefs": 1,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 13,
+        "valid": 13,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "elemental_tier2_ballers",
+    "name": "Elemental Tier 2 Bailers",
+    "name_cn": "元素二本滚球流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG31_818",
+        "name": "Snow Baller",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 5,
+        "name_cn": "冰雪投球手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG31_816",
+        "name": "Fire Baller",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 5,
+        "name_cn": "火焰投球手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_119",
+        "name": "Crackling Cyclone",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "爆裂飓风",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG26_174",
+        "name": "Soul Rewinder",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "灵魂回溯者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG_GVG_085",
+        "name": "Annoy-o-Tron",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "吵吵机器人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG29_611",
+        "name": "Cord Puller",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "拔线机",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG32_236",
+        "name": "Aureate Laureate",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "夺金健将",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG28_805",
+        "name": "Strike Oil",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "钻探原油",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG28_518",
+        "name": "Chef's Choice",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "主厨甄选",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "停在 2 循环 每个 冰雪投球手 & 火焰投球手 在 圣盾 随从. 也 循环 钻探原油",
+        "whenToCommit": "好 英雄 + Ballers 早期",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "火焰投球手",
+              "cardId": "BG31_816",
+              "tier": 2
+            },
+            {
+              "name": "冰雪投球手",
+              "cardId": "BG31_818",
+              "tier": 2
+            },
+            {
+              "name": "钻探原油",
+              "cardId": "BG28_805",
+              "tier": 2
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "quilboar_avenge",
+    "name": "Quilboar Avenge",
+    "name_cn": "野猪人复仇流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG26_157",
+        "name": "Bristlebach",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "作曲鬃师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG35_437",
+        "name": "Vinespeaker",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "藤语野猪人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG32_430",
+        "name": "Glowgullet Warlord",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "亮喉督军",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG35_433",
+        "name": "Redtusk Thornraiser",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "赤牙荆棘培育师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_731",
+        "name": "Twilight Broodmother",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光巢母",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_604",
+        "name": "Sewer Lord",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠头目",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_630",
+        "name": "Twilight Hatchling",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光龙崽",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG26_867",
+        "name": "Three Lil' Quilboar",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "三只小野猪",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_434",
+        "name": "Hired Ritualist",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "受雇的祭师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG33_888",
+        "name": "Hog Watcher",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "护猪牧人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_039",
+        "name": "Pufferquil",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "刺豚野猪",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "保护 作曲鬃师 & 藤语野猪人 配合 亮喉督军. 圣盾 你的 T6 配合 护猪牧人. 尝试 保留 赤牙荆棘培育师 尽可能多 到 复生 所有 你的 野猪人",
+        "whenToCommit": "作曲鬃师 + 藤语野猪人",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 5,
+          "validRefs": 5,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "赤牙荆棘培育师",
+              "cardId": "BG35_433",
+              "tier": 4
+            },
+            {
+              "name": "藤语野猪人",
+              "cardId": "BG35_437",
+              "tier": 6
+            },
+            {
+              "name": "亮喉督军",
+              "cardId": "BG32_430",
+              "tier": 2
+            },
+            {
+              "name": "护猪牧人",
+              "cardId": "BG33_888",
+              "tier": 5
+            },
+            {
+              "name": "作曲鬃师",
+              "cardId": "BG26_157",
+              "tier": 6
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 12,
+        "valid": 12,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "quilboar_smuggler",
+    "name": "Quilboar Smuggler",
+    "name_cn": "野猪人宝石走私者流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "S",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_155",
+        "name": "Gem Smuggler",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "宝石走私商",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_159",
+        "name": "Moon-Bacon Jazzer",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "暗膘爵士乐手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_437",
+        "name": "Vinespeaker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "藤语野猪人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG26_160",
+        "name": "Prickly Piper",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "刺头吹笛人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG23_017",
+        "name": "Sanguine Champion",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "鲜血勇士",
+        "freshness": {
+          "exists": true,
+          "currentTier": 7
+        }
+      },
+      {
+        "cardId": "BG27_084",
+        "name": "Sprightly Scarab",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "机变甲虫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG33_888",
+        "name": "Hog Watcher",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "护猪牧人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG30_123",
+        "name": "Fearless Foodie",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "无畏的食客",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "尝试 golder 重金属双头飞龙 放置 在左侧 Moon Bacon Jazzer & 在右侧 宝石走私商. 然后 触发 重金属双头飞龙 尽可能多",
+        "whenToCommit": "重金属双头飞龙 + 宝石走私商 + 布莱恩·铜须",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "重金属双头飞龙",
+              "cardId": "BG26_801",
+              "tier": 4
+            },
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            },
+            {
+              "name": "宝石走私商",
+              "cardId": "BG25_155",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 12,
+        "valid": 12,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "mech_automaton",
+    "name": "Mech Automaton",
+    "name_cn": "机械自动机流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG_TTN_401",
+        "name": "Ancestral Automaton",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "星元自动机",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_012",
+        "name": "Kangor's Apprentice",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "坎格尔的学徒",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_DEEP_015",
+        "name": "Prosthetic Hand",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "义肢假手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG32_172",
+        "name": "Auto Assembler",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "自动装配机",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_148",
+        "name": "Scrap Scraper",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "报废废铁回收机",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_342",
+        "name": "Falling Sky Golem",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "坠落的飞天魔像",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG_BOT_911",
+        "name": "Annoy-o-Module",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "吵吵模组",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "EBG_Spell_017",
+        "name": "Eyes of the Earth Mother",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "大地母亲之眼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "召唤 星元自动机 尽可能多 作为 尽可能. 一些 英雄技能 帮助 如 巫妖王 塔隆·血魔 ...",
+        "whenToCommit": "星元自动机 + 义肢假手 + 坎格尔的学徒",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "坎格尔的学徒",
+              "cardId": "BGS_012",
+              "tier": 5
+            },
+            {
+              "name": "星元自动机",
+              "cardId": "BG_TTN_401",
+              "tier": 2
+            },
+            {
+              "name": "义肢假手",
+              "cardId": "BG_DEEP_015",
+              "tier": 4
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "mech_shield",
+    "name": "Mech Shield",
+    "name_cn": "机械圣盾流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG33_809",
+        "name": "Divine Sparkbot",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "神圣火花机器人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BGS_071",
+        "name": "Deflect-o-Bot",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "偏折机器人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG_DEEP_015",
+        "name": "Prosthetic Hand",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "义肢假手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG28_741",
+        "name": "Charging Czarina",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "蓄能女沙皇",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_341",
+        "name": "Humon'gozz",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "胡蒙格斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_016",
+        "name": "Sin'dorei Straight Shot",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "辛多雷直射手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BGS_012",
+        "name": "Kangor's Apprentice",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "坎格尔的学徒",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_817",
+        "name": "Sanctify",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "圣洁庇护",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_342",
+        "name": "Falling Sky Golem",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "坠落的飞天魔像",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "生成 圣洁庇护 配合 神圣火花机器人 + 提图斯·瑞文戴尔/巨大的金刚鹦鹉/坎格尔的学徒. 如有可能 尝试 提升 你的 酒馆法术 (胡蒙格斯 例如)",
+        "whenToCommit": "神圣火花机器人 + 提图斯·瑞文戴尔/坎格尔的学徒",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 6,
+          "validRefs": 6,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "提图斯·瑞文戴尔",
+              "cardId": "BG25_354",
+              "tier": 5
+            },
+            {
+              "name": "巨大的金刚鹦鹉",
+              "cardId": "BGS_078",
+              "tier": 4
+            },
+            {
+              "name": "神圣火花机器人",
+              "cardId": "BG33_809",
+              "tier": 5
+            },
+            {
+              "name": "坎格尔的学徒",
+              "cardId": "BGS_012",
+              "tier": 5
+            },
+            {
+              "name": "胡蒙格斯",
+              "cardId": "BG32_341",
+              "tier": 4
+            },
+            {
+              "name": "圣洁庇护",
+              "cardId": "BG33_817",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 11,
+        "valid": 11,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "murloc_mrrglton",
+    "name": "Murloc Mrrglton",
+    "name_cn": "鱼人摩戈尔顿流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG35_142",
+        "name": "Cousin Errgl",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "厄戈尔表弟",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_891",
+        "name": "Magicfin Mycologist",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔鳍真菌学家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG27_556",
+        "name": "Diremuck Forager",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "凶饿的觅食者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_140",
+        "name": "Expert Aviator",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "飞行专家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG35_123",
+        "name": "Cataclysmic Harbinger",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "灾变先锋",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_140",
+        "name": "Mama Mrrglton",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "莫格顿大妈",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG35_141",
+        "name": "Papa Mrrglton",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "莫格顿老爹",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BGS_020",
+        "name": "Primalfin Lookout",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "蛮鱼斥候",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_ICC_901",
+        "name": "Drakkari Enchanter",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "达卡莱附魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_318",
+        "name": "Bile Spitter",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "怒胆喷毒鱼人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "生成 尽可能多 莫格顿大妈 & 莫格顿老爹 配合 厄戈尔表弟 + 达卡莱附魔师",
+        "whenToCommit": "厄戈尔表弟 + 布莱恩·铜须",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 5,
+          "validRefs": 5,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            },
+            {
+              "name": "达卡莱附魔师",
+              "cardId": "BG26_ICC_901",
+              "tier": 5
+            },
+            {
+              "name": "莫格顿大妈",
+              "cardId": "BG35_140",
+              "tier": 3
+            },
+            {
+              "name": "莫格顿老爹",
+              "cardId": "BG35_141",
+              "tier": 3
+            },
+            {
+              "name": "厄戈尔表弟",
+              "cardId": "BG35_142",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 12,
+        "valid": 12,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "murloc_handbuff",
+    "name": "Murloc Handbuff",
+    "name_cn": "鱼人手牌强化流",
+    "patchNumber": 235290,
+    "difficulty": "Hard",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG27_556",
+        "name": "Diremuck Forager",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "凶饿的觅食者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG26_137",
+        "name": "Bream Counter",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "裁脍鱼人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG30_122",
+        "name": "Mrglin' Burglar",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "鱼人蟊贼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_354",
+        "name": "Choral Mrrrglr",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "合唱鱼人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG33_318",
+        "name": "Bile Spitter",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "怒胆喷毒鱼人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_891",
+        "name": "Magicfin Mycologist",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔鳍真菌学家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_140",
+        "name": "Expert Aviator",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "飞行专家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_020",
+        "name": "Primalfin Lookout",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "蛮鱼斥候",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG22_202",
+        "name": "Tad",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "塔德",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG32_330",
+        "name": "Flighty Scout",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "好斗的斥候",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "生成 Murloc 配合 布莱恩·铜须 蛮鱼斥候 & 魔鳍真菌学家 和 提升 你的 裁脍鱼人 配合 鱼人蟊贼. 召唤 它 在战斗中 配合 凶饿的觅食者",
+        "whenToCommit": "布莱恩·铜须 + 蛮鱼斥候 + 鱼人蟊贼",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 6,
+          "validRefs": 6,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "凶饿的觅食者",
+              "cardId": "BG27_556",
+              "tier": 4
+            },
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            },
+            {
+              "name": "魔鳍真菌学家",
+              "cardId": "BG33_891",
+              "tier": 6
+            },
+            {
+              "name": "裁脍鱼人",
+              "cardId": "BG26_137",
+              "tier": 4
+            },
+            {
+              "name": "蛮鱼斥候",
+              "cardId": "BGS_020",
+              "tier": 5
+            },
+            {
+              "name": "鱼人蟊贼",
+              "cardId": "BG30_122",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 11,
+        "valid": 11,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "murloc_scam",
+    "name": "Murloc Scam ",
+    "name_cn": "Murloc Scam ",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG23_318",
+        "name": "Leeroy the Reckless",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 5,
+        "name_cn": "莽神火车王",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_318",
+        "name": "Bile Spitter",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "怒胆喷毒鱼人",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG27_556",
+        "name": "Diremuck Forager",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "凶饿的觅食者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_140",
+        "name": "Expert Aviator",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "飞行专家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_131",
+        "name": "Deadly Spore",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "致命的孢子",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG34_604",
+        "name": "Heroic Underdog",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "英勇的逆袭者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_039",
+        "name": "Pufferquil",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "刺豚野猪",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG23_008",
+        "name": "Glowscale",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "闪鳞纳迦",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG28_500",
+        "name": "Armor Stash",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "护甲储备",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "打出 每个 \"一个 为了 一个\" 随从 如 莽神火车王 怒胆喷毒鱼人 等等.",
+        "whenToCommit": "没有 其他 Gameplans + 怒胆喷毒鱼人 + 莽神火车王",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 2,
+          "validRefs": 2,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "怒胆喷毒鱼人",
+              "cardId": "BG33_318",
+              "tier": 5
+            },
+            {
+              "name": "莽神火车王",
+              "cardId": "BG23_318",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "naga_deep_blue",
+    "name": "Naga Deep Blue",
+    "name_cn": "娜迦深蓝流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG26_502",
+        "name": "Deep Blue Crooner",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "深沉蓝调歌手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG26_505",
+        "name": "Zesty Shaker",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "热情沙锤手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_883",
+        "name": "Balinda Stonehearth",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "巴琳达·斯通赫尔斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_500",
+        "name": "Flaming Enforcer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔焰执行者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_881",
+        "name": "Leyline Surfacer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔网浮灵",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG25_039",
+        "name": "Pufferquil",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "刺豚野猪",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG23_009",
+        "name": "Lava Lurker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "熔岩潜伏者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG23_008",
+        "name": "Glowscale",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "闪鳞纳迦",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "EBG_Spell_017",
+        "name": "Eyes of the Earth Mother",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "大地母亲之眼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "Duplicate Deep Blue Crooners 法术迸发 配合 热情沙锤手 & 巴琳达·斯通赫尔斯",
+        "whenToCommit": "早期 深沉蓝调歌手 + 热情沙锤手",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "巴琳达·斯通赫尔斯",
+              "cardId": "BG35_883",
+              "tier": 6
+            },
+            {
+              "name": "深沉蓝调歌手",
+              "cardId": "BG26_502",
+              "tier": 3
+            },
+            {
+              "name": "热情沙锤手",
+              "cardId": "BG26_505",
+              "tier": 4
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "pirate_bounty",
+    "name": "Pirate Bounty ",
+    "name_cn": "Pirate Bounty ",
+    "patchNumber": 235290,
+    "difficulty": "Hard",
+    "powerLevel": "A",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG33_823",
+        "name": "Sky Admiral Rogers",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "空军上将罗杰斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG33_825",
+        "name": "Proud Privateer",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 30,
+        "name_cn": "骄傲的私掠者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_822",
+        "name": "Bigwig Bandit",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "顶尖大盗",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG27_005",
+        "name": "Timecap'n Hooktail",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "时空船长钩尾",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG35_700",
+        "name": "Ship Jumper",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "跳船海盗",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG35_701",
+        "name": "Brazen Buccaneer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "无耻的海盗",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_ICC_901",
+        "name": "Drakkari Enchanter",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "达卡莱附魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_821",
+        "name": "Felfire Conjurer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "邪火咒龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_835",
+        "name": "Tranquil Meditative",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "宁静的冥想者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_821",
+        "name": "Shipwrecked Rascal",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "船难海贼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_822",
+        "name": "Fire-forged Evoker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "火铸唤魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "循环 bounty 配合 空军上将罗杰斯 & 骄傲的私掠者. 你 将要 循环 大量 酒馆法术 所以 一些 随从 如 Fire forged Evoker 或 活化艾泽里特 可以 是 interesting",
+        "whenToCommit": "空军上将罗杰斯 + 骄傲的私掠者",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "空军上将罗杰斯",
+              "cardId": "BG33_823",
+              "tier": 6
+            },
+            {
+              "name": "活化艾泽里特",
+              "cardId": "BG28_707",
+              "tier": 5
+            },
+            {
+              "name": "骄傲的私掠者",
+              "cardId": "BG33_825",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 12,
+        "valid": 12,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "undead_attack",
+    "name": "Undead Attack",
+    "name_cn": "亡灵攻击力流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "S",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG25_010",
+        "name": "Handless Forsaken",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "断手被遗忘者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG32_324",
+        "name": "Drustfallen Butcher",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "德鲁斯特堕落屠夫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG31_835",
+        "name": "Deathly Striker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "致命打击者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG29_815",
+        "name": "Nightbane Ignited",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "骨火巨龙夜之魇",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_009",
+        "name": "Eternal Summoner",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "永恒召唤者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_694",
+        "name": "Wintergrasp Ghoul",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "冬拥食尸鬼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG28_303",
+        "name": "Disguised Graverobber",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "变装盗墓贼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG28_604",
+        "name": "Butchering",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "宰割",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_690",
+        "name": "Plaguerunner",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "疫病行尸",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG32_880",
+        "name": "Friendly Geist",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "友善的恶鬼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_883",
+        "name": "Balinda Stonehearth",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巴琳达·斯通赫尔斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG_DEEP_015",
+        "name": "Prosthetic Hand",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "义肢假手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG32_880",
+        "name": "Friendly Geist",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "友善的恶鬼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "打出 一些 亡语 & 复生 随从 如 断手被遗忘者 到 生成 宰割 配合 德鲁斯特堕落屠夫",
+        "whenToCommit": "亡语/复生 随从 + 德鲁斯特堕落屠夫",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 3,
+          "validRefs": 3,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "德鲁斯特堕落屠夫",
+              "cardId": "BG32_324",
+              "tier": 5
+            },
+            {
+              "name": "断手被遗忘者",
+              "cardId": "BG25_010",
+              "tier": 3
+            },
+            {
+              "name": "宰割",
+              "cardId": "BG28_604",
+              "tier": 5
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 14,
+        "valid": 14,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "undead_end_of_turn",
+    "name": "Undead End of turn",
+    "name_cn": "亡灵回合结束流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG35_334",
+        "name": "Skeletal Strafer",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "骷髅狂射手",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_ICC_901",
+        "name": "Drakkari Enchanter",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "达卡莱附魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_731",
+        "name": "Twilight Broodmother",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光巢母",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_630",
+        "name": "Twilight Hatchling",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光龙崽",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG35_604",
+        "name": "Sewer Lord",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠头目",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG19_010",
+        "name": "Sewer Rat",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [],
+    "freshness": {
+      "score": 80,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 8,
+        "valid": 8,
+        "missing": 0
+      },
+      "avgTipScore": 50,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "undead_overflow",
+    "name": "Undead Overflow ",
+    "name_cn": "Undead Overflow ",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "C",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG30_129",
+        "name": "Catacomb Crasher",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "古墓捣蛋鬼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG30_125",
+        "name": "Cadaver Caretaker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "遗骸看管者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG27_004",
+        "name": "Surf n' Surf",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "海上双雄",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG23_009",
+        "name": "Lava Lurker",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "熔岩潜伏者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG28_303",
+        "name": "Disguised Graverobber",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "变装盗墓贼",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG35_883",
+        "name": "Balinda Stonehearth",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巴琳达·斯通赫尔斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG35_342",
+        "name": "Falling Sky Golem",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "坠落的飞天魔像",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "触发 你的 召唤 随从 (遗骸看管者 或 熔岩潜伏者 + Surf n Surfs 法术迸发) 尽可能多",
+        "whenToCommit": "提图斯·瑞文戴尔 + 古墓捣蛋鬼 + 遗骸看管者/熔岩潜伏者 & 海上双雄",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 5,
+          "validRefs": 5,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "提图斯·瑞文戴尔",
+              "cardId": "BG25_354",
+              "tier": 5
+            },
+            {
+              "name": "熔岩潜伏者",
+              "cardId": "BG23_009",
+              "tier": 2
+            },
+            {
+              "name": "遗骸看管者",
+              "cardId": "BG30_125",
+              "tier": 3
+            },
+            {
+              "name": "古墓捣蛋鬼",
+              "cardId": "BG30_129",
+              "tier": 5
+            },
+            {
+              "name": "海上双雄",
+              "cardId": "BG27_004",
+              "tier": 1
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "neutral_back_to_back",
+    "name": "Back to Back",
+    "name_cn": "背靠背法术流",
+    "patchNumber": 235290,
+    "difficulty": "Easy",
+    "powerLevel": "B",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG35_952",
+        "name": "Back to Back",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "背靠背",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_883",
+        "name": "Balinda Stonehearth",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "巴琳达·斯通赫尔斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG26_ICC_901",
+        "name": "Drakkari Enchanter",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "达卡莱附魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_123",
+        "name": "Cataclysmic Harbinger",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "灾变先锋",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_821",
+        "name": "Felfire Conjurer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "邪火咒龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG33_891",
+        "name": "Magicfin Mycologist",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔鳍真菌学家",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG24_005",
+        "name": "Sinrunner Blanchy",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "罪奔者布兰契",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG32_835",
+        "name": "Tranquil Meditative",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "宁静的冥想者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "你必须 生成 背靠背 尽可能多 (配合 灾变先锋 & 达卡莱附魔师) 你 也 需要 提升 你的 酒馆法术 (邪火咒龙 例如)",
+        "whenToCommit": "背靠背 + 灾变先锋 + 巴琳达·斯通赫尔斯",
+        "date": "2026-04-14",
+        "patchNumber": 239550,
+        "summary": "",
+        "freshness": {
+          "score": 96,
+          "status": "fresh",
+          "tipAgeDays": 30,
+          "totalRefs": 5,
+          "validRefs": 5,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "巴琳达·斯通赫尔斯",
+              "cardId": "BG35_883",
+              "tier": 6
+            },
+            {
+              "name": "达卡莱附魔师",
+              "cardId": "BG26_ICC_901",
+              "tier": 5
+            },
+            {
+              "name": "邪火咒龙",
+              "cardId": "BG32_821",
+              "tier": 5
+            },
+            {
+              "name": "灾变先锋",
+              "cardId": "BG35_123",
+              "tier": 5
+            },
+            {
+              "name": "背靠背",
+              "cardId": "BG35_952",
+              "tier": 4
+            }
+          ],
+          "sourcePatch": 239550,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 98,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 8,
+        "valid": 8,
+        "missing": 0
+      },
+      "avgTipScore": 96,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "dragon_ring_bearer",
+    "name": "Dragon Ring Bearer",
+    "name_cn": "龙族持戒流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "S",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG34_921",
+        "name": "Ring Bearer",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 100,
+        "name_cn": "护戒纳迦",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG29_813",
+        "name": "Persistent Poet",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "执念诗心龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG32_822",
+        "name": "Fire-forged Evoker",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "火铸唤魔师",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG24_500",
+        "name": "Amber Guardian",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "琥珀卫士",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG32_821",
+        "name": "Felfire Conjurer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "邪火咒龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_731",
+        "name": "Twilight Broodmother",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "暮光巢母",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_922",
+        "name": "Maelstrom Emergent",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "大漩涡涌流纳迦",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG29_815",
+        "name": "Nightbane Ignited",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "骨火巨龙夜之魇",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      }
+    ],
+    "tips": [],
+    "freshness": {
+      "score": 80,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 50,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "elemental_shop_buff",
+    "name": "Elemental Shop Buff",
+    "name_cn": "元素酒馆Buff流",
+    "patchNumber": 235290,
+    "difficulty": "Hard",
+    "powerLevel": "A",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_883",
+        "name": "Balinda Stonehearth",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 5,
+        "name_cn": "巴琳达·斯通赫尔斯",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_500",
+        "name": "Flaming Enforcer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 5,
+        "name_cn": "魔焰执行者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG26_175",
+        "name": "Elemental of Surprise",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "惊喜元素",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG35_881",
+        "name": "Leyline Surfacer",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔网浮灵",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BGS_123",
+        "name": "Tavern Tempest",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "酒馆旋风",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BGS_116",
+        "name": "Refreshing Anomaly",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "刷新畸体",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_910",
+        "name": "Conflagration",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "燃焰",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_911",
+        "name": "Arcane Absorption",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "奥术吸收",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG28_707",
+        "name": "Living Azerite",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "活化艾泽里特",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG34_858",
+        "name": "Air Revenant",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "空气亡魂",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      }
+    ],
+    "tips": [
+      {
+        "author": "slyders",
+        "language": "enUS",
+        "tip": "循环 一些 元素 配合 酒馆旋风 Lantern Lava 和 布莱恩·铜须. 然后 生成 燃焰 & 奥术吸收 配合 火焰之地的逸火 & 魔网浮灵. 放置 燃焰 配合 巴琳达·斯通赫尔斯 在 1 随从 在 酒馆 和 打出 奥术吸收 在 你的 随从",
+        "whenToCommit": "Lantern Lava + 布莱恩·铜须 + 酒馆旋风",
+        "date": "2026-04-30",
+        "patchNumber": 241135,
+        "summary": "",
+        "freshness": {
+          "score": 98,
+          "status": "fresh",
+          "tipAgeDays": 14,
+          "totalRefs": 7,
+          "validRefs": 7,
+          "missingRefs": [],
+          "validCards": [
+            {
+              "name": "巴琳达·斯通赫尔斯",
+              "cardId": "BG35_883",
+              "tier": 6
+            },
+            {
+              "name": "火焰之地的逸火",
+              "cardId": "BG35_882",
+              "tier": 5
+            },
+            {
+              "name": "布莱恩·铜须",
+              "cardId": "BG_LOE_077",
+              "tier": 5
+            },
+            {
+              "name": "酒馆旋风",
+              "cardId": "BGS_123",
+              "tier": 4
+            },
+            {
+              "name": "魔网浮灵",
+              "cardId": "BG35_881",
+              "tier": 4
+            },
+            {
+              "name": "奥术吸收",
+              "cardId": "BG35_911",
+              "tier": 4
+            },
+            {
+              "name": "燃焰",
+              "cardId": "BG35_910",
+              "tier": 4
+            }
+          ],
+          "sourcePatch": 241135,
+          "currentPatch": 241135
+        }
+      }
+    ],
+    "freshness": {
+      "score": 99,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 12,
+        "valid": 12,
+        "missing": 0
+      },
+      "avgTipScore": 98,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "beast_leviathan",
+    "name": "Beast Leviathan",
+    "name_cn": "野兽利维坦流",
+    "patchNumber": 235290,
+    "difficulty": "Medium",
+    "powerLevel": "A",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG26_802",
+        "name": "Banana Slamma",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "香蕉猛猿",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG35_604",
+        "name": "Sewer Lord",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠头目",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG35_602",
+        "name": "Lurking Leviathan",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 10,
+        "name_cn": "深潜巨兽",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BGS_018",
+        "name": "Goldrinn the Great Wolf",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨狼戈德林",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG26_800",
+        "name": "Manasaber",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "魔刃豹",
+        "freshness": {
+          "exists": true,
+          "currentTier": 1
+        }
+      },
+      {
+        "cardId": "BG19_010",
+        "name": "Sewer Rat",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "下水道老鼠",
+        "freshness": {
+          "exists": true,
+          "currentTier": 2
+        }
+      },
+      {
+        "cardId": "BG25_806",
+        "name": "Sly Raptor",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "狡猾的迅猛龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG33_371",
+        "name": "P-0UL-TR-0N",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "P-0UL-TR-0N",
+        "freshness": {
+          "exists": false,
+          "currentTier": null
+        }
+      },
+      {
+        "cardId": "BG27_084",
+        "name": "Sprightly Scarab",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "机变甲虫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG28_603",
+        "name": "Boon of Beetles",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "甲虫恩泽",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      }
+    ],
+    "tips": [],
+    "freshness": {
+      "score": 75,
+      "status": "stale",
+      "cardValidity": {
+        "total": 12,
+        "valid": 11,
+        "missing": 1
+      },
+      "avgTipScore": 50,
+      "currentPatch": 241135
+    }
+  },
+  {
+    "compId": "naga_spellbuff",
+    "name": "Naga Spell Buff",
+    "name_cn": "娜迦法术Buff流",
+    "patchNumber": 235290,
+    "difficulty": "Hard",
+    "powerLevel": "S",
+    "forcedTribes": [],
+    "cards": [
+      {
+        "cardId": "BG34_926",
+        "name": "Ruthless Queensguard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 50,
+        "name_cn": "无情的女王护卫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 6
+        }
+      },
+      {
+        "cardId": "BG34_922",
+        "name": "Maelstrom Emergent",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 20,
+        "name_cn": "大漩涡涌流纳迦",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG26_801",
+        "name": "Rylak Metalhead",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "重金属双头飞龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG34_635t",
+        "name": "Black Chromadrake",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "黑色多彩幼龙",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      },
+      {
+        "cardId": "BG25_354",
+        "name": "Titus Rivendare",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "提图斯·瑞文戴尔",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG_LOE_077",
+        "name": "Brann Bronzebeard",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "布莱恩·铜须",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BGS_078",
+        "name": "Monstrous Macaw",
+        "tips": [],
+        "status": "CORE",
+        "finalBoardWeight": 1,
+        "name_cn": "巨大的金刚鹦鹉",
+        "freshness": {
+          "exists": true,
+          "currentTier": 4
+        }
+      },
+      {
+        "cardId": "BG32_835",
+        "name": "Tranquil Meditative",
+        "tips": [],
+        "status": "ADDON",
+        "finalBoardWeight": 1,
+        "name_cn": "宁静的冥想者",
+        "freshness": {
+          "exists": true,
+          "currentTier": 5
+        }
+      },
+      {
+        "cardId": "BG27_084",
+        "name": "Sprightly Scarab",
+        "tips": [],
+        "status": "CYCLE",
+        "finalBoardWeight": 1,
+        "name_cn": "机变甲虫",
+        "freshness": {
+          "exists": true,
+          "currentTier": 3
+        }
+      }
+    ],
+    "tips": [],
+    "freshness": {
+      "score": 80,
+      "status": "fresh",
+      "cardValidity": {
+        "total": 9,
+        "valid": 9,
+        "missing": 0
+      },
+      "avgTipScore": 50,
+      "currentPatch": 241135
+    }
+  }
+]

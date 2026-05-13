@@ -1,0 +1,15 @@
+{
+  "name": "bob-coach",
+  "version": "0.1.0",
+  "description": "Bob教练 — 酒馆战棋开源教学插件（覆盖层辅助）",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "export-data": "python scripts/export-data.py"
+  },
+  "author": "yueyang9999",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.4.11"
+  }
+}
