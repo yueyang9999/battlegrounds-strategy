@@ -271,7 +271,7 @@
   <div id="dc-toast" class="dc-toast hidden">
     <div id="dc-toast-text"></div>
     <div class="dc-progress-bar"><div id="dc-progress-fill" class="dc-progress-fill"></div></div>
-    <button id="dc-manual-btn" class="btn btn-danger-sm interactive hidden">手动重连</button>
+    <span style="font-size:9px;color:var(--text-muted);text-align:center;margin-top:2px">3秒后自动重连</span>
   </div>
 
   <!-- 退出确认对话框 -->
@@ -293,8 +293,20 @@
     <span id="demo-turn">回合 1</span>
   </div>
 
+  <!-- 次级提示条 -->
+  <div id="secondary-hints" class="secondary-hints hidden"></div>
+
 </div>
 
+<script src="modules/DecisionBase.js"></script>
+<script src="modules/RulesEngine.js"></script>
+<script src="modules/Orchestrator.js"></script>
+<script src="modules/LevelingModule.js"></script>
+<script src="modules/MinionPickModule.js"></script>
+<script src="modules/HeroPowerModule.js"></script>
+<script src="modules/SpellModule.js"></script>
+<script src="modules/TrinketModule.js"></script>
+<script src="modules/DecisionsLogger.js"></script>
 <script src="overlay.js"></script>
 </body>
 </html>

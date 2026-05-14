@@ -30,6 +30,13 @@ contextBridge.exposeInMainWorld("bobCoach", {
   quitApp: () => ipcRenderer.invoke("app:quit"),
   hideWindow: () => ipcRenderer.invoke("app:hide-window"),
 
+  // ── 游戏状态 ──
+  getGameState: () => ipcRenderer.invoke("game-state:get"),
+  resetGameState: () => ipcRenderer.invoke("game-state:reset"),
+
+  // ── 决策记录（反馈闭环） ──
+  logDecision: (entry) => ipcRenderer.invoke("recording:log-decision", entry),
+
   // ── 日志 ──
   log: (level, msg) => ipcRenderer.invoke("log", level, msg),
 
@@ -43,6 +50,7 @@ contextBridge.exposeInMainWorld("bobCoach", {
       "open-settings",
       "open-about",
       "game-running",
+      "game-state-update",
       "sync:update-available",
       "sync:applied",
     ];

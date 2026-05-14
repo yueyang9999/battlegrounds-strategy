@@ -19,9 +19,12 @@ const state = {
   handMinions: [],
   shopMinions: [],      // [{cardId, name_cn, tier, tribes_cn, position}]
   gamePhase: "shop",    // shop | combat | recruit
+  activeAnomaly: null,  // string — 当前畸变ID（由 log-parser 写入）
+  activeRewards: [],    // string[] — 已获得的任务奖励ID
 
   // 决策结果
-  suggestion: null,     // {type: "level_up"|"refresh"|"danger", message, color, reasonShort, reasonDetail}
+  suggestion: null,     // Decision 对象: {type, priority, action, message, reason, confidence}
+  secondaryHints: [],   // Decision[] — 次级提示
   highlightedCards: [], // [{cardId, highlightType, reasonShort, position}]
   compMatches: [],      // [{comp, matchPercent, missingCards, ...}]
   currentComp: null,
@@ -63,7 +66,6 @@ function cacheDom() {
   dom.dcToast = $("dc-toast");
   dom.dcToastText = $("dc-toast-text");
   dom.dcProgressFill = $("dc-progress-fill");
-  dom.dcManualBtn = $("dc-manual-btn");
   dom.gearMenu = $("gear-menu");
   dom.gearIcon = $("gear-icon");
   dom.gearDropdown = $("gear-dropdown");
@@ -89,6 +91,7 @@ function cacheDom() {
   dom.aboutOverlay = $("about-overlay");
   dom.demoIndicator = $("demo-indicator");
   dom.demoTurn = $("demo-turn");
+  dom.secondaryHints = $("secondary-hints");
   dom.btnCheckUpdate = $("btn-check-update");
   dom.syncCardsVer = $("sync-cards-ver");
   dom.syncHeroDate = $("sync-hero-date");
@@ -177,15 +180,55 @@ async function loadAllData() {
     state.compStrategies = (await window.bobCoach.loadData("comp_strategies")) || [];
     state.heroStats = (await window.bobCoach.loadData("hero_stats")) || [];
 
-    // Build card lookup map
-    const cardsArr = (await window.bobCoach.loadData("cards")) || [];
+    // Load hero_tips (tips + curves)
+    var heroTipsRaw = (await window.bobCoach.loadData("hero_tips")) || {};
+    state.heroTips = heroTipsRaw.tips || heroTipsRaw;
+    state.heroCurves = heroTipsRaw.curves || [];
+
+    // Load trinket tips
+    state.trinketTips = (await window.bobCoach.loadData("trinket_tips")) || {};
+
+    // Load spell interaction data (法术协同卡牌索引)
+    state._spellInteractions = (await window.bobCoach.loadData("spell_interactions")) || {};
+
+    // 校验 decision_tables 与 cards.json 的一致性（新英雄/畸变未登记时告警）
+    if (typeof RulesEngine !== "undefined" && RulesEngine.validateConfig && state.cards) {
+      var validation = RulesEngine.validateConfig(state.decisionTables, state.cards);
+      if (validation.warnings && validation.warnings.length > 0) {
+        console.warn("[RulesEngine] 配置校验警告:", validation.warnings);
+      }
+      if (validation.unknownHeroes && validation.unknownHeroes.length > 0) {
+        console.warn("[RulesEngine] 未知英雄（将从配置中忽略）:", validation.unknownHeroes);
+      }
+    }
+
+    // Build hero stats map for fast lookup
+    state._heroStatsMap = {};
+    for (var i = 0; i < state.heroStats.length; i++) {
+      var hs = state.heroStats[i];
+      state._heroStatsMap[hs.hero_card_id] = hs;
+    }
+
+    // Build card lookup map + hero power cost lookup
+    var cardsArr = (await window.bobCoach.loadData("cards")) || [];
     state.cards = {};
-    for (const c of cardsArr) {
+    state._heroPowerCost = {}; // hp_id → mana_cost
+    state._heroHpMap = {};     // hero_id → hp_ids[]
+    for (var j = 0; j < cardsArr.length; j++) {
+      var c = cardsArr[j];
       state.cards[c.str_id] = c;
+      if (c.card_type === "hero power") {
+        state._heroPowerCost[c.str_id] = c.mana_cost || 0;
+      }
+      if (c.card_type === "hero" && c.hp_ids) {
+        state._heroHpMap[c.str_id] = c.hp_ids;
+      }
     }
 
     console.log(
-      `[Bob] Loaded ${cardsArr.length} cards, ${state.compStrategies.length} comps, ${state.heroStats.length} heroes`
+      "[Bob] Loaded " + cardsArr.length + " cards, " + state.compStrategies.length +
+      " comps, " + state.heroStats.length + " heroes, " +
+      Object.keys(state.heroTips || {}).length + " hero tips"
     );
     return true;
   } catch (e) {
@@ -312,8 +355,241 @@ const DEMO_SCENARIOS = [
 ];
 
 // ═══════════════════════════════════════════
-// 决策引擎
+// 实时对局状态接入（来自 HDT 日志解析）
 // ═══════════════════════════════════════════
+
+function applyGameState(gs) {
+  // 检测新对局：hero 变化 或 gameActive 从 false → true
+  var isNewSession = false;
+  if (gs.gameActive && gs.heroCardId) {
+    var prevHero = state.heroCardId || "";
+    if (!state.gameActive || (gs.heroCardId !== prevHero)) {
+      isNewSession = true;
+    }
+  }
+
+  // 映射随从数据：补充 name_cn 和 tribes_cn
+  function mapMinion(m) {
+    const card = getCard(m.cardId);
+    return {
+      cardId: m.cardId,
+      name_cn: card ? card.name_cn : m.cardId,
+      tier: m.tier || (card ? card.tier : 1),
+      attack: m.attack || 0,
+      health: m.health || 0,
+      golden: m.golden || false,
+      position: m.position || 0,
+      tribes_cn: card ? card.minion_types_cn || [] : (m.tribes || []),
+    };
+  }
+
+  state.gameActive = gs.gameActive;
+  state.turn = gs.turn || 1;
+  state.gold = gs.gold || 0;
+  state.maxGold = gs.maxGold || 3;
+  state.tavernTier = gs.tavernTier || 1;
+  state.health = gs.health || 30;
+  state.heroCardId = gs.heroCardId || "";
+  state.heroName = gs.heroName || (gs.heroCardId ? getCardName(gs.heroCardId) : "");
+  state.gamePhase = gs.gamePhase || "shop";
+  state.boardMinions = (gs.boardMinions || []).map(mapMinion);
+  state.handMinions = (gs.handMinions || []).map(mapMinion);
+
+  // 分离商店中的随从和法术
+  var shopMinions = [];
+  var shopSpells = [];
+  var allShop = gs.shopMinions || [];
+  for (var si = 0; si < allShop.length; si++) {
+    var sm = allShop[si];
+    var card = getCard(sm.cardId);
+    if (card && (card.card_type === "tavern" || card.card_type === "spell")) {
+      shopSpells.push({
+        cardId: sm.cardId,
+        name_cn: getCardName(sm.cardId),
+        cardType: card.card_type,
+        text_cn: card.text_cn || "",
+        position: sm.position || si,
+      });
+    } else {
+      shopMinions.push({
+        cardId: sm.cardId,
+        name_cn: getCardName(sm.cardId),
+        tier: sm.tier || (card ? card.tier : 1),
+        tribes_cn: card ? card.minion_types_cn || [] : [],
+        position: sm.position || si,
+      });
+    }
+  }
+  state.shopMinions = shopMinions;
+  state.shopSpells = shopSpells;
+
+  // 新对局 → 启动记录会话
+  if (isNewSession && decisionsLogger) {
+    decisionsLogger.startSession(state.heroCardId, state.heroName);
+  }
+
+  runDecisionEngine();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════
+// 决策引擎（模块化）
+// ═══════════════════════════════════════════
+
+var orchestrator = null;
+var decisionsLogger = null;
+
+function initOrchestrator() {
+  if (orchestrator) return;
+  orchestrator = new Orchestrator();
+
+  var dt = state.decisionTables || {};
+
+  orchestrator.register(new LevelingModule(dt));
+  orchestrator.register(new MinionPickModule(dt));
+  orchestrator.register(new HeroPowerModule(dt));
+  orchestrator.register(new SpellModule(dt));
+  orchestrator.register(new TrinketModule(dt));
+
+  orchestrator.loadPriorityConfig(dt.priority_config || null);
+}
+
+function buildContext() {
+  var boardPower = estimateBoardPower(state.boardMinions);
+  var dominantTribe = getDominantTribe(state.boardMinions);
+  var compMatches = matchBoardToComps(state.boardMinions);
+  var currentComp = compMatches.length > 0 ? compMatches[0] : null;
+
+  // 构建流派核心卡 ID 集合（用于自动加权）
+  var coreCardIds = new Set();
+  if (currentComp && currentComp.comp && currentComp.comp.cards) {
+    for (var i = 0; i < currentComp.comp.cards.length; i++) {
+      var c = currentComp.comp.cards[i];
+      if (c.status === "CORE") coreCardIds.add(c.cardId || c.card_id || "");
+    }
+  }
+
+  // Compute hero power cost from current hero's hp_ids
+  var heroPowerCost = 0;
+  var heroPowerUsable = state.heroPowerUsable !== false;
+  if (state.heroCardId && state._heroHpMap) {
+    var hpIds = state._heroHpMap[state.heroCardId];
+    if (hpIds && hpIds.length > 0 && state._heroPowerCost) {
+      heroPowerCost = state._heroPowerCost[hpIds[0]] || 0;
+      // Cost 0 hero powers are typically passive — skip prompting
+    }
+  }
+
+  // Check hero-specific tips for extra context
+  var heroTipList = null;
+  if (state.heroTips && state.heroCardId) {
+    var ht = state.heroTips[state.heroCardId];
+    if (ht && ht.tips) heroTipList = ht.tips;
+  }
+
+  return {
+    turn: state.turn,
+    gold: state.gold,
+    maxGold: state.maxGold,
+    tavernTier: state.tavernTier,
+    health: state.health,
+    heroCardId: state.heroCardId,
+    heroName: state.heroName,
+    boardMinions: state.boardMinions,
+    handMinions: state.handMinions,
+    shopMinions: state.shopMinions,
+    gamePhase: state.gamePhase,
+    heroTips: state.heroTips || null,
+    heroTipList: heroTipList,
+    heroStats: state._heroStatsMap || null,
+    boardPower: boardPower,
+    dominantTribe: dominantTribe,
+    compMatches: compMatches,
+    currentComp: currentComp,
+    curveType: selectCurveType(),
+    decisionTables: state.decisionTables,
+    heroPowerCost: heroPowerCost,
+    heroPowerUsable: heroPowerUsable,
+    activeAnomaly: state.activeAnomaly || null,
+    activeRewards: state.activeRewards || [],
+    shopSpells: state.shopSpells || [],
+    trinketOffer: state.trinketOffer || [],
+    trinketTips: state.trinketTips || {},
+    _heroHpMap: state._heroHpMap || {},
+    _heroPowerCost: state._heroPowerCost || {},
+    _compCoreCardIds: coreCardIds,
+    _spellInteractions: _buildSpellInteractionLookup(state._spellInteractions),
+    _cardsById: state.cards || null,
+    _shopEvaluations: null,
+  };
+}
+
+// ── 将 spell_interactions.json 的数组转为 cardId lookup sets ──
+function _buildSpellInteractionLookup(raw) {
+  if (!raw) return null;
+  var result = {
+    buffAmplifierIds: {},
+    castTriggerIds: {},
+    duplicatorIds: {},
+    generatorIds: {},
+    costReducerIds: {},
+    trinketInteractIds: {},
+  };
+  var keys = ["spell_buff_amplifiers", "spell_cast_triggers", "spell_duplicators",
+              "spell_generators", "spell_cost_reducers"];
+  var targets = [result.buffAmplifierIds, result.castTriggerIds, result.duplicatorIds,
+                 result.generatorIds, result.costReducerIds];
+  for (var k = 0; k < keys.length; k++) {
+    var arr = raw[keys[k]];
+    if (arr) {
+      for (var a = 0; a < arr.length; a++) {
+        targets[k][arr[a].id] = true;
+      }
+    }
+  }
+  // 饰品交互：合并所有 spell 相关 trinket
+  var trinketKeys = ["spell_buff_amplifiers", "spell_duplicators", "spell_generators",
+                     "spell_cast_triggers", "spell_cost_reducers"];
+  for (var tk = 0; tk < trinketKeys.length; tk++) {
+    var tArr = raw[trinketKeys[tk]];
+    if (tArr) {
+      for (var ta = 0; ta < tArr.length; ta++) {
+        var entry = tArr[ta];
+        if (entry.type === "trinket") {
+          result.trinketInteractIds[entry.id] = true;
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function runDecisionEngine() {
+  if (!state.decisionTables || !state.gameActive) {
+    clearDecisionState();
+    return;
+  }
+
+  // 确保 orchestrator 已初始化
+  if (!orchestrator) initOrchestrator();
+
+  var ctx = buildContext();
+  var result = orchestrator.run(ctx);
+
+  // 将 orchestrator 输出写入 state
+  state.suggestion = result.primarySuggestion;
+  state.secondaryHints = result.secondaryHints || [];
+  state.highlightedCards = result.cardHighlights || [];
+  state.compMatches = result.compPanelData.compMatches || [];
+  state.currentComp = result.compPanelData.currentComp || null;
+
+  // 记录本回合决策到反馈日志
+  if (decisionsLogger) {
+    decisionsLogger.logTurn(state);
+  }
+}
+
+// ── 工具函数（保留在 overlay.js，供 buildContext 使用） ──
 
 function estimateBoardPower(boardMinions) {
   const table = (state.decisionTables && state.decisionTables.board_power_estimation) || {};
@@ -378,129 +654,27 @@ function matchBoardToComps(boardMinions) {
   return matches.slice(0, displayMax);
 }
 
-function evaluateShopCards(shopMinions, boardMinions) {
-  const weights = (state.decisionTables && state.decisionTables.card_weights) || {};
-  const dominantTribe = getDominantTribe(boardMinions);
-  const boardCounts = {};
-  for (const m of boardMinions) {
-    boardCounts[m.cardId] = (boardCounts[m.cardId] || 0) + 1;
+function selectCurveType() {
+  // 1. Check hero-specific overrides from decision_tables
+  var heroOverrides = (state.decisionTables && state.decisionTables.leveling_curve &&
+    state.decisionTables.leveling_curve.hero_overrides) || {};
+  if (state.heroCardId && heroOverrides[state.heroCardId]) {
+    return heroOverrides[state.heroCardId].curve_type || "standard";
   }
 
-  return shopMinions.map((shopCard) => {
-    const tribeWeight = dominantTribe ? (weights[dominantTribe] || {})[shopCard.cardId] : null;
-    const neutralW = (weights.neutral || {})[shopCard.cardId];
-    const bestW = tribeWeight || neutralW;
-    const weight = bestW ? bestW.weight || 0 : 0;
-    const role = bestW ? bestW.role || "" : "";
-    const hasPair = (boardCounts[shopCard.cardId] || 0) >= 2;
-    const hasOne = (boardCounts[shopCard.cardId] || 0) >= 1;
-
-    let highlightType = null;
-    let reasonShort = "";
-
-    if (hasPair) {
-      highlightType = "triple";
-      reasonShort = "可凑三连，碰高本核心";
-    } else if (weight >= 8) {
-      highlightType = "core";
-      reasonShort = role === "core" ? `核心卡，完善${dominantTribe || ""}流派` : "高分推荐，战力核心";
-    } else if (weight >= 5) {
-      highlightType = "power";
-      reasonShort = "战力提升，中期保证";
-    } else if (hasOne) {
-      highlightType = "triple";
-      reasonShort = "有1张在手，再拿可凑对子";
+  // 2. Check hero_stats avg_position — top-tier heroes can play more aggressively
+  if (state._heroStatsMap && state.heroCardId) {
+    var hs = state._heroStatsMap[state.heroCardId];
+    if (hs && hs.avg_position) {
+      if (hs.avg_position <= 3.5) return "aggressive";
+      if (hs.avg_position >= 5.0) return "defensive";
     }
+  }
 
-    return {
-      cardId: shopCard.cardId,
-      name_cn: shopCard.name_cn || getCardName(shopCard.cardId),
-      highlightType,
-      weight,
-      reasonShort,
-      position: shopCard.position,
-    };
-  });
-}
-
-function selectCurveType() {
-  // Simplified: choose based on health
+  // 3. Health-based fallback
   if (state.health <= 12) return "defensive";
   if (state.health >= 25 && state.tavernTier <= 2) return "aggressive";
   return "standard";
-}
-
-function runDecisionEngine() {
-  if (!state.decisionTables || !state.gameActive) {
-    state.suggestion = null;
-    state.highlightedCards = [];
-    state.compMatches = [];
-    state.currentComp = null;
-    return;
-  }
-
-  const table = state.decisionTables;
-  const boardPower = estimateBoardPower(state.boardMinions);
-  const compMatches = matchBoardToComps(state.boardMinions);
-  const currentComp = compMatches.length > 0 ? compMatches[0] : null;
-  const curveType = selectCurveType();
-  const curve = (table.leveling_curve || {})[curveType] || {};
-
-  // ── 1. 升本建议 ──
-  let suggestion = null;
-  const turnKey = String(state.turn);
-  const curveEntry = curve[turnKey];
-
-  if (curveEntry) {
-    const canLevel = state.gold >= curveEntry.cost;
-    const boardOk = boardPower >= (table.board_power_estimation?.default_threshold_level || 0.4);
-    const healthOk = state.health > (table.board_power_estimation?.health_threshold_danger || 10);
-
-    if (canLevel && boardOk && healthOk) {
-      const targetTier = state.tavernTier + 1;
-      const rules = table.suggestion_rules?.level_up || {};
-      const keyCard = currentComp ? currentComp.missingCards[0] : null;
-      const keyCardName = keyCard ? getCardName(keyCard) : "核心卡";
-
-      suggestion = {
-        type: "level_up",
-        color: "orange",
-        message: `建议升本→${targetTier}`,
-        reasonShort: `场面战力充足，血量安全，升${targetTier}本后有概率找到${keyCardName}`,
-        reasonDetail: `当前场面战力 ${boardPower.toFixed(1)}，高于同回合均值。血量 ${state.health} 较安全。\n升到${targetTier}本后可以找${keyCardName}完善${currentComp?.comp?.name || "阵容"}。\n\n如果不升本，刷两下出核心的概率约8%。你会怎么选？`,
-      };
-    }
-  }
-
-  // ── 2. 危险警告 ──
-  const healthDanger = table.board_power_estimation?.health_threshold_danger || 10;
-  if (!suggestion && state.health <= healthDanger && boardPower < 0.5) {
-    suggestion = {
-      type: "danger",
-      color: "red",
-      message: "危险！急需战力",
-      reasonShort: `血量仅剩${state.health}，场面战力不足`,
-      reasonDetail: `当前血量${state.health}低于安全线，场面战力${boardPower.toFixed(1)}。\n建议优先购买高战力随从保命，不要贪升本。\n\n血量低于10时，每回合的存活率都至关重要。`,
-    };
-  }
-
-  // ── 3. 搜牌建议 ──
-  if (!suggestion && currentComp && currentComp.matchPercent < 80 && currentComp.missingCards.length > 0) {
-    const rules = table.suggestion_rules?.refresh_shop || {};
-    const missingNames = currentComp.missingCards.slice(0, 3).map(getCardName).join("、");
-    suggestion = {
-      type: "refresh",
-      color: "blue",
-      message: "建议搜牌找核心",
-      reasonShort: `缺少${currentComp.missingCards.length}张核心卡: ${missingNames}`,
-      reasonDetail: `当前${currentComp.comp.name}核心卡进度 ${currentComp.overlapCount}/${currentComp.totalComp}，缺少${missingNames}。\n刷出其中一张的概率约12%。`,
-    };
-  }
-
-  state.suggestion = suggestion;
-  state.highlightedCards = evaluateShopCards(state.shopMinions, state.boardMinions);
-  state.compMatches = compMatches;
-  state.currentComp = currentComp;
 }
 
 // ═══════════════════════════════════════════
@@ -508,8 +682,8 @@ function runDecisionEngine() {
 // ═══════════════════════════════════════════
 
 function renderSuggestionBadge() {
-  const s = state.suggestion;
-  const el = dom.suggestionBadge;
+  var s = state.suggestion;
+  var el = dom.suggestionBadge;
   if (!el) return;
 
   if (!s || !state.gameActive) {
@@ -517,68 +691,259 @@ function renderSuggestionBadge() {
     return;
   }
 
-  dom.sugText.textContent = s.message;
+  dom.sugText.textContent = s.message || "";
 
-  // Color class
-  el.classList.remove("hidden", "danger", "refresh", "minimized");
+  // Color class — map Decision type to CSS class
+  el.classList.remove("hidden", "danger", "refresh", "minimized", "hero-power", "spell");
   if (state.badgeMinimized) el.classList.add("minimized");
   if (s.type === "danger") el.classList.add("danger");
   if (s.type === "refresh") el.classList.add("refresh");
+  if (s.type === "hero_power") el.classList.add("hero-power");
+  if (s.type === "spell_buy" || s.type === "spell_use") el.classList.add("spell");
 
-  // Reason tooltip
-  dom.sugReason.textContent = s.reasonShort || "";
+  // Reason tooltip — 含模块来源
+  var sourceLabel = {
+    LevelingModule: "升本策略",
+    MinionPickModule: "选牌引擎",
+    HeroPowerModule: "英雄技能",
+    SpellModule: "法术评估",
+    TrinketModule: "饰品分析",
+  };
+  var src = sourceLabel[s.source] || s.source || "";
+  var conf = Math.round((s.confidence || 0) * 100);
+  var tipText = (src ? "[" + src + "] " : "") + "置信度 " + conf + "%\n" + (s.reason || s.reasonShort || "");
+  dom.sugReason.textContent = tipText;
   dom.sugReason.classList.add("hidden");
+
+  // 次级提示条
+  renderSecondaryHints();
+}
+
+function renderSecondaryHints() {
+  var hints = state.secondaryHints || [];
+  var container = document.getElementById("secondary-hints");
+  if (!container) return;
+
+  if (!state.gameActive || hints.length === 0) {
+    container.classList.add("hidden");
+    return;
+  }
+
+  var sourceLabel = {
+    LevelingModule: "升本策略",
+    MinionPickModule: "选牌引擎",
+    HeroPowerModule: "英雄技能",
+    SpellModule: "法术评估",
+    TrinketModule: "饰品分析",
+  };
+
+  container.classList.remove("hidden");
+  var html = "";
+  for (var i = 0; i < Math.min(hints.length, 4); i++) {
+    var h = hints[i];
+    var icon = _hintIcon(h.type);
+    var label = h.message || h.action || "";
+    var src = sourceLabel[h.source] || h.source || "";
+    var conf = Math.round((h.confidence || 0) * 100);
+    var tooltip = (src ? "[" + src + "] " : "") + "置信度 " + conf + "%" +
+      (h.reason ? "\n" + h.reason : "");
+    html += '<span class="hint-item ' + (h.type || "") + '" title="' + tooltip.replace(/"/g, "&quot;") + '">' + icon + " " + label + "</span>";
+  }
+  container.innerHTML = html;
+}
+
+function _hintIcon(type) {
+  switch (type) {
+    case "hero_power": return "&#9889;";
+    case "spell_buy":
+    case "spell_use": return "&#128220;";
+    case "trinket_pick": return "&#128142;";
+    case "refresh": return "&#128259;";
+    case "minion_pick": return "&#9764;";
+    default: return "&#9654;";
+  }
 }
 
 function renderCardHighlights() {
-  const container = dom.cardHighlights;
+  var container = dom.cardHighlights;
   if (!container) return;
   container.innerHTML = "";
-
   if (!state.gameActive) return;
 
-  // Reference resolution: 1920x1080, scale to current window dimensions
-  const refW = 1920;
-  const refH = 1080;
-  const scaleX = window.innerWidth / refW;
-  const scaleY = window.innerHeight / refH;
+  // 参考分辨率缩放
+  var refW = 1920, refH = 1080;
+  var scaleX = window.innerWidth / refW;
+  var scaleY = window.innerHeight / refH;
 
-  // Shop card reference positions (pixels at 1920x1080, bottom-center area)
-  const refCardY = 780;
-  const refCardW = 134;
-  const refCardH = 173;
-  const refStartX = 500;
-  const refGapX = 157;
+  // 商店卡牌参考坐标
+  var refCardY = 780, refCardW = 134, refCardH = 173;
+  var refStartX = 500, refGapX = 157;
+  var shopY = Math.round(refCardY * scaleY);
+  var cardW = Math.round(refCardW * scaleX);
+  var cardH = Math.round(refCardH * scaleY);
+  var startX = Math.round(refStartX * scaleX);
+  var gapX = Math.round(refGapX * scaleX);
 
-  const shopY = Math.round(refCardY * scaleY);
-  const cardW = Math.round(refCardW * scaleX);
-  const cardH = Math.round(refCardH * scaleY);
-  const startX = Math.round(refStartX * scaleX);
-  const gapX = Math.round(refGapX * scaleX);
+  // ── 买随从费用判断（统一由 RulesEngine 计算洋葱层修正） ──
+  var buyCost = RulesEngine.getBuyCost(state);
+  var firstMinionFree = RulesEngine.isFirstMinionFree(state);
+  var maxBuys = RulesEngine.getMaxBuys(state);
 
-  for (const hc of state.highlightedCards) {
+  // ── 1. 用途标签（右上角） + 购买图标（左侧），按权重截取 ──
+  var sorted = (state.highlightedCards || []).slice().sort(function (a, b) {
+    return (b.weight || 0) - (a.weight || 0);
+  });
+
+  var purposeTags = { core: "核", power: "战", triple: "碰" };
+  var markedCount = 0;
+
+  for (var i = 0; i < sorted.length; i++) {
+    var hc = sorted[i];
     if (!hc.highlightType) continue;
 
-    const pos = hc.position;
-    const left = startX + pos * gapX;
+    // 铸币预算限制：权重>=5 的才有资格占预算位，碰(三连)不受预算限制
+    if (hc.highlightType !== "triple" && hc.weight < 5) continue;
+    if (hc.highlightType !== "triple" && markedCount >= maxBuys && maxBuys > 0) break;
+    if (hc.highlightType !== "triple") markedCount++;
 
-    const wrapper = document.createElement("div");
-    wrapper.className = `card-highlight ${hc.highlightType}`;
+    var pos = hc.position;
+    var left = startX + pos * gapX;
+
+    var wrapper = document.createElement("div");
+    wrapper.className = "card-marker";
     wrapper.style.left = left + "px";
     wrapper.style.top = shopY + "px";
     wrapper.style.width = cardW + "px";
     wrapper.style.height = cardH + "px";
-    wrapper.title = hc.reasonShort || "";
+    wrapper.title = (hc.reasonShort || "") + " | 权重 " + (hc.weight || 0);
 
-    // Badge
-    const badge = document.createElement("div");
-    const badgeTexts = { core: "核", power: "战", triple: "碰" };
-    badge.className = `card-badge ${hc.highlightType}`;
-    badge.textContent = badgeTexts[hc.highlightType] || "?";
-    wrapper.appendChild(badge);
+    // 用途标签（右上角）
+    var tagText = purposeTags[hc.highlightType] || "";
+    if (tagText) {
+      var tag = document.createElement("div");
+      tag.className = "card-purpose-tag " + hc.highlightType;
+      tag.textContent = tagText;
+      wrapper.appendChild(tag);
+    }
+
+    // 行为图标（左侧边缘中部）
+    var actionDot = document.createElement("div");
+    var actionClass = hc.highlightType === "core" ? "buy_core" :
+                      hc.highlightType === "triple" ? "buy_triple" :
+                      hc.highlightType === "power" ? "buy_power" : "buy";
+    actionDot.className = "card-action-dot " + actionClass;
+    actionDot.textContent = "买";
+    wrapper.appendChild(actionDot);
 
     container.appendChild(wrapper);
   }
+
+  // ── 2. 出售标记：我方阵容非核心低战力随从 ──
+  var coreSet = new Set();
+  if (state.currentComp && state.currentComp.comp && state.currentComp.comp.cards) {
+    var compCards = state.currentComp.comp.cards;
+    for (var ci = 0; ci < compCards.length; ci++) {
+      var cc = compCards[ci];
+      if (cc.status === "CORE") {
+        coreSet.add(cc.cardId || cc.card_id || "");
+      }
+    }
+  }
+
+  // 阵容卡牌参考坐标（下方偏左区域，7个位置）
+  var refBoardY = 870, refBoardW = 120, refBoardH = 150;
+  var refBoardStartX = 340, refBoardGapX = 128;
+  var boardY = Math.round(refBoardY * scaleY);
+  var boardCardW = Math.round(refBoardW * scaleX);
+  var boardCardH = Math.round(refBoardH * scaleY);
+  var boardStartX = Math.round(refBoardStartX * scaleX);
+  var boardGapX = Math.round(refBoardGapX * scaleX);
+
+  var sellSuggestions = findSellableMinions(coreSet);
+
+  for (var si = 0; si < sellSuggestions.length; si++) {
+    var sm = sellSuggestions[si];
+    var sPos = sm.position;
+    var sLeft = boardStartX + sPos * boardGapX;
+
+    var sWrapper = document.createElement("div");
+    sWrapper.className = "card-marker";
+    sWrapper.style.left = sLeft + "px";
+    sWrapper.style.top = boardY + "px";
+    sWrapper.style.width = boardCardW + "px";
+    sWrapper.style.height = boardCardH + "px";
+    sWrapper.title = sm.reason || "可考虑出售换铸币";
+
+    var sDot = document.createElement("div");
+    sDot.className = "card-action-dot sell";
+    sDot.textContent = "卖";
+    sWrapper.appendChild(sDot);
+
+    container.appendChild(sWrapper);
+  }
+}
+
+// ── 出售判断：非核心、低星级、无三连潜力的随从 ──
+
+function findSellableMinions(coreSet) {
+  var result = [];
+  var board = state.boardMinions || [];
+
+  // 只在场面满员或急需铸币时标记出售
+  var boardFull = board.length >= 7;
+  var needGold = state.gold < 3 && board.length >= 4;
+
+  if (!boardFull && !needGold) return result;
+
+  // 统计卡牌出现次数（检测三连潜力）
+  var cardCounts = {};
+  for (var i = 0; i < board.length; i++) {
+    var cid = board[i].cardId;
+    cardCounts[cid] = (cardCounts[cid] || 0) + 1;
+  }
+
+  for (var j = 0; j < board.length; j++) {
+    var m = board[j];
+    var cid = m.cardId;
+
+    // 跳过核心卡
+    if (coreSet.has(cid)) continue;
+    // 跳过金色卡
+    if (m.golden) continue;
+    // 跳过有对子潜力的卡（已有2张）
+    if (cardCounts[cid] >= 2) continue;
+
+    var tier = m.tier || 1;
+    // 高星卡不轻易建议卖（5-6星通常有战力价值）
+    if (tier >= 5) continue;
+
+    // 1-2星非核心卡，在场面满员时最值得卖
+    var reason = "";
+    if (tier <= 2) {
+      var bonusGold = hasSellBonus(cid);
+      reason = "低星非核心，可出售换" + (bonusGold || 1) + "铸币";
+    } else if (boardFull) {
+      reason = "场面满员，非核心可替换";
+    } else {
+      continue;
+    }
+
+    result.push({
+      cardId: cid,
+      position: j,
+      tier: tier,
+      reason: reason,
+    });
+  }
+
+  // 最多标记2个，避免用户误操作
+  return result.slice(0, Math.min(result.length, boardFull ? 2 : 1));
+}
+
+function hasSellBonus(cardId) {
+  // 委托给 RulesEngine 统一计算（洋葱层模型：基础1 + 英雄修正 + 饰品修正 + 畸变）
+  var price = RulesEngine.getSellPrice(cardId, state);
+  return price > 1 ? price : 0;
 }
 
 function renderCompPanel() {
@@ -762,6 +1127,14 @@ function applyDemoScenario(index) {
   updateDemoIndicator();
 }
 
+function clearDecisionState() {
+  state.suggestion = null;
+  state.secondaryHints = [];
+  state.highlightedCards = [];
+  state.compMatches = [];
+  state.currentComp = null;
+}
+
 function nextDemoTurn() {
   const next = state.demoTurnIndex + 1;
   applyDemoScenario(next >= DEMO_SCENARIOS.length ? 0 : next);
@@ -775,10 +1148,7 @@ function toggleDemoMode() {
   } else {
     dom.demoIndicator.classList.add("hidden");
     state.gameActive = false;
-    state.suggestion = null;
-    state.highlightedCards = [];
-    state.compMatches = [];
-    state.currentComp = null;
+    clearDecisionState();
     renderAll();
   }
 }
@@ -801,7 +1171,7 @@ function setupEvents() {
     // Always show visual feedback immediately (don't wait for netsh result)
     state.disconnectStatus = "disconnecting";
     renderDisconnectButton();
-    showDcToast("拔线中，3秒后自动重连", true);
+    showDcToast("拔线中，3秒后自动重连");
 
     // Try actual firewall block (may fail without admin, but visuals already work)
     window.bobCoach.triggerDisconnect();
@@ -813,14 +1183,6 @@ function setupEvents() {
       renderDisconnectButton();
       hideDcToast();
     }, 3000);
-  });
-
-  dom.dcManualBtn.addEventListener("click", async () => {
-    await window.bobCoach.manualReconnect();
-    clearTimeout(state._dcRevertTimer);
-    state.disconnectStatus = "online";
-    renderDisconnectButton();
-    hideDcToast();
   });
 
   setupDisconnectDrag();
@@ -959,6 +1321,8 @@ function setupEvents() {
   // ── IPC 事件监听 ──
   window.bobCoach.on("window-moved", (rect) => {
     // Positional recalculation can happen here
+    // Re-render highlights with new window size
+    if (state.gameActive) renderCardHighlights();
   });
 
   window.bobCoach.on("disconnect:state-changed", (status) => {
@@ -967,13 +1331,26 @@ function setupEvents() {
     if (status === "online") {
       hideDcToast();
     } else if (status === "disconnecting") {
-      showDcToast("拔线中，3秒后自动重连", true);
+      showDcToast("拔线中，3秒后自动重连");
     }
   });
 
   window.bobCoach.on("toggle-panel", toggleCompPanel);
   window.bobCoach.on("open-settings", openSettings);
   window.bobCoach.on("open-about", openAbout);
+
+  // ── 实时游戏状态（来自 HDT 日志解析） ──
+  window.bobCoach.on("game-state-update", (gameState) => {
+    if (!gameState || !gameState.gameActive) return;
+
+    // 真实对局开始 → 禁用 demo 模式
+    if (state.demoMode) {
+      state.demoMode = false;
+      dom.demoIndicator.classList.add("hidden");
+    }
+
+    applyGameState(gameState);
+  });
 
   window.bobCoach.on("sync:update-available", (available) => {
     showUpdateAvailable(available);
@@ -1084,11 +1461,60 @@ function applyCompPanelOffset(dx, dy) {
 }
 
 function openTacticalBoard() {
-  const s = state.suggestion;
+  var s = state.suggestion;
   if (!s) return;
 
-  dom.tacticalTitle.textContent = s.type === "level_up" ? "升本决策分析" : s.type === "danger" ? "危险警告" : "搜牌决策分析";
-  dom.tacticalBody.textContent = s.reasonDetail || "暂无详细分析";
+  var titleMap = {
+    level_up: "升本决策分析",
+    danger: "危险警告",
+    minion_pick: "选牌决策分析",
+    hero_power: "技能使用分析",
+    spell_buy: "法术购买分析",
+    spell_use: "法术使用分析",
+    trinket_pick: "饰品选择分析",
+    refresh: "搜牌决策分析",
+  };
+  dom.tacticalTitle.textContent = titleMap[s.type] || "决策分析";
+
+  // 汇总所有建议（主要 + 次级）
+  var allDecisions = [];
+  if (s) allDecisions.push(s);
+  var hints = state.secondaryHints || [];
+  for (var i = 0; i < hints.length; i++) {
+    allDecisions.push(hints[i]);
+  }
+
+  // 模块来源中文映射
+  var sourceLabel = {
+    LevelingModule: "升本策略",
+    MinionPickModule: "选牌引擎",
+    HeroPowerModule: "英雄技能",
+    SpellModule: "法术评估",
+    TrinketModule: "饰品分析",
+  };
+
+  var html = "";
+  for (var j = 0; j < allDecisions.length; j++) {
+    var d = allDecisions[j];
+    var isPrimary = (j === 0);
+    var src = sourceLabel[d.source] || d.source || "决策引擎";
+    var confPct = Math.round((d.confidence || 0) * 100);
+    var confColor = confPct >= 70 ? "var(--c-accent)" : confPct >= 40 ? "var(--c-secondary)" : "var(--text-muted)";
+
+    html += '<div class="dc-card' + (isPrimary ? ' primary' : '') + '">';
+    html += '<div class="dc-card-head">';
+    html += '<span class="dc-card-type">' + (d.message || d.action || "") + '</span>';
+    html += '<span class="dc-card-src">' + src + '</span>';
+    html += '</div>';
+    html += '<div class="dc-card-body">' + (d.reason || "暂无详细分析").replace(/\n/g, "<br>") + '</div>';
+    html += '<div class="dc-card-foot">';
+    html += '<span class="dc-conf-bar" style="width:' + confPct + '%;background:' + confColor + '"></span>';
+    html += '<span class="dc-conf-label" style="color:' + confColor + '">置信度 ' + confPct + '%</span>';
+    html += '</div>';
+    html += '</div>';
+  }
+
+  dom.tacticalBody.innerHTML = html;
   dom.tacticalBoard.classList.remove("hidden");
 }
 
@@ -1187,8 +1613,16 @@ async function applyUpdates() {
 
   try {
     const result = await window.bobCoach.applySyncUpdates(state.pendingUpdates);
+    if (result.errors.length > 0) {
+      // 展示具体错误信息
+      dom.btnCheckUpdate.textContent = "部分失败 - 重试";
+      if ($("sync-update-text")) {
+        $("sync-update-text").textContent = "更新出错: " + result.errors.join("; ");
+        $("sync-update-banner").classList.remove("hidden");
+      }
+      console.error("[Bob] Some updates failed:", result.errors);
+    }
     if (result.applied.length > 0) {
-      // Reload all data
       await loadAllData();
       runDecisionEngine();
       renderAll();
@@ -1198,19 +1632,20 @@ async function applyUpdates() {
       state.pendingUpdates = null;
 
       dom.btnCheckUpdate.textContent = "更新完成 ✓";
-      setTimeout(() => {
+      setTimeout(function () {
         if (dom.btnCheckUpdate) {
           dom.btnCheckUpdate.textContent = "检查更新";
           dom.btnCheckUpdate.disabled = false;
         }
       }, 3000);
     }
-    if (result.errors.length > 0) {
-      console.error("[Bob] Some updates failed:", result.errors);
-    }
   } catch (e) {
     console.error("[Bob] Apply updates failed:", e);
-    dom.btnCheckUpdate.textContent = "更新失败";
+    dom.btnCheckUpdate.textContent = "网络错误 - 重试";
+    if ($("sync-update-text")) {
+      $("sync-update-text").textContent = "网络连接失败: " + (e.message || "请检查网络后重试");
+      $("sync-update-banner").classList.remove("hidden");
+    }
   }
   dom.btnCheckUpdate.disabled = false;
 }
@@ -1336,10 +1771,9 @@ let _gearDx = 0;
 let _gearDy = 0;
 let _gearWasDragged = false;
 
-function showDcToast(text, showManual) {
+function showDcToast(text) {
   dom.dcToastText.textContent = text;
   dom.dcToast.classList.remove("hidden");
-  dom.dcManualBtn.classList.toggle("hidden", !showManual);
   dom.dcProgressFill.style.width = "0%";
 
   // 3 second countdown
@@ -1612,6 +2046,11 @@ async function init() {
   if (!state.agreementAccepted) {
     dom.agreementOverlay.classList.remove("hidden");
   }
+
+  // 初始化决策记录器（反馈闭环）
+  decisionsLogger = new DecisionsLogger(function (entry) {
+    window.bobCoach.logDecision(entry).catch(function () {});
+  });
 
   // Load data
   const dataLoaded = await loadAllData();

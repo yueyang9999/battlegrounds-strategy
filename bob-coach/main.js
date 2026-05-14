@@ -13,12 +13,14 @@ const path = require("path");
 const fs = require("fs");
 const { execSync, exec } = require("child_process");
 const syncData = require("./sync-data");
+const { GameStateTracker } = require("./log-parser");
 
 // ── 路径常量 ──
 const USER_DATA = app.getPath("userData");
 const SETTINGS_PATH = path.join(USER_DATA, "settings.json");
 const DATA_DIR = path.join(__dirname, "data");
 const LOG_DIR = path.join(USER_DATA, "logs");
+const SESSIONS_DIR = path.join(USER_DATA, "sessions");
 
 // ── 全局状态 ──
 let overlayWin = null;
@@ -30,6 +32,7 @@ let firewallBlocked = false;
 let trackingInterval = null;
 let logWatcher = null;
 let windowHiddenByUser = false;
+let gameTracker = null;
 
 function buildTrayMenu() {
   return Menu.buildFromTemplate([
@@ -419,103 +422,140 @@ function createOverlayWindow() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// HDT 日志解析器
+// 游戏日志解析器（HDT / Hearthstone Power.log）
 // ═══════════════════════════════════════════════════════════
 
 let logWatchFile = null;
 let logLastSize = 0;
+let logWatchRetryTimer = null;
 
-function findHDTLogPath() {
-  const possiblePaths = [
+function findGameLogPaths() {
+  const paths = [];
+
+  // 1. Hearthstone Power.log (最可靠)
+  const hsLogDirs = [
+    path.join(app.getPath("appData"), "..", "Local", "Blizzard", "Hearthstone", "Logs"),
+    path.join(app.getPath("home"), "AppData", "Local", "Blizzard", "Hearthstone", "Logs"),
+    "C:\\Program Files (x86)\\Hearthstone\\Logs",
+    "D:\\Program Files (x86)\\Hearthstone\\Logs",
+  ];
+  for (const p of hsLogDirs) {
+    if (fs.existsSync(p)) {
+      const powerLog = path.join(p, "Power.log");
+      if (fs.existsSync(powerLog)) {
+        paths.push({ path: powerLog, source: "hs" });
+      }
+    }
+  }
+
+  // 2. HDT 日志目录
+  const hdtDirs = [
     path.join(app.getPath("appData"), "HearthstoneDeckTracker", "Logs"),
     path.join(app.getPath("appData"), "..", "Local", "HearthstoneDeckTracker", "Logs"),
     path.join(app.getPath("home"), "AppData", "Local", "HearthstoneDeckTracker", "Logs"),
   ];
-  for (const p of possiblePaths) {
+  for (const p of hdtDirs) {
     if (fs.existsSync(p)) {
       const files = fs.readdirSync(p).filter((f) => f.endsWith(".log") || f.endsWith(".txt"));
-      if (files.length > 0) {
-        // find the most recent log file
-        const sorted = files
-          .map((f) => ({
-            name: f,
-            mtime: fs.statSync(path.join(p, f)).mtime,
-          }))
-          .sort((a, b) => b.mtime - a.mtime);
-        // prefer Power.log or bg.log
-        const bgLog = sorted.find((f) => f.name.toLowerCase().includes("bg") || f.name.toLowerCase().includes("battleground"));
-        const powerLog = sorted.find((f) => f.name.toLowerCase().includes("power"));
-        const target = bgLog || powerLog || sorted[0];
-        if (target) return path.join(p, target.name);
+      const sorted = files
+        .map((f) => ({ name: f, mtime: fs.statSync(path.join(p, f)).mtime }))
+        .sort((a, b) => b.mtime - a.mtime);
+      const bgLog = sorted.find(
+        (f) =>
+          f.name.toLowerCase().includes("bg") ||
+          f.name.toLowerCase().includes("battleground")
+      );
+      const powerLog = sorted.find((f) => f.name.toLowerCase().includes("power"));
+      const target = bgLog || powerLog || sorted[0];
+      if (target) {
+        paths.push({ path: path.join(p, target.name), source: "hdt" });
       }
     }
   }
-  return null;
-}
 
-function parseLogLine(line) {
-  try {
-    // Try to parse as JSON first (Firestone/HDT format)
-    const trimmed = line.trim();
-    if (!trimmed) return null;
-
-    if (trimmed.startsWith("{")) {
-      const parsed = JSON.parse(trimmed);
-      return parsed;
-    }
-
-    // Try to parse HDT-style log lines
-    // [Power] GameState.DebugPrintPower() - TAG_CHANGE ...
-    return { raw: trimmed };
-  } catch {
-    return { raw: line.trim() };
-  }
+  return paths;
 }
 
 function startLogWatching() {
-  const logPath = findHDTLogPath();
-  if (!logPath) {
-    log("info", "No HDT log found, will rely on demo mode");
+  // 初始化状态追踪器
+  if (!gameTracker) {
+    gameTracker = new GameStateTracker((state) => {
+      if (overlayWin && !overlayWin.isDestroyed()) {
+        overlayWin.webContents.send("game-state-update", state);
+      }
+      if (state.gameActive) {
+        log("debug", `Game state: T${state.turn} P${state.gamePhase} G${state.gold}/${state.maxGold} T${state.tavernTier} H${state.health} board=${state.boardMinions.length} shop=${state.shopMinions.length}`);
+      }
+    });
+  }
+
+  const logPaths = findGameLogPaths();
+  if (logPaths.length === 0) {
+    log("info", "No game log found, will rely on demo mode");
+    // 每 30 秒重试查找
+    logWatchRetryTimer = setTimeout(() => startLogWatching(), 30000);
     return false;
   }
 
-  log("info", "Watching log: " + logPath);
-  logLastSize = fs.statSync(logPath).size;
-  logWatchFile = logPath;
+  // 优先 HS Power.log，其次 HDT
+  const target = logPaths[0];
+  log("info", `Watching log [${target.source}]: ${target.path}`);
+  logWatchFile = target.path;
 
-  fs.watch(logPath, (eventType) => {
-    if (eventType !== "change") return;
-    try {
-      const stats = fs.statSync(logPath);
-      if (stats.size < logLastSize) {
-        logLastSize = 0; // log rotation
-      }
-      if (stats.size <= logLastSize) return;
+  try {
+    logLastSize = fs.statSync(target.path).size;
+  } catch (e) {
+    log("error", "Cannot read log file size: " + e.message);
+    logWatchRetryTimer = setTimeout(() => startLogWatching(), 30000);
+    return false;
+  }
 
-      const stream = fs.createReadStream(logPath, {
-        start: logLastSize,
-        end: stats.size,
-        encoding: "utf-8",
-      });
-      let buffer = "";
-      stream.on("data", (chunk) => {
-        buffer += chunk;
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-        for (const line of lines) {
-          const parsed = parseLogLine(line);
-          if (parsed && overlayWin && !overlayWin.isDestroyed()) {
-            overlayWin.webContents.send("log-line", parsed);
-          }
+  try {
+    fs.watch(target.path, (eventType) => {
+      if (eventType !== "change") return;
+      try {
+        const stats = fs.statSync(target.path);
+        if (stats.size < logLastSize) {
+          // 日志轮转（新对局）
+          gameTracker.reset();
+          logLastSize = 0;
         }
-      });
-      stream.on("end", () => {
-        logLastSize = stats.size;
-      });
-    } catch (e) {
-      log("error", "Log read error: " + e.message);
-    }
-  });
+        if (stats.size <= logLastSize) return;
+
+        const stream = fs.createReadStream(target.path, {
+          start: logLastSize,
+          end: stats.size,
+          encoding: "utf-8",
+        });
+        let buffer = "";
+        stream.on("data", (chunk) => {
+          buffer += chunk;
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              gameTracker.processLine(line);
+            } catch (e) {
+              // 静默跳过解析错误
+            }
+          }
+        });
+        stream.on("end", () => {
+          logLastSize = stats.size;
+        });
+        stream.on("error", (e) => {
+          log("error", "Log stream error: " + e.message);
+        });
+      } catch (e) {
+        // 文件可能被删除（对局结束），静默重试
+      }
+    });
+  } catch (e) {
+    log("error", "Failed to watch log file: " + e.message);
+    logWatchRetryTimer = setTimeout(() => startLogWatching(), 30000);
+    return false;
+  }
 
   return true;
 }
@@ -551,6 +591,33 @@ function registerIpcHandlers() {
       log("error", `Failed to load data ${name}: ${e.message}`);
       return null;
     }
+  });
+
+  // Decision recording (feedback loop)
+  ipcMain.handle("recording:log-decision", (_event, entry) => {
+    try {
+      if (!fs.existsSync(SESSIONS_DIR)) fs.mkdirSync(SESSIONS_DIR, { recursive: true });
+      var line = JSON.stringify(entry) + "\n";
+      fs.appendFileSync(path.join(SESSIONS_DIR, "decisions.log"), line, "utf-8");
+      return true;
+    } catch (e) {
+      log("error", "Failed to log decision: " + e.message);
+      return false;
+    }
+  });
+
+  // Game state (request current snapshot from renderer)
+  ipcMain.handle("game-state:get", () => {
+    if (!gameTracker) return null;
+    return gameTracker.getOverlayState();
+  });
+
+  ipcMain.handle("game-state:reset", () => {
+    if (gameTracker) {
+      gameTracker.reset();
+      return true;
+    }
+    return false;
   });
 
   // App control
@@ -679,6 +746,7 @@ app.on("will-quit", () => {
   cleanupFirewall();
   globalShortcut.unregisterAll();
   if (trackingInterval) clearInterval(trackingInterval);
+  if (logWatchRetryTimer) clearTimeout(logWatchRetryTimer);
   log("info", "Bob Coach stopped");
 });
 

@@ -129,52 +129,85 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   选牌高亮 (Card Highlight)
+   卡牌标记 — 行为图标(左侧) + 用途标签(右上)
    ═══════════════════════════════════════════ */
-.card-highlight {
+
+/* 容器：无边框，图标绝对定位在内部 */
+.card-marker {
   position: absolute;
   pointer-events: none;
-  border-radius: var(--r-md);
   z-index: 40;
 }
-.card-highlight.core {
-  border: 2px solid rgba(255, 55, 45, 0.85);
-  box-shadow: 0 0 10px rgba(255, 55, 45, 0.28);
-}
-.card-highlight.power {
-  border: 2px solid var(--c-blue);
-  box-shadow: 0 0 6px var(--c-blue-glow);
-}
-.card-highlight.triple {
-  border: 2px solid rgba(255, 155, 35, 0.88);
-  box-shadow: 0 0 10px rgba(255, 155, 35, 0.28);
-}
-.card-badge {
+
+/* ── 用途标签（右上角，不遮挡等级图标） ── */
+.card-purpose-tag {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  font-size: 10px;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  font-size: 8px;
   font-weight: bold;
+  line-height: 14px;
+  text-align: center;
+  z-index: 42;
+}
+.card-purpose-tag.core {
+  background: rgba(220, 45, 35, 0.9);
+  color: #fff;
+}
+.card-purpose-tag.power {
+  background: rgba(55, 130, 210, 0.9);
+  color: #fff;
+}
+.card-purpose-tag.triple {
+  background: rgba(235, 145, 30, 0.9);
+  color: #1a1000;
+}
+
+/* ── 行为图标（左侧边缘中部，圆点+文字） ── */
+.card-action-dot {
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-shadow: var(--shadow-text);
-  z-index: 41;
+  font-size: 8px;
+  font-weight: bold;
+  z-index: 42;
+  border: 1px solid rgba(255,255,255,0.25);
 }
-.card-badge.core {
-  background: rgba(255, 55, 45, 0.92);
+/* 购买 — 绿色系 */
+.card-action-dot.buy {
+  background: rgba(60, 170, 80, 0.9);
   color: #fff;
 }
-.card-badge.power {
-  background: var(--c-blue);
+.card-action-dot.buy_power {
+  background: rgba(50, 140, 200, 0.88);
   color: #fff;
 }
-.card-badge.triple {
-  background: rgba(255, 155, 35, 0.92);
+.card-action-dot.buy_core {
+  background: rgba(220, 55, 40, 0.9);
+  color: #fff;
+  box-shadow: 0 0 6px rgba(255, 60, 40, 0.5);
+}
+.card-action-dot.buy_triple {
+  background: rgba(235, 150, 30, 0.92);
   color: #1a1000;
+  box-shadow: 0 0 8px rgba(255, 160, 20, 0.55);
+}
+/* 出售 — 暗红色三角标记 */
+.card-action-dot.sell {
+  background: rgba(180, 60, 50, 0.85);
+  color: #fff;
+  border-style: dashed;
+  border-color: rgba(255, 120, 100, 0.6);
 }
 
 /* ═══════════════════════════════════════════
@@ -704,13 +737,75 @@ body {
   letter-spacing: 2px;
 }
 .tactical-body {
-  padding: 14px 16px;
-  max-height: 50vh;
+  padding: 10px 14px;
+  max-height: 55vh;
   overflow-y: auto;
-  font-size: .92rem;
+  font-size: .88rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+/* 决策卡片 */
+.dc-card {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  transition: border-color var(--ease);
+}
+.dc-card.primary {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 12px rgba(212,175,55,0.08);
+}
+.dc-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.dc-card-type {
+  font-weight: bold;
+  font-size: .85rem;
+  color: var(--text-primary);
+}
+.dc-card-src {
+  font-size: .68rem;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.04);
+}
+.dc-card-body {
+  padding: 8px 10px;
+  font-size: .78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.dc-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 8px;
+  position: relative;
+}
+.dc-conf-bar {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  min-width: 4px;
+  transition: width 0.4s var(--ease);
+}
+.dc-conf-label {
+  font-size: .65rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .btn-close {
   background: none;
   border: none;
@@ -1117,3 +1212,79 @@ body {
 .fresh-dot.fresh { background: #6f6; }
 .fresh-dot.stale { background: #eb4; }
 .fresh-dot.outdated { background: #e55; }
+
+/* ═══════════════════════════════════════════
+   次级提示条 (Secondary Hints)
+   ═══════════════════════════════════════════ */
+.secondary-hints {
+  position: absolute;
+  top: calc(8% + 32px);
+  right: 18%;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  z-index: 49;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.secondary-hints.hidden {
+  display: none;
+}
+.hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: rgba(16, 13, 8, 0.75);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  cursor: default;
+  transition: all var(--ease);
+}
+.hint-item:hover {
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+  background: var(--bg-hover);
+}
+.hint-item.hero_power {
+  border-color: rgba(212, 175, 55, 0.5);
+  color: var(--c-accent);
+}
+.hint-item.spell_buy,
+.hint-item.spell_use {
+  border-color: rgba(150, 110, 220, 0.5);
+  color: var(--c-purple);
+}
+.hint-item.trinket_pick {
+  border-color: rgba(70, 180, 120, 0.5);
+  color: #5c8;
+}
+.hint-item.danger {
+  border-color: var(--c-danger);
+  color: var(--c-danger);
+}
+.hint-item.refresh {
+  border-color: rgba(80, 140, 210, 0.5);
+  color: #6af;
+}
+.hint-item.minion_pick {
+  border-color: rgba(200, 160, 60, 0.5);
+  color: #db4;
+}
+.hint-item.level_up {
+  border-color: rgba(210, 140, 40, 0.5);
+  color: #ea3;
+}
+
+/* ── 建议徽章新增类型 ── */
+#suggestion-badge.hero-power {
+  border-color: rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.18);
+}
+#suggestion-badge.spell {
+  border-color: rgba(150, 110, 220, 0.6);
+  box-shadow: 0 0 10px rgba(150, 110, 220, 0.15);
+}
