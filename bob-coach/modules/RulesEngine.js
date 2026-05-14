@@ -129,6 +129,165 @@ var RulesEngine = (function () {
   }
 
   /**
+   * 获取有效刷新费用（考虑免费刷新次数和HP消耗）
+   */
+  function getEffectiveRefreshCost(ctx) {
+    var freeCount = countFreeRefreshes(ctx);
+    if (freeCount > 0) return 0;
+    return getRefreshCost(ctx);
+  }
+
+  /**
+   * 统计当前可用的免费刷新次数
+   * 来源：BGS_116 刷新畸体战吼(+2) / BG28_827 快速浏览法术 / BG30_MagicItem_435 免费刷新饰品
+   */
+  function countFreeRefreshes(ctx) {
+    var rules = _rules(ctx);
+    var refreshRules = rules.refresh_rules || {};
+    var freeTrinketIds = refreshRules.free_refresh_trinket_ids || [];
+    var freeCardIds = refreshRules.free_refresh_card_ids || [];
+    var count = 0;
+
+    // 1. 免费刷新饰品（BG30_MagicItem_435 = 无限免费）
+    var trinkets = ctx.trinketOffer || [];
+    for (var t = 0; t < trinkets.length; t++) {
+      if (freeTrinketIds.indexOf(trinkets[t].cardId) !== -1) return Infinity;
+    }
+
+    // 2. 刷新畸体 BGS_116 — 在场提供2次免费刷新（战吼效果）
+    var board = ctx.boardMinions || [];
+    for (var b = 0; b < board.length; b++) {
+      if (freeCardIds.indexOf(board[b].cardId) !== -1) count += 2;
+    }
+
+    // 3. 快速浏览 BG28_827 — 已购买则+2次
+    var freeRefreshCount = ctx.freeRefreshCount || 0;
+    count += freeRefreshCount;
+
+    return count;
+  }
+
+  /**
+   * 统计 HP 刷新剩余次数（BG26_524 舞蹈王子玛克扎尔）
+   */
+  function countHpRefreshes(ctx) {
+    var rules = _rules(ctx);
+    var refreshRules = rules.refresh_rules || {};
+    var hpMinionIds = refreshRules.hp_refresh_minion_ids || [];
+    var board = ctx.boardMinions || [];
+    for (var b = 0; b < board.length; b++) {
+      if (hpMinionIds.indexOf(board[b].cardId) !== -1) {
+        return refreshRules.max_hp_refreshes_per_turn || 2;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * 评估当前酒馆价值（供 RefreshModule 和 FreezeModule 共用）
+   * @returns {{ totalScore: number, highlights: Array, hasCoreCard: boolean, hasTripleCard: boolean, hasGoldenSpell: boolean }}
+   */
+  function estimateShopValue(ctx) {
+    var rules = _rules(ctx);
+    var cardWeights = (ctx.decisionTables && ctx.decisionTables.card_weights) || {};
+    var spellWeights = (ctx.decisionTables && ctx.decisionTables.spell_weights) || {};
+    var freezeRules = rules.freeze_rules || {};
+    var valueWeights = freezeRules.shop_value_weights || {};
+    var goldenSpellIds = freezeRules.golden_spell_ids || [];
+    var pointOfGoldTargets = freezeRules.point_of_gold_targets || {};
+
+    // 统计场上卡牌出现次数（三连检测）
+    var boardCounts = {};
+    var handCounts = {};
+    var boardMinions = ctx.boardMinions || [];
+    var handMinions = ctx.handMinions || [];
+    for (var bi = 0; bi < boardMinions.length; bi++) {
+      var bcid = boardMinions[bi].cardId;
+      boardCounts[bcid] = (boardCounts[bcid] || 0) + 1;
+    }
+    for (var hi = 0; hi < handMinions.length; hi++) {
+      var hcid = handMinions[hi].cardId;
+      handCounts[hcid] = (handCounts[hcid] || 0) + 1;
+    }
+
+    var scores = [];
+    var hasCoreCard = false;
+    var hasTripleCard = false;
+    var hasGoldenSpell = false;
+
+    // 评分商店随从
+    var shopMinions = ctx.shopMinions || [];
+    for (var sm = 0; sm < shopMinions.length; sm++) {
+      var m = shopMinions[sm];
+      var cardScore = 0;
+      // 查卡牌权重
+      var matchedWeight = null;
+      var tribes = Object.keys(cardWeights);
+      for (var tw = 0; tw < tribes.length; tw++) {
+        var w = cardWeights[tribes[tw]][m.cardId];
+        if (w && (!matchedWeight || w.weight > matchedWeight.weight)) {
+          matchedWeight = w;
+        }
+      }
+      if (matchedWeight) {
+        if (matchedWeight.role === "core") {
+          cardScore += valueWeights.core_card || 10;
+          hasCoreCard = true;
+        } else if (matchedWeight.role === "power") {
+          cardScore += valueWeights.power_card || 5;
+        }
+        cardScore += matchedWeight.weight || 0;
+      }
+      // 三连潜力检测
+      var totalCopies = (boardCounts[m.cardId] || 0) + (handCounts[m.cardId] || 0);
+      if (totalCopies >= 2) {
+        cardScore += valueWeights.triple_card || 12;
+        hasTripleCard = true;
+      }
+      // 点金目标检测
+      if (pointOfGoldTargets[m.cardId]) {
+        cardScore += 5;
+      }
+      scores.push({ cardId: m.cardId, score: cardScore, type: "minion" });
+    }
+
+    // 评分商店法术
+    var shopSpells = ctx.shopSpells || [];
+    for (var ss = 0; ss < shopSpells.length; ss++) {
+      var sp = shopSpells[ss];
+      var spellScore = 0;
+      // 点金法术
+      if (goldenSpellIds.indexOf(sp.cardId) !== -1) {
+        spellScore += valueWeights.golden_spell || 15;
+        hasGoldenSpell = true;
+      }
+      // 查法术权重
+      var sw = spellWeights[sp.cardId];
+      if (sw) {
+        if (sw.category === "economy") spellScore += valueWeights.economy_spell || 4;
+        if (sw.category === "discover") spellScore += valueWeights.discover_spell || 6;
+        spellScore += (sw.cost === 0) ? 3 : 0;
+      }
+      scores.push({ cardId: sp.cardId, score: spellScore, type: "spell" });
+    }
+
+    // 降序排列，取前3张
+    scores.sort(function(a, b) { return b.score - a.score; });
+    var totalScore = 0;
+    for (var top = 0; top < Math.min(3, scores.length); top++) {
+      totalScore += scores[top].score;
+    }
+
+    return {
+      totalScore: totalScore,
+      highlights: scores.slice(0, 3),
+      hasCoreCard: hasCoreCard,
+      hasTripleCard: hasTripleCard,
+      hasGoldenSpell: hasGoldenSpell,
+    };
+  }
+
+  /**
    * 获取升本费用估算
    * 注意：升本费用受英雄（米尔豪斯+1）、畸变等影响
    */
@@ -201,6 +360,8 @@ var RulesEngine = (function () {
         return getRefreshCost(ctx);
       case "trinket_pick":
         return 0;
+      case "sell_minion":
+        return -(getSellPrice(decision.data && decision.data.cardId, ctx) || 1);
       default:
         return 0;
     }
@@ -279,6 +440,50 @@ var RulesEngine = (function () {
     return set;
   }
 
+  // ── HP-cost 卡牌 ──
+
+  var HP_COST_CARDS = {
+    "BG28_571": 3,
+    "BG25_520": 3,
+    "BG26_524": 1,
+    "BG30_MagicItem_701": 3,
+    "BG35_MagicItem_152": 3,
+  };
+
+  function isHpCostCard(cardId) {
+    return !!HP_COST_CARDS[cardId];
+  }
+
+  function getHpCostAmount(cardId) {
+    return HP_COST_CARDS[cardId] || 0;
+  }
+
+  // ── 护甲法术 ──
+
+  var ARMOR_SPELL_IDS = {
+    "BG28_500": "set_5",
+    "BG34_Treasure_934": "add_10",
+  };
+
+  function isArmorSpell(cardId) {
+    return !!ARMOR_SPELL_IDS[cardId];
+  }
+
+  function getArmorSpellType(cardId) {
+    return ARMOR_SPELL_IDS[cardId] || null;
+  }
+
+  // ── 智慧球 ──
+
+  var WISDOM_BALL_IDS = {
+    "BG30_802": true,
+    "BG24_Reward_313": true,
+  };
+
+  function isWisdomBall(cardId) {
+    return !!WISDOM_BALL_IDS[cardId];
+  }
+
   // ── 导出 ──
 
   return {
@@ -291,9 +496,27 @@ var RulesEngine = (function () {
     getMaxBuys: getMaxBuys,
     getSellPrice: getSellPrice,
     getRefreshCost: getRefreshCost,
+    getEffectiveRefreshCost: getEffectiveRefreshCost,
+    countFreeRefreshes: countFreeRefreshes,
+    countHpRefreshes: countHpRefreshes,
+    estimateShopValue: estimateShopValue,
     getLevelUpCost: getLevelUpCost,
     getSpellCost: getSpellCost,
     getDecisionCost: getDecisionCost,
+
+    // HP-cost
+    isHpCostCard: isHpCostCard,
+    getHpCostAmount: getHpCostAmount,
+    HP_COST_CARDS: HP_COST_CARDS,
+
+    // Armor spells
+    isArmorSpell: isArmorSpell,
+    getArmorSpellType: getArmorSpellType,
+    ARMOR_SPELL_IDS: ARMOR_SPELL_IDS,
+
+    // Wisdom ball
+    isWisdomBall: isWisdomBall,
+    WISDOM_BALL_IDS: WISDOM_BALL_IDS,
 
     validateConfig: validateConfig,
     getConfigVersion: getConfigVersion,

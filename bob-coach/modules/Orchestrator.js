@@ -70,7 +70,7 @@ var Orchestrator = class Orchestrator {
       if (d.confidence < minConfidence) return false;
       // 不在商店阶段时过滤购买类建议
       if (ctx.gamePhase !== "shop") {
-        if (d.type === "minion_pick" || d.type === "spell_buy" || d.type === "refresh") {
+        if (d.type === "minion_pick" || d.type === "spell_buy" || d.type === "refresh" || d.type === "refresh_smart" || d.type === "freeze" || d.type === "unfreeze") {
           return false;
         }
       }
@@ -98,13 +98,43 @@ var Orchestrator = class Orchestrator {
     var remainingGold = ctx.gold || 0;
     var accepted = dangers.slice(); // 危险警告不消耗金币
 
+    // 分离卖牌决策（优先处理，因为卖牌产生金币）
+    var sellDecisions = [];
+    var regularDecisions = [];
+    for (var i = 0; i < others.length; i++) {
+      if (others[i].type === "sell_minion") {
+        sellDecisions.push(others[i]);
+      } else {
+        regularDecisions.push(others[i]);
+      }
+    }
+
+    // 先处理卖牌决策（生成金币）
+    for (var i = 0; i < sellDecisions.length; i++) {
+      var sd = sellDecisions[i];
+      var sCost = this._estimateCost(sd, ctx);
+      accepted.push(sd);
+      remainingGold -= sCost; // sCost 为负值，所以 remainingGold 增加
+    }
+
     // 按 score = priority * confidence 排序
-    others.sort(function (a, b) {
+    regularDecisions.sort(function (a, b) {
       return (b.priority * b.confidence) - (a.priority * a.confidence);
     });
 
-    for (var i = 0; i < others.length; i++) {
-      var d = others[i];
+    // freeze 与 refresh 互斥：冻结优先（免费、安全），移除刷新建议
+    var hasFreeze = false;
+    for (var fi = 0; fi < regularDecisions.length; fi++) {
+      if (regularDecisions[fi].type === "freeze") { hasFreeze = true; break; }
+    }
+    if (hasFreeze) {
+      regularDecisions = regularDecisions.filter(function (d) {
+        return d.type !== "refresh" && d.type !== "refresh_smart";
+      });
+    }
+
+    for (var i = 0; i < regularDecisions.length; i++) {
+      var d = regularDecisions[i];
       var cost = this._estimateCost(d, ctx);
 
       if (cost <= remainingGold) {

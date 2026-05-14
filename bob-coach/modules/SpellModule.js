@@ -64,6 +64,35 @@ var SpellModule = class SpellModule extends BaseModule {
 
       var totalScore = baseScore + synergyScore + heroBonus + trinketBonus + budgetScore;
 
+      // ── 特殊法术加成 ──
+      // 护甲法术：低血量/高回合时提升评分
+      if (spell.cardId === "BG28_500" || spell.cardId === "BG34_Treasure_934") {
+        var effectiveHp = (ctx.health || 0) + (ctx.armor || 0);
+        if (effectiveHp <= 15) {
+          totalScore += 5;  // 危险血量，护甲法术优先级高
+        } else if (effectiveHp <= 25 && (ctx.turn || 5) >= 8) {
+          totalScore += 3;  // 中后期，护甲提供容错
+        } else if (effectiveHp <= 25) {
+          totalScore += 1;
+        }
+      }
+
+      // 智慧球：高优先级
+      if (spell.cardId === "BG30_802" || spell.cardId === "BG24_Reward_313") {
+        totalScore += 4;  // 智慧球始终高价值
+        if ((ctx.turn || 5) >= 8) totalScore += 2;  // 后期更高价值（可出七星随从）
+      }
+
+      // HP-cost 法术：低血量时不推荐
+      if (spell.cardId === "BG28_571") {
+        var hp = (ctx.health || 30) + (ctx.armor || 0);
+        if (hp <= 15) {
+          totalScore -= 8;  // 危险血量，不推荐用血换铸币
+        } else if (hp <= 25 && (ctx.turn || 5) <= 6) {
+          totalScore -= 3;
+        }
+      }
+
       // ── 决策生成 ──
       var priority, confidence, label;
 

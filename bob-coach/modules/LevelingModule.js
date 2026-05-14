@@ -55,10 +55,9 @@ var LevelingModule = class LevelingModule extends BaseModule {
     var entry = curveData[turnKey];
     if (!entry) return null;
 
-    // 条件检查
+    // 条件检查（自适应阈值）
     var canLevel = ctx.gold >= entry.cost;
-    var boardThreshold = (table.board_power_estimation &&
-      table.board_power_estimation.default_threshold_level) || 0.4;
+    var boardThreshold = this._calcDynamicThreshold(ctx);
     var boardOk = ctx.boardPower >= boardThreshold;
     var healthThreshold = (table.board_power_estimation &&
       table.board_power_estimation.health_threshold_danger) || 10;
@@ -105,6 +104,39 @@ var LevelingModule = class LevelingModule extends BaseModule {
     var curveType = ctx.curveType || "standard";
     var curve = table.leveling_curve[curveType] || table.leveling_curve.standard || {};
     return curve;
+  }
+
+  _calcDynamicThreshold(ctx) {
+    var table = (ctx.decisionTables && ctx.decisionTables.board_power_estimation) || {};
+    var cfg = table.adaptive_leveling || {};
+    var base = cfg.base_threshold || 0.3;
+    var threshold = base;
+
+    // Round adjustment
+    var turn = ctx.turn || 5;
+    var turnAdj = cfg.turn_adjustments || { early: 0.1, mid: 0.0, late: -0.05 };
+    if (turn <= 3) threshold += turnAdj.early || 0.1;
+    else if (turn >= 8) threshold += turnAdj.late || -0.05;
+
+    // Health adjustment
+    var health = ctx.health || 25;
+    if (health > 25) threshold += cfg.health_safe_above_25 || -0.08;
+    else if (health < 10) threshold += cfg.health_danger_below_10 || 0.15;
+
+    // Board power adjustment
+    var bp = ctx.boardPower || 1.0;
+    if (bp > 1.5) threshold += cfg.board_strong_above_1_5 || -0.05;
+    else if (bp < 0.5) threshold += cfg.board_weak_below_0_5 || 0.1;
+
+    // Comp progress adjustment
+    var compMatch = ctx.currentComp ? ctx.currentComp.matchPercent || 0 : 0;
+    if (compMatch >= 60) threshold += cfg.comp_forming_above_60 || -0.05;
+    else if (compMatch < 30 && compMatch > 0) threshold += cfg.comp_weak_below_30 || 0.05;
+
+    // Clamp
+    var minT = cfg.min_threshold || 0.15;
+    var maxT = cfg.max_threshold || 0.55;
+    return Math.max(minT, Math.min(maxT, threshold));
   }
 
   _getKeyCardName(ctx) {

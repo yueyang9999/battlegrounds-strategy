@@ -9,7 +9,7 @@
 
 var Decision = class Decision {
   /**
-   * @param {string} type    — "level_up"|"minion_pick"|"hero_power"|"danger"|"spell_buy"|"spell_use"|"trinket_pick"|"refresh"
+   * @param {string} type    — "level_up"|"minion_pick"|"hero_power"|"danger"|"spell_buy"|"spell_use"|"trinket_pick"|"refresh"|"refresh_smart"|"freeze"|"unfreeze"|"sell_minion"
    * @param {number} priority — 0-100, 越高越优先
    * @param {string} action  — 动作标识，如 "level_up", "buy_card_2", "use_hero_power"
    * @param {string} message — 简短展示文字（中文）
@@ -37,8 +37,11 @@ var DecisionPriority = {
   SPELL_MUST_BUY: 75,
   TRINKET_BEST: 70,
   LEVEL_UP_STANDARD: 60,
+  SELL_MINION: 55,
   POWER_MINION: 50,
   SPELL_GOOD: 45,
+  FREEZE: 40,
+  REFRESH_SMART: 35,
   REFRESH_HINT: 30,
   TRINKET_OK: 20,
   INFO: 10,
@@ -119,7 +122,18 @@ var BaseModule = class BaseModule {
       case "spell_use":
         return (decision.data && decision.data.cost) || 1;
       case "refresh":
-        return 1;
+      case "refresh_smart":
+        return (typeof RulesEngine !== 'undefined' && RulesEngine.getEffectiveRefreshCost)
+          ? RulesEngine.getEffectiveRefreshCost(ctx)
+          : 1;
+      case "freeze":
+      case "unfreeze":
+        return 0;
+      case "sell_minion":
+        // 出售收益（正数表示获得金币）
+        return -(typeof RulesEngine !== 'undefined' && RulesEngine.getSellPrice
+          ? RulesEngine.getSellPrice((decision.data && decision.data.cardId), ctx)
+          : 1);
       default:
         return 0;
     }

@@ -35,6 +35,8 @@
       <div class="gear-item" data-action="next-turn">&#9654; 下一回合</div>
       <div class="gear-item" data-action="toggle-panel">&#9776; 教练面板</div>
       <div class="gear-item" data-action="open-settings">&#9878; 设置</div>
+      <div class="gear-item" data-action="open-legend">&#128214; 图例说明</div>
+      <div class="gear-item" data-action="open-rules">&#128220; 游戏规则</div>
       <div class="gear-item" data-action="open-about">&#9432; 关于</div>
       <div class="gear-item" data-action="quit">&#10005; 退出</div>
     </div>
@@ -119,6 +121,35 @@
           <li>不自动点击/键盘输入</li>
           <li>仅以覆盖层形式显示教学建议</li>
         </ul>
+
+        <div class="agreement-divider"></div>
+
+        <p style="font-weight:bold;color:#f0c060">数据来源声明</p>
+        <ul style="font-size:11px;color:var(--text-muted)">
+          <li><strong>Gamerhub</strong> (api.gamerhub.com) — 卡牌图鉴、随从/英雄基础数据</li>
+          <li><strong>Firestone</strong> (firestoneapp.com) — 英雄胜率、流派热度、环境大数据</li>
+          <li>所有数据版权归原平台所有，本插件仅做教学性引用</li>
+        </ul>
+
+        <div class="agreement-divider"></div>
+
+        <p style="font-weight:bold;color:#e55">免责声明</p>
+        <ul style="font-size:11px;color:var(--text-muted)">
+          <li>本项目为开源教学工具（MIT 协议），仅供学习交流</li>
+          <li><strong>严禁用于任何商业用途</strong>，包括但不限于收费服务、商业培训</li>
+          <li>使用本插件产生的任何游戏账号风险由用户自行承担</li>
+          <li>插件开发者不对因使用本工具导致的任何后果负责</li>
+        </ul>
+
+        <div class="agreement-divider"></div>
+
+        <p style="font-weight:bold;color:var(--text-primary)">数据隐私说明</p>
+        <ul style="font-size:11px;color:var(--text-muted)">
+          <li><strong>本地模式</strong>：所有对战数据仅存储于您的设备，不上传任何信息</li>
+          <li><strong>云端模式</strong>：匿名分享对战特征数据（不含个人身份信息），用于策略优化</li>
+          <li>您随时可以在设置中导出、删除或切换数据模式</li>
+        </ul>
+
         <p style="color:#f0c060;margin-top:12px">选择使用模式：</p>
       </div>
       <div class="agreement-buttons">
@@ -127,7 +158,7 @@
       </div>
       <label class="agreement-check">
         <input type="checkbox" id="agreement-checkbox">
-        我已阅读并同意免责声明，了解本插件不执行自动操作
+        我已阅读并同意以上声明：包括数据来源、免责条款与隐私说明
       </label>
       <p class="agreement-disabled-note" id="agreement-disabled-note">请先勾选同意声明</p>
     </div>
@@ -198,6 +229,21 @@
           </select>
         </div>
         <div class="setting-row">
+          <label>战斗预测条</label>
+          <input type="checkbox" id="set-show-combat" checked>
+          <span style="font-size:11px;color:var(--text-muted)">在顶部显示对战胜率预测条</span>
+        </div>
+        <div class="setting-row" id="combat-samples-row">
+          <label>模拟次数</label>
+          <select id="set-combat-samples">
+            <option value="100">100 次</option>
+            <option value="200" selected>200 次</option>
+            <option value="500">500 次</option>
+            <option value="1000">1000 次</option>
+          </select>
+          <span style="font-size:11px;color:var(--text-muted)">次数越多越准确，但消耗更多计算</span>
+        </div>
+        <div class="setting-row">
           <label>攻略筛选</label>
           <select id="set-freshness-filter">
             <option value="all">显示全部攻略</option>
@@ -227,20 +273,235 @@
           </div>
           <pre id="sync-update-text" style="font-size:10px;color:var(--text-secondary);margin-top:4px;white-space:pre-line"></pre>
         </div>
+      </div>
+
+      <!-- ═══════ 账号管理区域 ═══════ -->
+      <div class="settings-section-divider"></div>
+      <div class="account-section">
+        <div class="account-section-header">
+          <span>&#128100; 账号管理</span>
+          <span id="account-status-badge" class="account-status-badge anonymous">未登录</span>
+        </div>
+
+        <div id="account-logged-out" class="account-form">
+          <div class="account-info-text" id="account-info-text"></div>
+          <div class="setting-row">
+            <label>用户名</label>
+            <input type="text" id="account-username" placeholder="输入用户名" style="width:140px">
+          </div>
+          <div class="setting-row">
+            <label>密码</label>
+            <input type="password" id="account-password" placeholder="输入密码" style="width:140px">
+          </div>
+          <div class="setting-row" style="border-bottom:none">
+            <label></label>
+            <div style="display:flex;gap:6px">
+              <button id="btn-account-register" class="btn btn-primary" style="font-size:11px;padding:4px 12px">注册</button>
+              <button id="btn-account-login" class="btn btn-secondary" style="font-size:11px;padding:4px 12px">登录</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="account-logged-in" class="account-form hidden">
+          <div class="account-info-text" id="account-user-info"></div>
+          <div class="setting-row" style="border-bottom:none">
+            <label></label>
+            <button id="btn-account-logout" class="btn btn-cancel" style="font-size:11px;padding:4px 12px;color:var(--c-danger)">注销登录</button>
+          </div>
+        </div>
+
         <div class="setting-row">
-          <label>云端数据</label>
-          <input type="checkbox" id="set-cloud">
-          <span style="font-size:11px;color:var(--text-muted)">启用后匿名分享对战特征数据</span>
+          <label>隐私级别</label>
+          <select id="set-privacy-level">
+            <option value="local">纯本地 — 不上传任何数据</option>
+            <option value="anonymous_stats">匿名统计 — 分享脱敏对战数据</option>
+            <option value="full_sync">完整同步 — 账号云备份</option>
+          </select>
         </div>
-        <div class="setting-row" id="cloud-data-row" style="display:none">
+        <div style="font-size:10px;color:var(--text-muted);padding:0 0 8px 0">
+          「匿名统计」仅上传英雄/流派/名次等游戏特征，不含个人标识。「完整同步」需登录账号。
+        </div>
+
+        <div class="setting-row">
           <label>数据管理</label>
-          <span style="font-size:11px;color:var(--text-muted)">已分享 0 局数据</span>
-          <button class="btn btn-danger-sm">清除云端记录</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button id="btn-export-data" class="btn btn-secondary" style="font-size:10px;padding:3px 8px">导出数据</button>
+            <button id="btn-import-data" class="btn btn-secondary" style="font-size:10px;padding:3px 8px">导入数据</button>
+            <button id="btn-delete-data" class="btn btn-danger-sm" style="font-size:10px">清除本地数据</button>
+          </div>
         </div>
+
+        <div class="account-stats" id="account-stats">
+          <div class="account-stats-title">个人统计</div>
+          <div class="account-stats-grid">
+            <div class="account-stat-item"><span class="account-stat-val" id="stat-total-games">0</span><span class="account-stat-label">总对局</span></div>
+            <div class="account-stat-item"><span class="account-stat-val" id="stat-top4-rate">--</span><span class="account-stat-label">前四率</span></div>
+            <div class="account-stat-item"><span class="account-stat-val" id="stat-first-place">0</span><span class="account-stat-label">吃鸡次数</span></div>
+            <div class="account-stat-item"><span class="account-stat-val" id="stat-avg-placement">--</span><span class="account-stat-label">平均排名</span></div>
+          </div>
+        </div>
+
+        <div class="sync-queue-status" id="sync-queue-status" style="display:none">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">云端同步队列</div>
+          <div style="display:flex;gap:12px;font-size:10px">
+            <span style="color:#f0c060">待同步: <span id="sq-pending">0</span></span>
+            <span style="color:#6f6">已同步: <span id="sq-synced">0</span></span>
+            <span style="color:#e55">失败: <span id="sq-failed">0</span></span>
+          </div>
+        </div>
+
+        <!-- 预留 API 端点列表 -->
+        <div class="api-endpoints-section" id="api-endpoints-section">
+          <div class="api-endpoints-title" id="api-endpoints-toggle" style="cursor:pointer">
+            &#128225; 云端 API 接口状态 &#9660;
+          </div>
+          <div class="api-endpoints-list hidden" id="api-endpoints-list"></div>
+        </div>
+      </div>
+
       </div>
       <div class="settings-footer">
         <button id="btn-save-settings" class="btn btn-primary">保存</button>
         <button id="btn-cancel-settings" class="btn btn-cancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图例说明面板 -->
+  <div id="legend-overlay" class="modal-overlay hidden">
+    <div class="legend-modal interactive">
+      <div class="tactical-header">
+        <span>图例说明</span>
+        <button id="legend-close" class="btn-close">&times;</button>
+      </div>
+      <div class="legend-body">
+        <div class="legend-section">
+          <div class="legend-section-title">卡片标记</div>
+          <div class="legend-icon-row">
+            <span class="legend-badge core">核</span>
+            <span>红色高亮 — 流派核心卡，最高优先级选取</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-badge power">战</span>
+            <span>蓝色高亮 — 战力提升卡，中期过渡/补强</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-badge triple">碰</span>
+            <span>金橙高亮 — 可凑三连，碰高本核心随从</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-icon-dot buy_core"></span>
+            <span>绿底红圈 — 核心卡购买标记(商店卡牌左侧)</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-icon-dot buy_power"></span>
+            <span>蓝底白圈 — 战力卡购买标记</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-icon-dot buy_triple"></span>
+            <span>金底黑字 — 三连购买标记</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-icon-dot sell"></span>
+            <span>暗红虚线圈 — 建议出售标记</span>
+          </div>
+        </div>
+
+        <div class="legend-section">
+          <div class="legend-section-title">决策图标</div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#9733;</span>
+            <span>升本建议 — 推荐升级酒馆等级</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#128259;</span>
+            <span>搜牌建议 — 刷新酒馆寻找核心卡</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#10052;</span>
+            <span>冻结建议 — 保留当前酒馆到下回合</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#9728;</span>
+            <span>解冻建议 — 建议取消冻结以刷新酒馆</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#9889;</span>
+            <span>英雄技能 — 提示使用英雄技能</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#128302;</span>
+            <span>法术建议 — 推荐购买/使用法术</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#128142;</span>
+            <span>饰品建议 — 推荐选择饰品</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#128308;</span>
+            <span>危险警告 — 血量/场面危险，需要立即应对</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-deco">&#128994;</span>
+            <span>战力评估 — 场面强度预估</span>
+          </div>
+        </div>
+
+        <div class="legend-section">
+          <div class="legend-section-title">评级体系</div>
+          <div class="legend-icon-row">
+            <span class="legend-tier-badge tier-s">S</span>
+            <span>S级(金) — 版本T0，极高胜率，优先选择</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-tier-badge tier-a">A</span>
+            <span>A级(绿) — 强势选择，适合上分</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-tier-badge tier-b">B</span>
+            <span>B级(蓝) — 可用，特定条件或种族下表现好</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-tier-badge tier-c">C</span>
+            <span>C级(灰) — 强度一般，尽量避免</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-tier-badge tier-d">D</span>
+            <span>D级(红) — 弱势，不推荐选择</span>
+          </div>
+        </div>
+
+        <div class="legend-section">
+          <div class="legend-section-title">置信度颜色</div>
+          <div class="legend-icon-row">
+            <span class="legend-conf-sample" style="background:rgba(212,175,55,0.85)"></span>
+            <span>金色 ≥70% — 高置信度，强推荐</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-conf-sample" style="background:rgba(70,150,220,0.85)"></span>
+            <span>蓝色 40-69% — 中等置信度，参考建议</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-conf-sample" style="background:rgba(160,160,160,0.7)"></span>
+            <span>灰色 &lt;40% — 低置信度，仅供参考</span>
+          </div>
+        </div>
+
+        <div class="legend-section">
+          <div class="legend-section-title">状态标识</div>
+          <div class="legend-icon-row">
+            <span class="legend-state-tag fresh">新鲜</span>
+            <span>攻略新鲜度≥80，数据可靠</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-state-tag stale">稳定</span>
+            <span>攻略新鲜度50-79，数据可用</span>
+          </div>
+          <div class="legend-icon-row">
+            <span class="legend-state-tag outdated">过时</span>
+            <span>攻略新鲜度&lt;50，数据可能过时</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -260,9 +521,95 @@
           GitHub: github.com/yueyang9999/battlegrounds-strategy<br>
           本插件遵循暴雪插件政策，不执行任何自动操作。
         </p>
-        <p style="margin-top:8px;font-size:11px;color:var(--text-danger)">
-          免责声明：本插件仅为学习辅助工具。使用本插件产生的任何游戏账号风险由用户自行承担。
-        </p>
+
+        <div class="agreement-divider"></div>
+
+        <p style="font-weight:bold;color:#f0c060;font-size:12px">数据来源</p>
+        <table class="about-source-table">
+          <tr><td class="about-source-name">Gamerhub</td><td>api.gamerhub.com</td><td>卡牌图鉴、随从/英雄基础数据</td></tr>
+          <tr><td class="about-source-name">Firestone</td><td>firestoneapp.com</td><td>英雄胜率、流派热度、环境大数据</td></tr>
+        </table>
+        <p style="font-size:10px;color:var(--text-muted);margin-top:4px">所有数据版权归原平台所有，本插件仅做教学性引用，不存储或再分发原始数据。</p>
+
+        <div class="agreement-divider"></div>
+
+        <p style="font-weight:bold;color:#e55;font-size:12px">免责声明</p>
+        <ul style="font-size:11px;color:var(--text-muted);padding-left:16px;line-height:1.7">
+          <li>本项目仅供学习交流，<strong style="color:#e55">严禁用于任何商业用途</strong></li>
+          <li>不得将本插件用于收费服务、商业培训或任何盈利场景</li>
+          <li>使用本插件产生的任何游戏账号风险由用户自行承担</li>
+          <li>插件开发者不对因使用本工具导致的任何后果负责</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 游戏规则参考面板 -->
+  <div id="rules-overlay" class="modal-overlay hidden">
+    <div class="rules-modal interactive">
+      <div class="tactical-header">
+        <span>游戏规则参考</span>
+        <button id="rules-close" class="btn-close">&times;</button>
+      </div>
+      <div class="rules-body" id="rules-body">
+        <div class="rules-section">
+          <div class="rules-section-title">基础买卖规则</div>
+          <table class="rules-table">
+            <tr><td>购买随从</td><td class="rules-val">3 金币</td></tr>
+            <tr><td>出售非金色随从</td><td class="rules-val">1 金币</td></tr>
+            <tr><td>出售金色随从</td><td class="rules-val">3 金币</td></tr>
+            <tr><td>刷新酒馆</td><td class="rules-val">1 金币</td></tr>
+            <tr><td>冻结酒馆</td><td class="rules-val">免费（保留当前商店）</td></tr>
+            <tr><td>使用英雄技能</td><td class="rules-val">依英雄而定（0~3金币）</td></tr>
+          </table>
+        </div>
+
+        <div class="rules-section">
+          <div class="rules-section-title">升本费用</div>
+          <table class="rules-table">
+            <tr><td>1本 → 2本</td><td class="rules-val">5 金币</td></tr>
+            <tr><td>2本 → 3本</td><td class="rules-val">7 金币</td></tr>
+            <tr><td>3本 → 4本</td><td class="rules-val">8 金币</td></tr>
+            <tr><td>4本 → 5本</td><td class="rules-val">9 金币</td></tr>
+            <tr><td>5本 → 6本</td><td class="rules-val">10 金币</td></tr>
+            <tr><td colspan="2" style="font-size:10px;color:var(--text-muted);padding-top:4px">每回合升级费用自动-1（最低0）</td></tr>
+          </table>
+        </div>
+
+        <div class="rules-section">
+          <div class="rules-section-title">卡池数量（各星级）</div>
+          <table class="rules-table">
+            <tr><th>星级</th><th>独特卡牌数</th><th>每卡张数</th><th>总卡数</th></tr>
+            <tr><td>★</td><td class="rules-val">38</td><td class="rules-val">16</td><td class="rules-val">608</td></tr>
+            <tr><td>★★</td><td class="rules-val">58</td><td class="rules-val">15</td><td class="rules-val">870</td></tr>
+            <tr><td>★★★</td><td class="rules-val">138</td><td class="rules-val">13</td><td class="rules-val">1794</td></tr>
+            <tr><td>★★★★</td><td class="rules-val">95</td><td class="rules-val">11</td><td class="rules-val">1045</td></tr>
+            <tr><td>★★★★★</td><td class="rules-val">159</td><td class="rules-val">9</td><td class="rules-val">1431</td></tr>
+            <tr><td>★★★★★★</td><td class="rules-val">40</td><td class="rules-val">7</td><td class="rules-val">280</td></tr>
+            <tr><td>★★★★★★★</td><td class="rules-val">13</td><td class="rules-val">5</td><td class="rules-val">65</td></tr>
+          </table>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px">共享卡池，所有玩家从同一池中抽取。卡被买走/出售会加减池中数量。</div>
+        </div>
+
+        <div class="rules-section">
+          <div class="rules-section-title">伤害上限规则</div>
+          <table class="rules-table">
+            <tr><th>回合</th><th>伤害上限</th></tr>
+            <tr><td>1 ~ 3 回合</td><td class="rules-val">5 点</td></tr>
+            <tr><td>4 ~ 7 回合</td><td class="rules-val">10 点</td></tr>
+            <tr><td>8 回合起</td><td class="rules-val">15 点</td></tr>
+            <tr><td>进入前4</td><td class="rules-val danger">无上限</td></tr>
+          </table>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px">伤害公式: 酒馆等级 + 存活随从星级之和。伤害上限仅限制"单回合受到伤害"不限制"造成伤害"。</div>
+        </div>
+
+        <div class="rules-section">
+          <div class="rules-section-title">饰品回合</div>
+          <table class="rules-table">
+            <tr><td>小型饰品</td><td class="rules-val">第 6 回合</td></tr>
+            <tr><td>大型饰品</td><td class="rules-val">第 9 回合</td></tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -296,8 +643,41 @@
   <!-- 次级提示条 -->
   <div id="secondary-hints" class="secondary-hints hidden"></div>
 
+  <!-- 冻结状态指示器 -->
+  <div id="freeze-indicator" class="hidden">&#10052; 酒馆已冻结</div>
+
+  <!-- 对战胜率预测条 -->
+  <div id="combat-predictor" class="hidden">
+    <span class="cp-label cp-label-left">我方</span>
+    <div class="cp-bar">
+      <div id="cp-win-seg" class="cp-seg cp-win" style="width:0%"></div>
+      <div id="cp-draw-seg" class="cp-seg cp-draw" style="width:0%"></div>
+      <div id="cp-loss-seg" class="cp-seg cp-loss" style="width:0%"></div>
+    </div>
+    <span class="cp-label cp-label-right">对方</span>
+    <div id="cp-percents" class="cp-percents">
+      <span id="cp-win-pct" class="cp-pct cp-win-text">0%</span>
+      <span id="cp-draw-pct" class="cp-pct cp-draw-text">0%</span>
+      <span id="cp-loss-pct" class="cp-pct cp-loss-text">0%</span>
+    </div>
+  </div>
+
+  <!-- 英雄选择分析面板 -->
+  <div id="hero-select-panel" class="hidden">
+    <div class="hero-select-header">选择英雄</div>
+    <div id="hero-select-list" class="hero-select-list"></div>
+  </div>
+
+  <!-- 饰品选择面板 -->
+  <div id="trinket-select-panel" class="hidden">
+    <div class="trinket-select-header">选择饰品</div>
+    <div id="trinket-select-list" class="trinket-select-list"></div>
+  </div>
+
 </div>
 
+<script src="simulation/SeededRNG.js"></script>
+<script src="simulation/CombatResolver.js"></script>
 <script src="modules/DecisionBase.js"></script>
 <script src="modules/RulesEngine.js"></script>
 <script src="modules/Orchestrator.js"></script>
@@ -305,7 +685,11 @@
 <script src="modules/MinionPickModule.js"></script>
 <script src="modules/HeroPowerModule.js"></script>
 <script src="modules/SpellModule.js"></script>
+<script src="modules/MechanicScoring.js"></script>
 <script src="modules/TrinketModule.js"></script>
+<script src="modules/RefreshModule.js"></script>
+<script src="modules/FreezeModule.js"></script>
+<script src="modules/OpponentAnalysisModule.js"></script>
 <script src="modules/DecisionsLogger.js"></script>
 <script src="overlay.js"></script>
 </body>

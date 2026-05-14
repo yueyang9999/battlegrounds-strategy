@@ -37,6 +37,26 @@ contextBridge.exposeInMainWorld("bobCoach", {
   // ── 决策记录（反馈闭环） ──
   logDecision: (entry) => ipcRenderer.invoke("recording:log-decision", entry),
 
+  // ── 用户数据 ──
+  getUserProfile: () => ipcRenderer.invoke("user:get-profile"),
+  updateUserProfile: (partial) => ipcRenderer.invoke("user:update-profile", partial),
+  userRegister: (username, password, email) => ipcRenderer.invoke("user:register", username, password, email),
+  userLogin: (username, password) => ipcRenderer.invoke("user:login", username, password),
+  initAnonymous: () => ipcRenderer.invoke("user:init-anonymous"),
+  userLogout: () => ipcRenderer.invoke("user:logout"),
+  setPrivacyLevel: (level) => ipcRenderer.invoke("user:set-privacy", level),
+  saveGameRecord: (record) => ipcRenderer.invoke("user:save-game-record", record),
+  getGameRecords: (opts) => ipcRenderer.invoke("user:get-game-records", opts),
+  getUserStats: () => ipcRenderer.invoke("user:get-stats"),
+  exportUserData: () => ipcRenderer.invoke("user:export-data"),
+  importUserData: (data) => ipcRenderer.invoke("user:import-data", data),
+  deleteAllUserData: () => ipcRenderer.invoke("user:delete-all-data"),
+  cloudRegister: (username, password, email) => ipcRenderer.invoke("user:cloud-register", username, password, email),
+  cloudLogin: (username, password) => ipcRenderer.invoke("user:cloud-login", username, password),
+  cloudSync: () => ipcRenderer.invoke("user:cloud-sync"),
+  getApiEndpoints: () => ipcRenderer.invoke("user:api-endpoints"),
+  getSyncQueueStatus: () => ipcRenderer.invoke("user:sync-queue-status"),
+
   // ── 日志 ──
   log: (level, msg) => ipcRenderer.invoke("log", level, msg),
 

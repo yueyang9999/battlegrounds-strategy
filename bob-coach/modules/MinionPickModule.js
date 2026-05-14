@@ -293,6 +293,8 @@ var MinionPickModule = class MinionPickModule extends BaseModule {
   // ── 搜牌建议 ──
 
   _checkRefresh(ctx) {
+    // 门控: RefreshModule 已提供更精细的刷新建议时跳过旧逻辑
+    if (ctx.hasSmartRefresh) return null;
     if (!ctx.currentComp) return null;
     if (ctx.currentComp.matchPercent >= 80) return null;
     if (!ctx.currentComp.missingCards || ctx.currentComp.missingCards.length === 0) return null;

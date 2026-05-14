@@ -14,6 +14,7 @@ const fs = require("fs");
 const { execSync, exec } = require("child_process");
 const syncData = require("./sync-data");
 const { GameStateTracker } = require("./log-parser");
+const UserDataStore = require("./modules/UserDataStore");
 
 // ── 路径常量 ──
 const USER_DATA = app.getPath("userData");
@@ -682,6 +683,40 @@ function registerIpcHandlers() {
   ipcMain.handle("sync:status", () => {
     return syncData.getSyncStatus();
   });
+
+  // ── 用户数据存储 ──
+  ipcMain.handle("user:get-profile", () => UserDataStore.getProfile());
+  ipcMain.handle("user:update-profile", (_event, partial) => UserDataStore.updateProfile(partial));
+  ipcMain.handle("user:register", (_event, username, password, email) =>
+    UserDataStore.registerLocal(username, password, email)
+  );
+  ipcMain.handle("user:login", (_event, username, password) =>
+    UserDataStore.loginLocal(username, password)
+  );
+  ipcMain.handle("user:init-anonymous", () => UserDataStore.initAnonymous());
+  ipcMain.handle("user:logout", () => UserDataStore.logout());
+  ipcMain.handle("user:set-privacy", (_event, level) => UserDataStore.setPrivacyLevel(level));
+
+  // 游戏记录
+  ipcMain.handle("user:save-game-record", (_event, record) => UserDataStore.saveGameRecord(record));
+  ipcMain.handle("user:get-game-records", (_event, opts) => UserDataStore.getGameRecords(opts));
+  ipcMain.handle("user:get-stats", () => UserDataStore.getStats());
+
+  // 数据导入导出
+  ipcMain.handle("user:export-data", () => UserDataStore.exportAllData());
+  ipcMain.handle("user:import-data", (_event, data) => UserDataStore.importData(data));
+  ipcMain.handle("user:delete-all-data", () => UserDataStore.deleteAllData());
+
+  // 云端 API (预留)
+  ipcMain.handle("user:cloud-register", (_event, username, password, email) =>
+    UserDataStore.cloudRegister(username, password, email)
+  );
+  ipcMain.handle("user:cloud-login", (_event, username, password) =>
+    UserDataStore.cloudLogin(username, password)
+  );
+  ipcMain.handle("user:cloud-sync", () => UserDataStore.cloudSync());
+  ipcMain.handle("user:api-endpoints", () => UserDataStore.getApiEndpoints());
+  ipcMain.handle("user:sync-queue-status", () => UserDataStore.getSyncQueueStatus());
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -691,6 +726,7 @@ function registerIpcHandlers() {
 app.whenReady().then(() => {
   log("info", "Bob Coach starting...");
   loadSettings();
+  UserDataStore.init(USER_DATA);
 
   // Clean up any leftover firewall rules from crash
   unblockHearthstone();

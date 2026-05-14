@@ -15,6 +15,7 @@ loadModule("modules/DecisionBase.js");
 loadModule("modules/RulesEngine.js");
 loadModule("modules/MinionPickModule.js");
 loadModule("modules/SpellModule.js");
+loadModule("modules/LevelingModule.js");
 
 var dt = JSON.parse(fs.readFileSync(path.join(base, "data", "decision_tables.json"), "utf-8"));
 var cardsArr = JSON.parse(fs.readFileSync(path.join(base, "data", "cards.json"), "utf-8"));
@@ -82,6 +83,8 @@ function makeCtx(o) {
     _cardsById: cardsById, _compCoreCardIds: o._compCoreCardIds || new Set(),
     _spellInteractions: o._spellInteractions !== undefined ? o._spellInteractions : lookup,
     dominantTribe: o.dominantTribe || null, heroPowerCost: o.heroPowerCost || 0,
+    boardPower: o.boardPower !== undefined ? o.boardPower : 1.0,
+    currentComp: o.currentComp || null,
   };
 }
 
@@ -274,6 +277,55 @@ checkGt("Z3.SPELL_MUST > GOOD", DecisionPriority.SPELL_MUST_BUY, DecisionPriorit
 // core/min = 80, power = 70, spell_must_buy = 75
 // spell must buy (75) should be between core (80) and power (70) for proper interleaving
 checkGt("Z4.CORE > SPELL_MUST", DecisionPriority.CORE_MINION, DecisionPriority.SPELL_MUST_BUY);
+
+// ═══════════════════════════════════════════════════════════
+// GROUP W: Adaptive leveling threshold — LevelingModule
+// ═══════════════════════════════════════════════════════════
+console.log("=== GROUP W: Adaptive leveling threshold ===");
+
+var levelMod = new LevelingModule(dt);
+
+// W1: Early game (turn 2) — threshold should be higher (conservative)
+var w1base = makeCtx({ turn: 2, health: 30, boardPower: 0.25, gold: 5, tavernTier: 1 });
+var w1threshold = levelMod._calcDynamicThreshold(w1base);
+checkGt("W1.early game threshold > base", w1threshold, 0.3);
+
+// W2: Late game (turn 10) — threshold lower (urgency to level)
+var w2base = makeCtx({ turn: 10, health: 20, boardPower: 2.0, gold: 10, tavernTier: 4 });
+var w2threshold = levelMod._calcDynamicThreshold(w2base);
+checkTruthy("W2.late game threshold < base", w2threshold < 0.3);
+
+// W3: Low health — threshold higher (too dangerous)
+var w3base = makeCtx({ turn: 6, health: 7, boardPower: 0.8, gold: 8, tavernTier: 2 });
+var w3threshold = levelMod._calcDynamicThreshold(w3base);
+checkTruthy("W3.low health threshold > safe threshold", w3threshold > 0.25);
+
+// W4: High health + strong board — threshold much lower
+var w4base = makeCtx({ turn: 7, health: 28, boardPower: 2.5, gold: 10, tavernTier: 3 });
+var w4threshold = levelMod._calcDynamicThreshold(w4base);
+checkTruthy("W4.safe+strong threshold low", w4threshold < 0.25);
+
+// W5: Weak board — threshold higher
+var w5base = makeCtx({ turn: 5, health: 20, boardPower: 0.3, gold: 8, tavernTier: 2 });
+var w5threshold = levelMod._calcDynamicThreshold(w5base);
+checkTruthy("W5.weak board threshold > base", w5threshold > 0.3);
+
+// W6: Good comp progress — threshold lower
+var w6base = makeCtx({ turn: 6, health: 22, boardPower: 1.5, gold: 9, tavernTier: 3,
+  currentComp: { comp: { name_cn: "龙族战吼" }, matchPercent: 70, overlapCount: 4, totalComp: 6, missingCards: [] }
+});
+var w6threshold = levelMod._calcDynamicThreshold(w6base);
+checkTruthy("W6.comp progress threshold < base", w6threshold < 0.3);
+
+// W7: Clamp within bounds
+var w7min = makeCtx({ turn: 1, health: 5, boardPower: 0.1, gold: 3, tavernTier: 1 });
+var w7max = makeCtx({ turn: 12, health: 30, boardPower: 5.0, gold: 10, tavernTier: 6,
+  currentComp: { comp: { name_cn: "test" }, matchPercent: 90, overlapCount: 6, totalComp: 7, missingCards: [] }
+});
+var w7t1 = levelMod._calcDynamicThreshold(w7min);
+var w7t2 = levelMod._calcDynamicThreshold(w7max);
+checkTruthy("W7.min clamp >= 0.15", w7t1 >= 0.15 && w7t1 <= 0.55);
+checkTruthy("W7.max clamp <= 0.55", w7t2 >= 0.15 && w7t2 <= 0.55);
 
 console.log("\n" + "=".repeat(50));
 console.log("  Passed: " + passed + " | Failed: " + failed);

@@ -34,6 +34,10 @@ const state = {
   panelOpen: false,
   settingsOpen: false,
   aboutOpen: false,
+  legendOpen: false,
+  rulesOpen: false,
+  showCombatPredictor: true,
+  combatSimSamples: 200,
   disconnectStatus: "online", // online | disconnecting | reconnecting
   dcCountdown: 3,
   demoMode: false,
@@ -48,6 +52,20 @@ const state = {
   heroStats: [],
   decisionTables: null,
   pendingUpdates: null,
+
+  // 对手数据
+  opponents: [],
+  combatPrediction: null,  // { winPct, drawPct, lossPct }
+
+  // 冻结/刷新状态
+  frozenShop: false,
+  freeRefreshCount: 0,
+  hpRefreshRemaining: 0,
+
+  // 账号管理
+  userProfile: null,
+  userStats: null,
+  syncQueueStatus: null,
 };
 
 // ── DOM 引用缓存 ──
@@ -89,6 +107,8 @@ function cacheDom() {
   dom.agreementDisabledNote = $("agreement-disabled-note");
   dom.settingsOverlay = $("settings-overlay");
   dom.aboutOverlay = $("about-overlay");
+  dom.legendOverlay = $("legend-overlay");
+  dom.rulesOverlay = $("rules-overlay");
   dom.demoIndicator = $("demo-indicator");
   dom.demoTurn = $("demo-turn");
   dom.secondaryHints = $("secondary-hints");
@@ -97,6 +117,35 @@ function cacheDom() {
   dom.syncHeroDate = $("sync-hero-date");
   dom.syncCompCount = $("sync-comp-count");
   dom.syncLastCheck = $("sync-last-check");
+  dom.combatPredictor = $("combat-predictor");
+  dom.cpWinSeg = $("cp-win-seg");
+  dom.cpDrawSeg = $("cp-draw-seg");
+  dom.cpLossSeg = $("cp-loss-seg");
+  dom.cpWinPct = $("cp-win-pct");
+  dom.cpDrawPct = $("cp-draw-pct");
+  dom.cpLossPct = $("cp-loss-pct");
+  dom.heroSelectPanel = $("hero-select-panel");
+  dom.heroSelectList = $("hero-select-list");
+  dom.trinketSelectPanel = $("trinket-select-panel");
+  dom.trinketSelectList = $("trinket-select-list");
+  dom.accountStatusBadge = $("account-status-badge");
+  dom.accountLoggedOut = $("account-logged-out");
+  dom.accountLoggedIn = $("account-logged-in");
+  dom.accountInfoText = $("account-info-text");
+  dom.accountUserInfo = $("account-user-info");
+  dom.accountUsername = $("account-username");
+  dom.accountPassword = $("account-password");
+  dom.setPrivacyLevel = $("set-privacy-level");
+  dom.accountStats = $("account-stats");
+  dom.statTotalGames = $("stat-total-games");
+  dom.statTop4Rate = $("stat-top4-rate");
+  dom.statFirstPlace = $("stat-first-place");
+  dom.statAvgPlacement = $("stat-avg-placement");
+  dom.syncQueueStatus = $("sync-queue-status");
+  dom.sqPending = $("sq-pending");
+  dom.sqSynced = $("sq-synced");
+  dom.sqFailed = $("sq-failed");
+  dom.apiEndpointsList = $("api-endpoints-list");
 }
 
 // ═══════════════════════════════════════════
@@ -392,6 +441,12 @@ function applyGameState(gs) {
   state.heroCardId = gs.heroCardId || "";
   state.heroName = gs.heroName || (gs.heroCardId ? getCardName(gs.heroCardId) : "");
   state.gamePhase = gs.gamePhase || "shop";
+  state.isHeroSelection = gs.isHeroSelection || false;
+  state.heroOptions = gs.heroOptions || [];
+  state.heroSlotCount = gs.heroSlotCount || 0;
+  state.availableRaces = gs.availableRaces || [];
+  state.trinketOffer = gs.trinketOffer || [];
+  state.trinketTurn = gs.trinketTurn || 0;
   state.boardMinions = (gs.boardMinions || []).map(mapMinion);
   state.handMinions = (gs.handMinions || []).map(mapMinion);
 
@@ -423,11 +478,19 @@ function applyGameState(gs) {
   state.shopMinions = shopMinions;
   state.shopSpells = shopSpells;
 
+  state.frozenShop = gs.frozenShop || false;
+  state.freeRefreshCount = gs.freeRefreshCount || 0;
+  state.hpRefreshRemaining = gs.hpRefreshRemaining || 0;
+
+  // 存储对手数据
+  state.opponents = gs.opponents || [];
+
   // 新对局 → 启动记录会话
   if (isNewSession && decisionsLogger) {
     decisionsLogger.startSession(state.heroCardId, state.heroName);
   }
 
+  computeCombatPrediction();
   runDecisionEngine();
   renderAll();
 }
@@ -450,6 +513,12 @@ function initOrchestrator() {
   orchestrator.register(new HeroPowerModule(dt));
   orchestrator.register(new SpellModule(dt));
   orchestrator.register(new TrinketModule(dt));
+  orchestrator.register(new RefreshModule(dt));
+  orchestrator.register(new FreezeModule(dt));
+  orchestrator.register(new OpponentAnalysisModule({
+    counter_tags: (dt && dt.counter_tags) || {},
+    opponent_analysis: (dt && dt.opponent_analysis) || {},
+  }));
 
   orchestrator.loadPriorityConfig(dt.priority_config || null);
 }
@@ -512,8 +581,16 @@ function buildContext() {
     heroPowerUsable: heroPowerUsable,
     activeAnomaly: state.activeAnomaly || null,
     activeRewards: state.activeRewards || [],
+    activeMechanics: {
+      trinkets: (state.trinketOffer && state.trinketOffer.length > 0) || false,
+      quests: (state.activeRewards && state.activeRewards.length > 0) || false,
+      buddies: false,
+      anomalies: state.activeAnomaly !== null,
+    },
     shopSpells: state.shopSpells || [],
     trinketOffer: state.trinketOffer || [],
+    trinketTurn: state.trinketTurn || 0,
+    availableRaces: state.availableRaces || [],
     trinketTips: state.trinketTips || {},
     _heroHpMap: state._heroHpMap || {},
     _heroPowerCost: state._heroPowerCost || {},
@@ -521,6 +598,10 @@ function buildContext() {
     _spellInteractions: _buildSpellInteractionLookup(state._spellInteractions),
     _cardsById: state.cards || null,
     _shopEvaluations: null,
+    frozenShop: state.frozenShop,
+    freeRefreshCount: state.freeRefreshCount,
+    hpRefreshRemaining: state.hpRefreshRemaining,
+    hasSmartRefresh: true,
   };
 }
 
@@ -694,12 +775,14 @@ function renderSuggestionBadge() {
   dom.sugText.textContent = s.message || "";
 
   // Color class — map Decision type to CSS class
-  el.classList.remove("hidden", "danger", "refresh", "minimized", "hero-power", "spell");
+  el.classList.remove("hidden", "danger", "refresh", "minimized", "hero-power", "spell", "freeze");
   if (state.badgeMinimized) el.classList.add("minimized");
   if (s.type === "danger") el.classList.add("danger");
   if (s.type === "refresh") el.classList.add("refresh");
   if (s.type === "hero_power") el.classList.add("hero-power");
   if (s.type === "spell_buy" || s.type === "spell_use") el.classList.add("spell");
+  if (s.type === "freeze" || s.type === "unfreeze") el.classList.add("freeze");
+  if (s.type === "refresh_smart") el.classList.add("refresh");
 
   // Reason tooltip — 含模块来源
   var sourceLabel = {
@@ -708,6 +791,8 @@ function renderSuggestionBadge() {
     HeroPowerModule: "英雄技能",
     SpellModule: "法术评估",
     TrinketModule: "饰品分析",
+    RefreshModule: "刷新策略",
+    FreezeModule: "冻结策略",
   };
   var src = sourceLabel[s.source] || s.source || "";
   var conf = Math.round((s.confidence || 0) * 100);
@@ -735,6 +820,8 @@ function renderSecondaryHints() {
     HeroPowerModule: "英雄技能",
     SpellModule: "法术评估",
     TrinketModule: "饰品分析",
+    RefreshModule: "刷新策略",
+    FreezeModule: "冻结策略",
   };
 
   container.classList.remove("hidden");
@@ -758,8 +845,11 @@ function _hintIcon(type) {
     case "spell_buy":
     case "spell_use": return "&#128220;";
     case "trinket_pick": return "&#128142;";
-    case "refresh": return "&#128259;";
+    case "refresh":
+    case "refresh_smart": return "&#128259;";
     case "minion_pick": return "&#9764;";
+    case "freeze": return "&#10052;";
+    case "unfreeze": return "&#9728;";
     default: return "&#9654;";
   }
 }
@@ -1073,11 +1163,394 @@ function getPositionTip(comp) {
   return text;
 }
 
+// ═══════════════════════════════════════════
+// 对战胜率预测（蒙特卡洛）
+// ═══════════════════════════════════════════
+
+function computeCombatPrediction() {
+  // 仅在招募阶段且有对手数据时计算
+  if (state.gamePhase !== "shop" && state.gamePhase !== "recruit") {
+    state.combatPrediction = null;
+    return;
+  }
+
+  var myBoard = state.boardMinions || [];
+  if (myBoard.length === 0) {
+    state.combatPrediction = null;
+    return;
+  }
+
+  // 找到下一对手的 board（取第一个有 board 数据的对手）
+  var oppBoard = null;
+  var opponents = state.opponents || [];
+  for (var oi = 0; oi < opponents.length; oi++) {
+    var opp = opponents[oi];
+    if (opp.boardMinions && opp.boardMinions.length > 0) {
+      oppBoard = opp.boardMinions;
+      break;
+    }
+  }
+
+  if (!oppBoard || oppBoard.length === 0) {
+    state.combatPrediction = null;
+    return;
+  }
+
+  // 将 minion 映射为 CombatResolver 需要的格式
+  function mapToUnit(minion) {
+    var card = state.cards ? state.cards[minion.cardId] : null;
+    return {
+      cardId: minion.cardId,
+      attack: minion.attack || 1,
+      health: minion.health || 1,
+      tier: minion.tier || (card ? card.tier : 1),
+      golden: minion.golden || false,
+      mechanics: card ? (card.mechanics || []) : [],
+      tribes_cn: card ? (card.minion_types_cn || []) : [],
+      position: minion.position || 0,
+    };
+  }
+
+  var myUnits = myBoard.map(mapToUnit);
+  var oppUnits = oppBoard.map(mapToUnit);
+
+  // 蒙特卡洛：使用用户配置的模拟次数
+  var SAMPLES = state.combatSimSamples || 200;
+  var wins = 0, draws = 0, losses = 0;
+
+  for (var s = 0; s < SAMPLES; s++) {
+    var rng = new SeededRNG(s * 7919 + state.turn * 31);
+    var result = CombatResolver.simulateCombat(myUnits, oppUnits, state.tavernTier, rng);
+
+    if (result.win) {
+      wins++;
+    } else if (result.attackerAlive === 0 && result.defenderAlive === 0) {
+      draws++;
+    } else {
+      losses++;
+    }
+  }
+
+  state.combatPrediction = {
+    winPct: Math.round((wins / SAMPLES) * 100),
+    drawPct: Math.round((draws / SAMPLES) * 100),
+    lossPct: Math.round((losses / SAMPLES) * 100),
+    opponentHero: opponents.length > 0 ? opponents[0].heroCardId : null,
+  };
+}
+
+function renderCombatPredictor() {
+  var el = dom.combatPredictor;
+  if (!el) return;
+
+  if (!state.showCombatPredictor) {
+    el.classList.add("hidden");
+    return;
+  }
+
+  var pred = state.combatPrediction;
+
+  if (!pred || !state.gameActive || state.gamePhase === "combat") {
+    el.classList.add("hidden");
+    return;
+  }
+
+  el.classList.remove("hidden");
+
+  // 更新色段宽度
+  dom.cpWinSeg.style.width = pred.winPct + "%";
+  dom.cpDrawSeg.style.width = pred.drawPct + "%";
+  dom.cpLossSeg.style.width = pred.lossPct + "%";
+
+  // 更新百分比文字
+  dom.cpWinPct.textContent = pred.winPct + "%";
+  dom.cpDrawPct.textContent = pred.drawPct + "%";
+  dom.cpLossPct.textContent = pred.lossPct + "%";
+
+  // 修正色段圆角
+  if (pred.winPct > 0) dom.cpWinSeg.style.borderRadius = "4px 0 0 4px";
+  else dom.cpWinSeg.style.borderRadius = "0";
+  if (pred.lossPct > 0) dom.cpLossSeg.style.borderRadius = "0 4px 4px 0";
+  else dom.cpLossSeg.style.borderRadius = "0";
+}
+
+// ═══════════════════════════════════════════
+// 英雄选择评分与展示
+// ═══════════════════════════════════════════
+
+function computeHeroScores(heroOptions) {
+  var statsMap = state._heroStatsMap || {};
+  var heroScores = [];
+  var availableRaces = state.availableRaces || [];
+
+  for (var i = 0; i < heroOptions.length; i++) {
+    var opt = heroOptions[i];
+    var stats = statsMap[opt.cardId];
+    var name_cn = getCardName(opt.cardId);
+
+    if (!stats) {
+      heroScores.push({
+        cardId: opt.cardId,
+        name_cn: name_cn,
+        score: 43,
+        tier: "d",
+        tierLabel: "D",
+        avgPosition: 0,
+        top4Rate: 0,
+        dataPoints: 0,
+        synergyTribes: [],
+      });
+      continue;
+    }
+
+    // rank_score: avg_position 越低越好 (1=最佳, 8=最差)
+    var rankScore = (8.5 - stats.avg_position) / 7.5 * 55;
+
+    // win_rate_score: 吃鸡率 + top4率
+    var placements = stats.placements || [];
+    var rank1 = placements.length > 0 ? placements[0].percentage || 0 : 0;
+    var top4Rate = 0;
+    for (var r = 0; r < placements.length && r < 4; r++) {
+      top4Rate += placements[r].percentage || 0;
+    }
+    var winRateScore = (rank1 + top4Rate * 0.25) / 100 * 30;
+
+    // data_confidence: 数据量信度
+    var dataConf = Math.min(8, (stats.data_points || 0) / 15000 * 8);
+
+    var baseScore = rankScore + winRateScore + dataConf;
+
+    // tribe synergy: 与该局可用种族的适配度加成 (最多 +10)
+    var tribeBonus = 0;
+    var synergyTribes = [];
+    var tribeStats = stats.tribe_stats || [];
+    if (availableRaces.length > 0 && tribeStats.length > 0) {
+      for (var t = 0; t < tribeStats.length; t++) {
+        if (tribeStats[t].impactAveragePosition < -0.08) {
+          tribeBonus += Math.abs(tribeStats[t].impactAveragePosition) * 35;
+          synergyTribes.push(tribeStats[t].tribe);
+        }
+      }
+    }
+    tribeBonus = Math.min(10, tribeBonus);
+
+    var score = Math.round(baseScore + tribeBonus);
+
+    // S/A/B/C/D 五级映射 (参考 HDT/Firestone 评级体系)
+    var tier, tierLabel;
+    if (score >= 52)      { tier = "s"; tierLabel = "S"; }
+    else if (score >= 49) { tier = "a"; tierLabel = "A"; }
+    else if (score >= 46) { tier = "b"; tierLabel = "B"; }
+    else if (score >= 44) { tier = "c"; tierLabel = "C"; }
+    else                  { tier = "d"; tierLabel = "D"; }
+
+    heroScores.push({
+      cardId: opt.cardId,
+      name_cn: name_cn,
+      score: score,
+      tier: tier,
+      tierLabel: tierLabel,
+      avgPosition: stats.avg_position,
+      top4Rate: top4Rate,
+      dataPoints: stats.data_points,
+      synergyTribes: synergyTribes,
+    });
+  }
+
+  // 按分数降序排序
+  heroScores.sort(function(a, b) { return b.score - a.score; });
+
+  return heroScores;
+}
+
+function renderHeroSelection() {
+  var panel = dom.heroSelectPanel;
+  if (!panel) return;
+
+  if (!state.isHeroSelection || !state.heroOptions || state.heroOptions.length < 2) {
+    panel.classList.add("hidden");
+    return;
+  }
+
+  panel.classList.remove("hidden");
+
+  var scores = computeHeroScores(state.heroOptions);
+  var list = dom.heroSelectList;
+  if (!list) return;
+
+  // 更新 header 显示槽位数
+  var header = panel.querySelector(".hero-select-header");
+  var slotCount = state.heroSlotCount || state.heroOptions.length;
+  if (header) {
+    header.textContent = "选择英雄 (" + slotCount + "选1)";
+  }
+
+  var html = "";
+  for (var i = 0; i < scores.length; i++) {
+    var h = scores[i];
+    var rankText = h.avgPosition > 0 ? h.avgPosition.toFixed(1) : "--";
+    var top4Text = h.top4Rate > 0 ? h.top4Rate.toFixed(0) + "%" : "";
+
+    html += '<div class="hero-option hero-tier-' + h.tier + '">';
+    html += '<span class="hero-tier-badge">' + h.tierLabel + '</span>';
+    html += '<span class="hero-option-name">' + h.name_cn + '</span>';
+    html += '<span class="hero-option-stats">';
+    html += '<span class="hero-avg-rank" title="平均排名">#' + rankText + '</span>';
+    if (top4Text) {
+      html += '<span class="hero-top4" title="前四率">T4 ' + top4Text + '</span>';
+    }
+    html += '</span>';
+    html += '</div>';
+  }
+
+  list.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// 饰品选择评分与展示
+// ═══════════════════════════════════════════
+
+function computeTrinketScores(trinketOffer) {
+  var results = [];
+  var dominantTribe = getDominantTribe(state.boardMinions);
+  var boardKeywords = [];
+  for (var bi = 0; bi < (state.boardMinions || []).length; bi++) {
+    var card = state.cards && state.cards[state.boardMinions[bi].cardId];
+    if (card && card.mechanics) {
+      boardKeywords = boardKeywords.concat(card.mechanics);
+    }
+  }
+
+  var context = {
+    dominantTribe: dominantTribe || "",
+    boardKeywords: boardKeywords,
+    health: state.health,
+    availableRaces: state.availableRaces || [],
+  };
+
+  for (var i = 0; i < trinketOffer.length; i++) {
+    var trinket = trinketOffer[i];
+    var cardId = trinket.cardId || "";
+
+    // 1. 优先使用预计算权重
+    var weights = (state.decisionTables && state.decisionTables.trinket_weights) || {};
+    var w = weights[cardId];
+
+    if (w) {
+      results.push({
+        cardId: cardId,
+        name_cn: trinket.name_cn || cardId,
+        text_cn: trinket.text_cn || "",
+        score: w.score,
+        tier: w.tier || "B",
+        reason: w.reason || "",
+        dimensions: w.dimensions || {},
+        source: "precomputed",
+      });
+      continue;
+    }
+
+    // 2. 回退: MechanicScoring 文本分析
+    if (typeof MechanicScoring !== "undefined") {
+      var card = { cardId: cardId, name_cn: trinket.name_cn, text_cn: trinket.text_cn, tier: 3 };
+      var ms = MechanicScoring.score(card, context);
+
+      // 社区 tips 置信度加成
+      var tips = (state.trinketTips || {})[cardId];
+      if (tips && tips.tips && tips.tips.length > 0) {
+        var freshCount = 0;
+        for (var t = 0; t < tips.tips.length; t++) {
+          if (tips.tips[t].freshness && tips.tips[t].freshness.status !== "outdated") {
+            freshCount++;
+          }
+        }
+        if (freshCount >= 2) ms.totalScore = Math.min(10, ms.totalScore + 1);
+      }
+
+      var tier = ms.tier;
+      results.push({
+        cardId: cardId,
+        name_cn: trinket.name_cn || cardId,
+        text_cn: trinket.text_cn || "",
+        score: ms.totalScore,
+        tier: tier,
+        reason: (ms.reasons || []).join("; ") || "文本分析评分",
+        dimensions: ms.dimensions || {},
+        source: "text_analysis",
+      });
+    } else {
+      // 3. 无数据回退
+      results.push({
+        cardId: cardId,
+        name_cn: trinket.name_cn || cardId,
+        text_cn: trinket.text_cn || "",
+        score: 3,
+        tier: "C",
+        reason: "暂无评分数据",
+        dimensions: {},
+        source: "fallback",
+      });
+    }
+  }
+
+  results.sort(function(a, b) { return b.score - a.score; });
+  return results;
+}
+
+function renderTrinketSelection() {
+  var panel = dom.trinketSelectPanel;
+  if (!panel) return;
+
+  var offers = state.trinketOffer || [];
+  if (offers.length === 0 || !state.gameActive) {
+    panel.classList.add("hidden");
+    return;
+  }
+
+  panel.classList.remove("hidden");
+
+  var scores = computeTrinketScores(offers);
+  var list = dom.trinketSelectList;
+  if (!list) return;
+
+  var header = panel.querySelector(".trinket-select-header");
+  if (header) {
+    header.textContent = "选择饰品 (回合" + (state.trinketTurn || "?") + ")";
+  }
+
+  var html = "";
+  for (var i = 0; i < scores.length; i++) {
+    var t = scores[i];
+    var tierClass = "trinket-tier-" + t.tier.toLowerCase();
+    html += '<div class="trinket-option ' + tierClass + '">';
+    html += '<span class="trinket-tier-badge">' + t.tier + '</span>';
+    html += '<span class="trinket-option-name">' + t.name_cn + '</span>';
+    html += '<span class="trinket-option-reason" title="' + t.reason.replace(/"/g, "&quot;") + '">' + (t.reason || "") + '</span>';
+    html += '</div>';
+  }
+
+  list.innerHTML = html;
+}
+
+function renderFreezeIndicator() {
+  var el = document.getElementById("freeze-indicator");
+  if (!el) return;
+  if (state.frozenShop && state.gamePhase === "shop" && state.gameActive) {
+    el.classList.remove("hidden");
+  } else {
+    el.classList.add("hidden");
+  }
+}
+
 function renderAll() {
   renderSuggestionBadge();
   renderCardHighlights();
   renderCompPanel();
   renderDisconnectButton();
+  renderCombatPredictor();
+  renderHeroSelection();
+  renderTrinketSelection();
+  renderFreezeIndicator();
 }
 
 // ═══════════════════════════════════════════
@@ -1122,6 +1595,7 @@ function applyDemoScenario(index) {
   state.shopMinions = scenario.shopMinions;
   state.gamePhase = scenario.gamePhase;
 
+  computeCombatPrediction();
   runDecisionEngine();
   renderAll();
   updateDemoIndicator();
@@ -1133,6 +1607,7 @@ function clearDecisionState() {
   state.highlightedCards = [];
   state.compMatches = [];
   state.currentComp = null;
+  state.combatPrediction = null;
 }
 
 function nextDemoTurn() {
@@ -1217,6 +1692,12 @@ function setupEvents() {
       case "open-settings":
         openSettings();
         break;
+      case "open-legend":
+        openLegend();
+        break;
+      case "open-rules":
+        openRules();
+        break;
       case "open-about":
         openAbout();
         break;
@@ -1284,8 +1765,8 @@ function setupEvents() {
   $("btn-quit-cancel").addEventListener("click", hideQuitDialog);
 
   // ── 设置控件即时预览 ──
-  $("set-cloud").addEventListener("change", (e) => {
-    $("cloud-data-row").style.display = e.target.checked ? "flex" : "none";
+  $("set-show-combat").addEventListener("change", (e) => {
+    $("combat-samples-row").style.display = e.target.checked ? "flex" : "none";
   });
   $("set-font-size").addEventListener("input", (e) => {
     applyFontSize(parseInt(e.target.value));
@@ -1304,6 +1785,25 @@ function setupEvents() {
     const val = parseFloat(e.target.value);
     applyTipOpacity(val);
     $("tip-opacity-val").textContent = Math.round(val * 100) + "%";
+  });
+
+  // ── 账号管理 ──
+  $("btn-account-register").addEventListener("click", handleRegister);
+  $("btn-account-login").addEventListener("click", handleLogin);
+  $("btn-account-logout").addEventListener("click", handleLogout);
+  $("btn-export-data").addEventListener("click", handleExportData);
+  $("btn-import-data").addEventListener("click", handleImportData);
+  $("btn-delete-data").addEventListener("click", handleDeleteData);
+  dom.setPrivacyLevel.addEventListener("change", handlePrivacyChange);
+  $("api-endpoints-toggle").addEventListener("click", function() {
+    var list = dom.apiEndpointsList;
+    if (list.classList.contains("hidden")) {
+      list.classList.remove("hidden");
+      $("api-endpoints-toggle").innerHTML = "&#128225; 云端 API 接口状态 &#9650;";
+    } else {
+      list.classList.add("hidden");
+      $("api-endpoints-toggle").innerHTML = "&#128225; 云端 API 接口状态 &#9660;";
+    }
   });
 
   // ── 数据同步 ──
@@ -1473,6 +1973,9 @@ function openTacticalBoard() {
     spell_use: "法术使用分析",
     trinket_pick: "饰品选择分析",
     refresh: "搜牌决策分析",
+    refresh_smart: "智能搜牌分析",
+    freeze: "冻结酒馆分析",
+    unfreeze: "解冻提醒分析",
   };
   dom.tacticalTitle.textContent = titleMap[s.type] || "决策分析";
 
@@ -1491,6 +1994,8 @@ function openTacticalBoard() {
     HeroPowerModule: "英雄技能",
     SpellModule: "法术评估",
     TrinketModule: "饰品分析",
+    RefreshModule: "刷新策略",
+    FreezeModule: "冻结策略",
   };
 
   var html = "";
@@ -1659,14 +2164,18 @@ function openSettings() {
   $("set-shortcut").value = state.disconnectShortcut || "F5";
   $("set-show-dc-btn").checked = state.showDcBtn !== false;
   $("set-dc-scope").value = state.dcShortcutScope || "always";
-  $("set-cloud").checked = state.cloudEnabled || false;
-  $("cloud-data-row").style.display = state.cloudEnabled ? "flex" : "none";
+  $("set-show-combat").checked = state.showCombatPredictor !== false;
+  $("set-combat-samples").value = String(state.combatSimSamples || 200);
+  $("combat-samples-row").style.display = state.showCombatPredictor !== false ? "flex" : "none";
   $("set-freshness-filter").value = state.freshnessFilter || "all";
   $("set-font-family").value = state.fontFamily || "default";
   $("set-font-size").value = state.fontSize || 13;
   $("font-size-val").textContent = (state.fontSize || 13) + "px";
   $("set-tip-opacity").value = state.tipOpacity || 0.3;
   $("tip-opacity-val").textContent = Math.round((state.tipOpacity || 0.3) * 100) + "%";
+
+  // Refresh account UI
+  refreshAccountUI();
 
   // Refresh sync status
   refreshSyncStatus();
@@ -1680,7 +2189,8 @@ function closeSettings() {
   $("set-shortcut").value = state.disconnectShortcut || "F5";
   $("set-show-dc-btn").checked = state.showDcBtn !== false;
   $("set-dc-scope").value = state.dcShortcutScope || "always";
-  $("set-cloud").checked = state.cloudEnabled || false;
+  $("set-show-combat").checked = state.showCombatPredictor !== false;
+  $("set-combat-samples").value = String(state.combatSimSamples || 200);
   applyDcBtnVisibility(state.showDcBtn !== false);
   $("set-font-family").value = state.fontFamily || "default";
   $("set-font-size").value = state.fontSize || 13;
@@ -1696,10 +2206,11 @@ async function saveSettings() {
   const shortcut = $("set-shortcut").value;
   const showDcBtn = $("set-show-dc-btn").checked;
   const dcScope = $("set-dc-scope").value;
-  const cloud = $("set-cloud").checked;
   const freshnessFilter = $("set-freshness-filter").value;
   const fontFamily = $("set-font-family").value;
   const fontSize = parseInt($("set-font-size").value);
+  const showCombat = $("set-show-combat").checked;
+  const combatSamples = parseInt($("set-combat-samples").value);
 
   // Apply immediately
   applyFontFamily(fontFamily);
@@ -1716,8 +2227,9 @@ async function saveSettings() {
   state.disconnectShortcut = shortcut;
   state.showDcBtn = showDcBtn;
   state.dcShortcutScope = dcScope;
-  state.cloudEnabled = cloud;
   state.freshnessFilter = freshnessFilter;
+  state.showCombatPredictor = showCombat;
+  state.combatSimSamples = combatSamples;
 
   // Register / unregister shortcut based on scope + visibility
   applyDcShortcutScope(shortcut, dcScope, showDcBtn);
@@ -1730,8 +2242,9 @@ async function saveSettings() {
     window.bobCoach.setSetting("disconnectShortcut", shortcut),
     window.bobCoach.setSetting("showDcBtn", showDcBtn),
     window.bobCoach.setSetting("dcShortcutScope", dcScope),
-    window.bobCoach.setSetting("cloudEnabled", cloud),
     window.bobCoach.setSetting("freshnessFilter", freshnessFilter),
+    window.bobCoach.setSetting("showCombatPredictor", showCombat),
+    window.bobCoach.setSetting("combatSimSamples", combatSamples),
   ]);
 
   $("font-preview").classList.add("hidden");
@@ -1748,12 +2261,236 @@ function closeAbout() {
   dom.aboutOverlay.classList.add("hidden");
 }
 
+function openLegend() {
+  state.legendOpen = true;
+  dom.legendOverlay.classList.remove("hidden");
+}
+function closeLegend() {
+  state.legendOpen = false;
+  dom.legendOverlay.classList.add("hidden");
+}
+dom.legendOverlay && dom.legendOverlay.addEventListener("click", function(e) {
+  if (e.target === dom.legendOverlay) closeLegend();
+});
+$("legend-close") && $("legend-close").addEventListener("click", closeLegend);
+
+function openRules() {
+  state.rulesOpen = true;
+  dom.rulesOverlay.classList.remove("hidden");
+}
+function closeRules() {
+  state.rulesOpen = false;
+  dom.rulesOverlay.classList.add("hidden");
+}
+dom.rulesOverlay && dom.rulesOverlay.addEventListener("click", function(e) {
+  if (e.target === dom.rulesOverlay) closeRules();
+});
+$("rules-close") && $("rules-close").addEventListener("click", closeRules);
+
 function showQuitDialog() {
   $("quit-overlay").classList.remove("hidden");
 }
 
 function hideQuitDialog() {
   $("quit-overlay").classList.add("hidden");
+}
+
+// ═══════════════════════════════════════════
+// 账号管理
+// ═══════════════════════════════════════════
+
+async function loadUserProfile() {
+  try {
+    state.userProfile = await window.bobCoach.getUserProfile();
+    state.userStats = await window.bobCoach.getUserStats();
+    state.syncQueueStatus = await window.bobCoach.getSyncQueueStatus();
+  } catch (e) {
+    console.error("[Bob] Failed to load user profile:", e);
+    state.userProfile = null;
+    state.userStats = null;
+  }
+}
+
+function refreshAccountUI() {
+  if (!dom.accountStatusBadge) return;
+  var profile = state.userProfile;
+  if (!profile) return;
+
+  var isLoggedIn = profile.accountType === "registered";
+
+  // 状态徽章
+  dom.accountStatusBadge.textContent = isLoggedIn ? profile.username : "未登录";
+  dom.accountStatusBadge.className = "account-status-badge " + (isLoggedIn ? "registered" : "anonymous");
+
+  // 表单切换
+  if (isLoggedIn) {
+    dom.accountLoggedOut.classList.add("hidden");
+    dom.accountLoggedIn.classList.remove("hidden");
+    dom.accountUserInfo.textContent = "已登录: " + profile.username +
+      (profile.email ? " (" + profile.email + ")" : "") +
+      " | 账号ID: " + (profile.userId || "").substring(0, 8) + "...";
+  } else {
+    dom.accountLoggedOut.classList.remove("hidden");
+    dom.accountLoggedIn.classList.add("hidden");
+    dom.accountInfoText.textContent = "注册账号后可云端备份对战数据、参与策略优化。也可直接使用匿名模式，所有数据仅存储于本地。";
+  }
+
+  // 隐私级别
+  if (dom.setPrivacyLevel) {
+    dom.setPrivacyLevel.value = profile.privacyLevel || "local";
+  }
+
+  // 统计数据
+  var stats = state.userStats;
+  if (stats && dom.statTotalGames) {
+    dom.statTotalGames.textContent = stats.totalGames || 0;
+    if (stats.totalGames > 0) {
+      var top4Rate = stats.top4Count ? Math.round((stats.top4Count / stats.totalGames) * 100) : 0;
+      dom.statTop4Rate.textContent = top4Rate + "%";
+      dom.statAvgPlacement.textContent = (stats.avgPlacement || 0).toFixed(1);
+    } else {
+      dom.statTop4Rate.textContent = "--";
+      dom.statAvgPlacement.textContent = "--";
+    }
+    dom.statFirstPlace.textContent = stats.firstPlaceCount || 0;
+  }
+
+  // 同步队列
+  var sq = state.syncQueueStatus;
+  if (sq && sq.total > 0 && dom.syncQueueStatus) {
+    dom.syncQueueStatus.style.display = "block";
+    dom.sqPending.textContent = sq.pending || 0;
+    dom.sqSynced.textContent = sq.synced || 0;
+    dom.sqFailed.textContent = sq.failed || 0;
+  } else if (dom.syncQueueStatus) {
+    dom.syncQueueStatus.style.display = "none";
+  }
+
+  // API 端点列表
+  renderApiEndpoints();
+}
+
+async function renderApiEndpoints() {
+  if (!dom.apiEndpointsList) return;
+  try {
+    var endpoints = await window.bobCoach.getApiEndpoints();
+    var html = "";
+    for (var i = 0; i < endpoints.length; i++) {
+      var ep = endpoints[i];
+      html += '<div class="api-endpoint-row">' +
+        '<span class="api-endpoint-method ' + ep.method.toLowerCase() + '">' + ep.method + '</span>' +
+        '<span class="api-endpoint-path">' + ep.path + '</span>' +
+        '<span class="api-endpoint-desc" style="font-size:8px;color:var(--text-muted)">' + ep.desc + '</span>' +
+        '<span class="api-endpoint-status ' + ep.status + '">' + (ep.status === "reserved" ? "预留" : "在线") + '</span>' +
+        '</div>';
+    }
+    dom.apiEndpointsList.innerHTML = html;
+  } catch (e) {}
+}
+
+async function handleRegister() {
+  var username = (dom.accountUsername.value || "").trim();
+  var password = (dom.accountPassword.value || "").trim();
+  if (!username || !password) {
+    alert("请输入用户名和密码");
+    return;
+  }
+  if (username.length < 3) {
+    alert("用户名至少3个字符");
+    return;
+  }
+  if (password.length < 6) {
+    alert("密码至少6个字符");
+    return;
+  }
+  var result = await window.bobCoach.userRegister(username, password, "");
+  if (result.error) {
+    alert("注册失败: " + result.error);
+    return;
+  }
+  await loadUserProfile();
+  refreshAccountUI();
+}
+
+async function handleLogin() {
+  var username = (dom.accountUsername.value || "").trim();
+  var password = (dom.accountPassword.value || "").trim();
+  if (!username || !password) {
+    alert("请输入用户名和密码");
+    return;
+  }
+  var result = await window.bobCoach.userLogin(username, password);
+  if (result.error) {
+    alert("登录失败: " + result.error);
+    return;
+  }
+  await loadUserProfile();
+  refreshAccountUI();
+}
+
+async function handleLogout() {
+  if (!confirm("确定要注销登录吗？游戏记录将保留在本地。")) return;
+  await window.bobCoach.userLogout();
+  await loadUserProfile();
+  refreshAccountUI();
+}
+
+async function handleExportData() {
+  try {
+    var data = await window.bobCoach.exportUserData();
+    var jsonStr = JSON.stringify(data, null, 2);
+    // 通过 Electron 保存文件对话框
+    var blob = new Blob([jsonStr], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "bob-coach-data-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert("导出失败: " + e.message);
+  }
+}
+
+async function handleImportData() {
+  var input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = async function() {
+    var file = input.files[0];
+    if (!file) return;
+    try {
+      var text = await file.text();
+      var data = JSON.parse(text);
+      var result = await window.bobCoach.importUserData(data);
+      if (result.error) {
+        alert("导入失败: " + result.error);
+        return;
+      }
+      alert("导入成功! 合并了 " + result.importedCount + " 条记录。");
+      await loadUserProfile();
+      refreshAccountUI();
+    } catch (e) {
+      alert("导入失败: 文件格式不正确");
+    }
+  };
+  input.click();
+}
+
+async function handleDeleteData() {
+  if (!confirm("确定要清除所有本地数据吗？此操作不可撤销！\n\n将删除：所有游戏记录、决策日志、个人统计。\n\n建议先导出数据备份。")) return;
+  if (!confirm("再次确认：清除所有本地数据？")) return;
+  await window.bobCoach.deleteAllUserData();
+  await loadUserProfile();
+  refreshAccountUI();
+}
+
+async function handlePrivacyChange() {
+  var level = dom.setPrivacyLevel.value;
+  await window.bobCoach.setPrivacyLevel(level);
+  state.userProfile = await window.bobCoach.getUserProfile();
+  state.syncQueueStatus = await window.bobCoach.getSyncQueueStatus();
+  refreshAccountUI();
 }
 
 // ═══════════════════════════════════════════
@@ -1938,10 +2675,19 @@ async function acceptAgreement(mode) {
   await window.bobCoach.setSetting("agreementAccepted", true);
   await window.bobCoach.setSetting("mode", mode);
   await window.bobCoach.setSetting("firstRun", false);
+
+  // 初始化用户数据
   if (mode === "cloud") {
-    await window.bobCoach.setSetting("cloudEnabled", true);
-    state.cloudEnabled = true;
+    // 云端模式：初始化匿名用户后可升级为注册账号
+    await window.bobCoach.initAnonymous();
+    await window.bobCoach.setPrivacyLevel("anonymous_stats");
+  } else {
+    // 本地模式：纯本地，不上传任何数据
+    await window.bobCoach.initAnonymous();
+    await window.bobCoach.setPrivacyLevel("local");
   }
+
+  await loadUserProfile();
   state.agreementAccepted = true;
   $("agreement-overlay").classList.add("hidden");
 }
@@ -2012,12 +2758,13 @@ async function init() {
   state.disconnectShortcut = settings.disconnectShortcut;
   state.showDcBtn = settings.showDcBtn !== false;
   state.dcShortcutScope = settings.dcShortcutScope || "always";
-  state.cloudEnabled = settings.cloudEnabled;
   state.freshnessFilter = settings.freshnessFilter || "all";
   state.mode = settings.mode;
   state.fontFamily = settings.fontFamily || "default";
   state.fontSize = settings.fontSize || 13;
   state.tipOpacity = settings.tipOpacity || 0.3;
+  state.showCombatPredictor = settings.showCombatPredictor !== false;
+  state.combatSimSamples = settings.combatSimSamples || 200;
 
   // Saved disconnect button position
   state.dcBtnLeft = settings.dcBtnLeft || null;
@@ -2041,6 +2788,9 @@ async function init() {
     state.dcShortcutScope || "always",
     state.showDcBtn !== false
   );
+
+  // Load user profile (account data)
+  await loadUserProfile();
 
   // Show agreement if not accepted
   if (!state.agreementAccepted) {

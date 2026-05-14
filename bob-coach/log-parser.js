@@ -45,6 +45,17 @@ class GameStateTracker {
     this.entities = Object.create(null);
     this._shopEntityIds = [];
     this._lastStateHash = "";
+    this._opponents = Object.create(null);  // { controllerId → { heroCardId, health, tavernTier, boardMinions[] } }
+    this._lastCombatOpponents = [];          // snapshot from most recent combat
+    this._heroCandidates = Object.create(null); // { entityId → { cardId, entityId, position } } 英雄选择阶段候选英雄
+    this._isHeroSelection = false;
+    this._trinketOffer = [];                     // [{ cardId, entityId }] 当前可选饰品
+    this._trinketEntities = Object.create(null); // { entityId → { cardId, entityId } } 饰品实体缓存
+    this.frozenShop = false;
+    this.freeRefreshCount = 0;
+    this.hpRefreshRemaining = 0;
+    this._lastShopTurn = 0;
+    this._lastShopKey = "";
   }
 
   // ── 公开 API ──
@@ -108,13 +119,67 @@ class GameStateTracker {
       turn: this.turn,
       gamePhase: this.gamePhase,
       gameActive: this.heroCardId !== null,
+      isHeroSelection: this._isHeroSelection,
+      heroOptions: this._isHeroSelection ? Object.values(this._heroCandidates) : [],
+      heroSlotCount: this._computeHeroSlotCount(),
       boardMinions: this._getZoneEntities("PLAY", 7),
       handMinions: this._getZoneEntities("HAND", 10),
       shopMinions: this._getShopEntities(),
+      opponents: this._getOpponentStates(),
+      trinketOffer: this._trinketOffer.slice(),
+      frozenShop: this.frozenShop,
+      freeRefreshCount: this.freeRefreshCount,
+      hpRefreshRemaining: this.hpRefreshRemaining,
     };
   }
 
+  _getOpponentStates() {
+    var result = [];
+    var oppKeys = Object.keys(this._opponents);
+    for (var i = 0; i < oppKeys.length; i++) {
+      var key = oppKeys[i];
+      var opp = this._opponents[key];
+      if (!opp || !opp.heroCardId) continue;
+      result.push({
+        controller: opp.controller,
+        heroCardId: opp.heroCardId,
+        health: opp.health,
+        tavernTier: opp.tavernTier,
+        boardMinions: opp.boardMinions.slice(0, 7),
+        alive: opp.alive,
+      });
+    }
+    return result;
+  }
+
   // ── 内部 ──
+
+  _clearHeroSelection() {
+    this._heroCandidates = Object.create(null);
+    this._isHeroSelection = false;
+  }
+
+  _parseChoiceEntities(msg) {
+    var entsMatch = msg.match(/\bentities=\[([^\]]*)\]/);
+    if (!entsMatch) return [];
+    return entsMatch[1]
+      .split(",")
+      .map(function(s) { return parseInt(s.trim(), 10); })
+      .filter(function(n) { return !isNaN(n); });
+  }
+
+  _computeHeroSlotCount() {
+    var cands = Object.values(this._heroCandidates);
+    if (cands.length === 0) return 0;
+    // 查找 positions 0 和 3: 如果都有候选 → 4选1, 否则 → 2选1
+    var hasLeft = false, hasRight = false;
+    for (var i = 0; i < cands.length; i++) {
+      if (cands[i].position === 0) hasLeft = true;
+      if (cands[i].position === 3) hasRight = true;
+    }
+    if (hasLeft && hasRight) return 4;
+    return cands.length >= 3 ? 4 : 2;
+  }
 
   _extractMessage(line) {
     // 去掉时间戳前缀 "D 00:00:00.0000000 " 或 "[Power] " 等
@@ -283,13 +348,42 @@ class GameStateTracker {
       // Zone changes for minions
       case "ZONE": {
         ent.zone = value;
+        // 英雄选择阶段: 候选英雄进入 PLAY → 玩家选择了该英雄
+        if (value === "PLAY" && this._isHeroSelection && this._heroCandidates[ef.id]) {
+          var chosen = this._heroCandidates[ef.id];
+          this.playerEntityId = ef.id;
+          this.heroCardId = chosen.cardId;
+          this.playerId = 1;
+          this._clearHeroSelection();
+          changed = true;
+        }
+        // 免费刷新追踪: BGS_116 刷新畸体 进入我方场地
+        if (value === "PLAY" && (ef.player === 1 || ef.controller === 1)) {
+          if (ent.cardId === "BGS_116") {
+            this.freeRefreshCount += 2;
+          }
+          if (ent.cardId === "BG26_524") {
+            this.hpRefreshRemaining = 2;
+          }
+        }
         if (ef.player === 1 || ef.controller === 1) {
           changed = true;
+        }
+        // Track opponent board minions during combat
+        if ((ef.player !== 1 || ef.controller !== 1) && value === "PLAY") {
+          var oppCtrl = ef.player || ef.controller || 0;
+          if (oppCtrl > 1) {
+            this._trackOpponentMinion(oppCtrl, ef.id, ent);
+          }
         }
         break;
       }
       case "ZONE_POSITION": {
         ent.zonePos = parseInt(value) || 0;
+        // 更新英雄候选位置
+        if (this._heroCandidates[ef.id]) {
+          this._heroCandidates[ef.id].position = ent.zonePos;
+        }
         if (ef.player === 1 || ef.controller === 1) {
           changed = true;
         }
@@ -298,11 +392,25 @@ class GameStateTracker {
 
       // CARDTYPE detection for hero
       case "CARDTYPE": {
-        if (value === "HERO" && (ef.player === 1 || ef.controller === 1)) {
-          if (ef.cardId && ef.cardId.startsWith("TB_BaconShop_HERO")) {
-            this.playerId = ef.player || ef.controller;
-            this.playerEntityId = ef.id;
-            this.heroCardId = ef.cardId;
+        if (value === "HERO" && ef.cardId && ef.cardId.startsWith("TB_BaconShop_HERO")) {
+          var ctrl = ef.player || ef.controller || 0;
+          if (ctrl === 1) {
+            // 英雄选择阶段 (step ≤ 2): 追踪候选，不立即设置 heroCardId
+            if (this.step <= 2 && !this.heroCardId) {
+              this._heroCandidates[ef.id] = { cardId: ef.cardId, entityId: ef.id, position: ef.zonePos || 0 };
+              if (Object.keys(this._heroCandidates).length >= 2) {
+                this._isHeroSelection = true;
+              }
+              changed = true;
+            } else {
+              this.playerId = 1;
+              this.playerEntityId = ef.id;
+              this.heroCardId = ef.cardId;
+              this._clearHeroSelection();
+              changed = true;
+            }
+          } else if (ctrl > 1) {
+            this._detectOpponentHero(ctrl, ef.cardId, ef.id);
             changed = true;
           }
         }
@@ -333,32 +441,131 @@ class GameStateTracker {
 
     // 检测玩家英雄
     if (cardId.startsWith("TB_BaconShop_HERO")) {
+      // 英雄选择阶段 (step ≤ 2): 追踪候选，不立即设置 heroCardId
+      if (this.step <= 2 && !this.heroCardId) {
+        this._heroCandidates[id] = { cardId: cardId, entityId: id, position: 0 };
+        if (Object.keys(this._heroCandidates).length >= 2) {
+          this._isHeroSelection = true;
+        }
+        return this._emitIfChanged();
+      }
       this.playerEntityId = id;
       this.heroCardId = cardId;
       this.playerId = 1;
+      this._clearHeroSelection();
+      return this._emitIfChanged();
+    }
+
+    // 检测饰品实体 (MagicItem)
+    if (cardId.indexOf("_MagicItem_") !== -1) {
+      this._trinketEntities[id] = { cardId: cardId, entityId: id };
       return this._emitIfChanged();
     }
 
     return false;
   }
 
+  // ── 对手追踪 ──
+
+  _trackOpponentMinion(controller, entityId, ent) {
+    if (!this._opponents[controller]) {
+      this._opponents[controller] = {
+        controller: controller,
+        heroCardId: "",
+        health: 30,
+        tavernTier: 1,
+        boardMinions: [],
+        alive: true,
+      };
+    }
+    var opp = this._opponents[controller];
+    // Add/update minion in board snapshot
+    var existingIdx = -1;
+    for (var i = 0; i < opp.boardMinions.length; i++) {
+      if (opp.boardMinions[i].entityId === entityId) {
+        existingIdx = i;
+        break;
+      }
+    }
+    var minionData = {
+      entityId: entityId,
+      cardId: ent.cardId || "",
+      attack: (ent.tags && ent.tags.ATK) || 0,
+      health: (ent.tags && ent.tags.HEALTH) || 0,
+      tier: (ent.tags && (ent.tags.CARDTECH_LEVEL || ent.tags.TECH_LEVEL)) || 1,
+      position: ent.zonePos || 0,
+    };
+    if (existingIdx >= 0) {
+      opp.boardMinions[existingIdx] = minionData;
+    } else {
+      opp.boardMinions.push(minionData);
+    }
+  }
+
+  _detectOpponentHero(controller, cardId, entityId) {
+    if (!cardId || !cardId.startsWith("TB_BaconShop_HERO")) return;
+    if (controller <= 1) return;
+    if (!this._opponents[controller]) {
+      this._opponents[controller] = {
+        controller: controller,
+        heroCardId: "",
+        health: 30,
+        tavernTier: 1,
+        boardMinions: [],
+        alive: true,
+      };
+    }
+    this._opponents[controller].heroCardId = cardId;
+    this._opponents[controller].heroEntityId = entityId;
+  }
+
   _processChoices(msg) {
     // CHOICES Entity=[...] id=1 PlayerId=1 TaskList=N CHOICE_TYPE=SHOP entities=[58,59,60,61]
     const choiceType = (msg.match(/\bCHOICE_TYPE=(\w+)/) || [])[1];
+
+    // 饰品选择
+    if (choiceType === "TRINKET" || choiceType === "TREASURE" || choiceType === "MAGIC_ITEM") {
+      var trinketIds = this._parseChoiceEntities(msg);
+      if (trinketIds.length >= 2) {
+        this._trinketOffer = [];
+        for (var ti = 0; ti < trinketIds.length; ti++) {
+          var teid = trinketIds[ti];
+          var tent = this.entities[teid];
+          if (tent && tent.cardId && tent.cardId.indexOf("_MagicItem_") !== -1) {
+            this._trinketOffer.push({ cardId: tent.cardId, entityId: teid });
+          } else if (this._trinketEntities[teid]) {
+            this._trinketOffer.push(this._trinketEntities[teid]);
+          }
+        }
+        return this._emitIfChanged();
+      }
+    }
+
+    // 英雄选择
+    if (choiceType === "HERO") {
+      var heroIds = this._parseChoiceEntities(msg);
+      if (heroIds.length >= 2) {
+        for (var i = 0; i < heroIds.length; i++) {
+          var eid = heroIds[i];
+          var ent = this.entities[eid];
+          if (ent && ent.cardId && ent.cardId.startsWith("TB_BaconShop_HERO")) {
+            this._heroCandidates[eid] = { cardId: ent.cardId, entityId: eid, position: ent.zonePos || 0 };
+          }
+        }
+        if (Object.keys(this._heroCandidates).length >= 2) {
+          this._isHeroSelection = true;
+        }
+        return this._emitIfChanged();
+      }
+    }
+
     if (choiceType !== "SHOP") return false;
 
-    const entsMatch = msg.match(/\bentities=\[([^\]]*)\]/);
-    if (!entsMatch) return false;
-
-    const ids = entsMatch[1]
-      .split(",")
-      .map((s) => parseInt(s.trim(), 10))
-      .filter((n) => !isNaN(n));
-
+    var ids = this._parseChoiceEntities(msg);
     if (ids.length === 0) return false;
 
     // 获取每个 shop entity 的 cardId
-    const newShop = ids.map((eid) => {
+    var newShop = ids.map(function(eid) {
       const ent = this.entities[eid];
       return {
         cardId: ent ? ent.cardId || "" : "",
@@ -372,8 +579,17 @@ class GameStateTracker {
 
     // 判断是否和上次相同
     const newShopKey = validShop.map((s) => s.entityId).join(",");
+
+    // 冻结检测: 进入新回合但酒馆实体未变 → 玩家冻结了酒馆
+    if (newShopKey === this._lastShopKey && this.turn > this._lastShopTurn) {
+      this.frozenShop = true;
+    } else {
+      this.frozenShop = false;
+    }
+
     if (newShopKey !== this._lastShopKey) {
       this._lastShopKey = newShopKey;
+      this._lastShopTurn = this.turn;
       this._shopEntityIds = ids;
       // Store shop info on entities
       validShop.forEach((s, i) => {
@@ -433,8 +649,40 @@ class GameStateTracker {
   }
 
   _processJsonChoices(evt) {
+    if (evt.choiceType === "HERO") {
+      var heroIds = evt.entities || evt.entityIds || [];
+      if (Array.isArray(heroIds) && heroIds.length >= 2) {
+        for (var i = 0; i < heroIds.length; i++) {
+          var eid = heroIds[i];
+          var ent = this.entities[eid];
+          if (ent && ent.cardId && ent.cardId.startsWith("TB_BaconShop_HERO")) {
+            this._heroCandidates[eid] = { cardId: ent.cardId, entityId: eid, position: ent.zonePos || 0 };
+          }
+        }
+        if (Object.keys(this._heroCandidates).length >= 2) {
+          this._isHeroSelection = true;
+        }
+        return this._emitIfChanged();
+      }
+    }
+    if (evt.choiceType === "TRINKET" || evt.choiceType === "TREASURE" || evt.choiceType === "MAGIC_ITEM") {
+      var tIds = evt.entities || evt.entityIds || [];
+      if (Array.isArray(tIds) && tIds.length >= 2) {
+        this._trinketOffer = [];
+        for (var ti = 0; ti < tIds.length; ti++) {
+          var tid = tIds[ti];
+          var tent = this.entities[tid];
+          if (tent && tent.cardId && tent.cardId.indexOf("_MagicItem_") !== -1) {
+            this._trinketOffer.push({ cardId: tent.cardId, entityId: tid });
+          } else if (this._trinketEntities[tid]) {
+            this._trinketOffer.push(this._trinketEntities[tid]);
+          }
+        }
+        return this._emitIfChanged();
+      }
+    }
     if (evt.choiceType !== "SHOP") return false;
-    const ids = evt.entities || evt.entityIds || [];
+    var ids = evt.entities || evt.entityIds || [];
     if (!Array.isArray(ids) || ids.length === 0) return false;
     this._shopEntityIds = ids;
     return this._emitIfChanged();
@@ -451,10 +699,25 @@ class GameStateTracker {
     this.entities[id].cardId = cardId;
 
     if (cardId.startsWith("TB_BaconShop_HERO")) {
+      if (this.step <= 2 && !this.heroCardId) {
+        this._heroCandidates[id] = { cardId: cardId, entityId: id, position: 0 };
+        if (Object.keys(this._heroCandidates).length >= 2) {
+          this._isHeroSelection = true;
+        }
+        return this._emitIfChanged();
+      }
       this.playerEntityId = id;
       this.heroCardId = cardId;
+      this._clearHeroSelection();
       return this._emitIfChanged();
     }
+
+    // 检测饰品实体
+    if (cardId.indexOf("_MagicItem_") !== -1) {
+      this._trinketEntities[id] = { cardId: cardId, entityId: id };
+      return this._emitIfChanged();
+    }
+
     return false;
   }
 
