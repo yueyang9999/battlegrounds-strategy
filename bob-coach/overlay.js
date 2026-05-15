@@ -274,10 +274,14 @@ async function loadAllData() {
       }
     }
 
+    // 加载玩家画像（个人对局历史提取结果）
+    state._playerProfile = (await window.bobCoach.loadData("player_profile")) || null;
+
     console.log(
       "[Bob] Loaded " + cardsArr.length + " cards, " + state.compStrategies.length +
       " comps, " + state.heroStats.length + " heroes, " +
-      Object.keys(state.heroTips || {}).length + " hero tips"
+      Object.keys(state.heroTips || {}).length + " hero tips" +
+      (state._playerProfile ? ", 玩家画像(" + state._playerProfile.totalGames + "场)" : "")
     );
     return true;
   } catch (e) {
@@ -501,6 +505,11 @@ function applyGameState(gs) {
 
 var orchestrator = null;
 var decisionsLogger = null;
+var cardDb = null;
+var poolTracker = null;
+var profileEngine = null;
+var recorder = null;
+var dataSyncer = null;
 
 function initOrchestrator() {
   if (orchestrator) return;
@@ -508,6 +517,46 @@ function initOrchestrator() {
 
   var dt = state.decisionTables || {};
 
+  // ── 初始化新模块 ──
+
+  // CardDatabase
+  if (!cardDb && state.cards) {
+    var cardsArr = Object.values(state.cards);
+    cardDb = new CardDatabase(cardsArr);
+    console.log("[init] CardDatabase 就绪:", cardDb.total, "张卡牌");
+  }
+
+  // PoolTracker
+  if (!poolTracker && cardDb) {
+    poolTracker = new PoolTracker(cardDb);
+    console.log("[init] PoolTracker 就绪");
+  }
+
+  // ProfileEngine
+  if (!profileEngine && cardDb) {
+    profileEngine = new ProfileEngine(null, cardDb);  // UserDataStore 在 Node 侧，此处用 null
+    // 加载提取的个人画像数据
+    if (state._playerProfile) {
+      profileEngine.loadExtractedProfile(state._playerProfile);
+      console.log("[init] ProfileEngine 就绪（已加载 " + state._playerProfile.totalGames + " 场个人画像）");
+    } else {
+      console.log("[init] ProfileEngine 就绪（无个人画像数据）");
+    }
+  }
+
+  // Recorder
+  if (!recorder && cardDb) {
+    recorder = new Recorder(cardDb);
+    console.log("[init] Recorder 就绪");
+  }
+
+  // DataSyncer
+  if (!dataSyncer) {
+    dataSyncer = new DataSyncer();
+    console.log("[init] DataSyncer 就绪");
+  }
+
+  // ── 注册决策模块 ──
   orchestrator.register(new LevelingModule(dt));
   orchestrator.register(new MinionPickModule(dt));
   orchestrator.register(new HeroPowerModule(dt));
@@ -602,6 +651,12 @@ function buildContext() {
     freeRefreshCount: state.freeRefreshCount,
     hpRefreshRemaining: state.hpRefreshRemaining,
     hasSmartRefresh: true,
+    // ── 新模块注入 ──
+    cardDb: cardDb,
+    poolTracker: poolTracker,
+    profileEngine: profileEngine,
+    recorder: recorder,
+    dataSyncer: dataSyncer,
   };
 }
 
@@ -702,37 +757,7 @@ function getDominantTribe(boardMinions) {
 }
 
 function matchBoardToComps(boardMinions) {
-  const table = (state.decisionTables && state.decisionTables.comp_matching) || {};
-  const minOverlap = table.min_overlap_for_match || 2;
-  const displayMax = table.display_max_comps || 3;
-  const coreThreshold = table.core_weight_threshold || 7;
-
-  const boardCardIds = new Set(boardMinions.map((m) => m.cardId));
-  const matches = [];
-
-  for (const comp of state.compStrategies) {
-    if (!comp.cards) continue;
-    const compCardIds = comp.cards.map((c) => c.cardId || c.card_id || "");
-    const overlap = compCardIds.filter((id) => boardCardIds.has(id));
-    const overlapCount = overlap.length;
-    const totalComp = compCardIds.length;
-    const matchPercent = totalComp > 0 ? Math.round((overlapCount / totalComp) * 100) : 0;
-    const missingCards = compCardIds.filter((id) => !boardCardIds.has(id));
-
-    if (overlapCount >= minOverlap) {
-      matches.push({
-        comp,
-        matchPercent,
-        overlapCount,
-        totalComp,
-        missingCards,
-        matchedCards: overlap,
-      });
-    }
-  }
-
-  matches.sort((a, b) => b.matchPercent - a.matchPercent);
-  return matches.slice(0, displayMax);
+  return CompMatcher.matchBoardToComps(boardMinions, state.compStrategies, state.decisionTables);
 }
 
 function selectCurveType() {

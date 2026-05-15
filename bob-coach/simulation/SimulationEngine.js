@@ -24,6 +24,7 @@ var SimulationEngine = {
     this._lookup = opts.lookup;
     this._levelingCurve = opts.levelingCurve;
     this._heroOverrides = opts.heroOverrides;
+    this._profileEngine = opts.profileEngine || null;
   },
 
   // 运行指定数量的8人对局
@@ -31,6 +32,7 @@ var SimulationEngine = {
     config = config || {};
     var bobCount = config.bobPlayerCount || 1;
     var heuristicCount = config.heuristicPlayerCount || 7;
+    var randomCount = config.randomPlayerCount || 0;
     var baseSeed = config.seed || 42;
     var verbose = config.verbose || false;
 
@@ -39,7 +41,7 @@ var SimulationEngine = {
     for (var g = 0; g < gameCount; g++) {
       var gameSeed = baseSeed + g * 1000;
       var rng = new SeededRNG(gameSeed);
-      var result = this.runOneGame(g, bobCount, heuristicCount, rng, verbose);
+      var result = this.runOneGame(g, bobCount, heuristicCount, randomCount, rng, verbose);
       allResults.push(result);
     }
 
@@ -47,7 +49,7 @@ var SimulationEngine = {
   },
 
   // 运行一局8人对局
-  runOneGame: function(gameIndex, bobCount, heuristicCount, rng, verbose) {
+  runOneGame: function(gameIndex, bobCount, heuristicCount, randomCount, rng, verbose) {
     var MAX_TURNS = 25;
     var cardsById = this._cardsById;
     var heroStatsById = this._heroStatsById;
@@ -60,13 +62,21 @@ var SimulationEngine = {
     // ── 2. 选取英雄 ──
     var heroIds = Object.keys(heroStatsById);
     rng.shuffle(heroIds);
-    var totalPlayers = bobCount + heuristicCount;
-    if (totalPlayers !== 8) totalPlayers = 8; // force 8
+    randomCount = randomCount || 0;
+    var totalPlayers = bobCount + heuristicCount + randomCount;
+    if (totalPlayers !== 8) {
+      // Adjust to ensure exactly 8
+      if (totalPlayers < 8) heuristicCount += (8 - totalPlayers);
+      totalPlayers = 8;
+    }
 
     var players = [];
     for (var i = 0; i < totalPlayers; i++) {
       var heroId = heroIds[i % heroIds.length];
-      var aiType = i < bobCount ? "bob" : "heuristic";
+      var aiType;
+      if (i < bobCount) aiType = "bob";
+      else if (i < bobCount + heuristicCount) aiType = "heuristic";
+      else aiType = "random";
       var player = new PlayerAgent(i + 1, heroId, aiType, {});
       ArmorSystem.initPlayer(player, heroId, cardsById);
 
@@ -127,6 +137,15 @@ var SimulationEngine = {
 
         p.startTurn(turn, sharedPool, new SeededRNG(gameIndex * 10000 + pi * 100 + turn), cardsById);
 
+        // ── 饰品选择生成（回合6/9）──
+        if (typeof TrinketOfferSystem !== "undefined" && TrinketOfferSystem.isTrinketTurn(turn)) {
+          p.trinkets = TrinketOfferSystem.generateOffers(
+            turn, new SeededRNG(gameIndex * 50000 + pi * 100 + turn)
+          );
+        } else {
+          p.trinkets = [];
+        }
+
         // 构建决策上下文
         var ctx = this._buildContext(p, turn, cardsById, sharedPool);
 
@@ -134,6 +153,8 @@ var SimulationEngine = {
         var decisions;
         if (p.aiType === "bob") {
           decisions = this._runBobCoach(p, ctx);
+        } else if (p.aiType === "random") {
+          decisions = RandomAI.decide(p, ctx, new SeededRNG(gameIndex * 20000 + pi * 100 + turn));
         } else {
           decisions = HeuristicAI.decide(p, ctx, new SeededRNG(gameIndex * 20000 + pi * 100 + turn));
         }
@@ -319,6 +340,12 @@ var SimulationEngine = {
       }
     }
 
+    // ── 流派匹配 ──
+    var compMatches = (typeof CompMatcher !== "undefined")
+      ? CompMatcher.matchBoardToComps(player.board, this._comps, this._decisionTables)
+      : [];
+    var currentComp = compMatches.length > 0 ? compMatches[0] : null;
+
     return {
       turn: turn,
       gold: player.gold,
@@ -338,8 +365,8 @@ var SimulationEngine = {
       heroStats: heroStats,
       boardPower: boardPower,
       dominantTribe: player.getDominantTribe(),
-      compMatches: [],
-      currentComp: null,
+      compMatches: compMatches,
+      currentComp: currentComp,
       curveType: player.curveType,
       decisionTables: dt,
       heroPowerCost: player.heroPowerCost,
@@ -347,7 +374,7 @@ var SimulationEngine = {
       activeAnomaly: player.anomaly,
       activeRewards: player.rewards,
       trinketOffer: player.trinkets,
-      trinketTips: {},
+      trinketTips: (typeof TrinketOfferSystem !== "undefined") ? TrinketOfferSystem._trinketTips : {},
       _heroHpMap: {},
       _heroPowerCost: {},
       _compCoreCardIds: coreCardIds,
@@ -362,6 +389,7 @@ var SimulationEngine = {
       _bobPlayerId: player.id,
       _nextOpponentId: nextOppId,
       _nextOpponentSummary: nextOppSummary,
+      profileEngine: this._profileEngine,
     };
   },
 
@@ -422,6 +450,20 @@ var SimulationEngine = {
           sharedPool.returnToPool(sold.cardId, sold.golden ? 3 : 1);
           player.followedDecisions++;
           player.decisionsMade.push({ turn: turn, action: "sell_minion", cardId: sold.cardId, followed: true });
+        }
+      }
+    }
+
+    // PHASE 0.5: 饰品选择（无金币消耗，选最高分）
+    if (player.trinkets && player.trinkets.length > 0) {
+      for (var td = 0; td < sorted.length; td++) {
+        var tdec = sorted[td];
+        if (tdec.type !== "trinket_pick") continue;
+        if (tdec.data && tdec.data.cardId) {
+          player.activeTrinkets.push(tdec.data.cardId);
+          player.followedDecisions++;
+          player.decisionsMade.push({ turn: turn, action: "pick_trinket", cardId: tdec.data.cardId, followed: true });
+          break; // 每回合只选1个饰品
         }
       }
     }

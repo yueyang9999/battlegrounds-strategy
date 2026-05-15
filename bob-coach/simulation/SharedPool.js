@@ -51,6 +51,12 @@ var SharedPool = class SharedPool {
       if (c.card_type !== "minion") continue;
       if (!c.tier || c.tier < 1 || c.tier > 6) continue;
 
+      // 排除伙伴/任务/畸变等特殊随从 (不进入公共卡池)
+      if (cardId.indexOf("Buddy") !== -1 || cardId.indexOf("_Buddy") !== -1) continue;
+      if (cardId.indexOf("Quest") !== -1 || cardId.indexOf("_Quest") !== -1) continue;
+      if (cardId.indexOf("Anomaly") !== -1 || cardId.indexOf("_Anomaly") !== -1) continue;
+      if (cardId.indexOf("Reward") !== -1 || cardId.indexOf("_Reward") !== -1) continue;
+
       // 检查种族是否在局
       var inGame = false;
       var tribes = c.minion_types_cn || [];

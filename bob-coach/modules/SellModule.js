@@ -29,11 +29,11 @@ var SellModule = class SellModule extends BaseModule {
     var powerTable = (ctx.decisionTables && ctx.decisionTables.board_power_estimation &&
       ctx.decisionTables.board_power_estimation.minion_base_power) || {};
 
-    // 检查商店是否有高价值卡（weight ≥ 7）
+    // 检查商店是否有高价值卡（weight ≥ 6, 或 T5+）
     var shopHasHighValue = false;
     for (var s = 0; s < shopMinions.length; s++) {
       var shopW = this._getWeight(shopMinions[s], ctx);
-      if (shopW >= 7) { shopHasHighValue = true; break; }
+      if (shopW >= 6 || shopMinions[s].tier >= 5) { shopHasHighValue = true; break; }
     }
 
     for (var i = 0; i < boardMinions.length; i++) {
@@ -41,16 +41,25 @@ var SellModule = class SellModule extends BaseModule {
       var conditionsMet = 0;
       var reasons = [];
 
-      // 保护：有战斗关键词的随从不卖（价值被 underestimate）
+      // 金色随从不建议出售
+      if (minion.golden) continue;
+
+      // 战斗关键词保护：圣盾/复生/风怒是核心战力，除非满场+高价值商店卡
       var mechs = minion.mechanics || [];
-      var hasCombatMech = false;
+      var hasCoreCombatMech = false;
+      var hasSecondaryCombatMech = false;
       for (var mi = 0; mi < mechs.length; mi++) {
         if (mechs[mi] === "DIVINE_SHIELD" || mechs[mi] === "REBORN" ||
-            mechs[mi] === "WINDFURY" || mechs[mi] === "VENOMOUS" || mechs[mi] === "TAUNT") {
-          hasCombatMech = true; break;
+            mechs[mi] === "WINDFURY") {
+          hasCoreCombatMech = true;
+        }
+        if (mechs[mi] === "VENOMOUS" || mechs[mi] === "TAUNT") {
+          hasSecondaryCombatMech = true;
         }
       }
-      if (hasCombatMech) continue; // 保留有价值机制的随从
+      // 有核心战力关键词：只在满场+高价值商店时考虑出售
+      var fullBoardPressure = boardMinions.length >= 7 && shopHasHighValue;
+      if (hasCoreCombatMech && !fullBoardPressure) continue;
 
       // 提前判断：是否有主导种族、本随从是否匹配
       var hasDominantTribe = false;
@@ -96,9 +105,15 @@ var SellModule = class SellModule extends BaseModule {
         reasons.push("等级差" + tierGap + "级，严重落后");
       }
 
-      // 至少满足2个条件, 或 (条件A单独+高价值商店卡), 或 (已确立主导种族+无协同且3+同族)
+      // 二级战力关键词惩罚：降低1个条件
+      if (hasSecondaryCombatMech) conditionsMet--;
+
+      // 满场+高价值商店卡：降低门槛（满场压力下1条件即可触发）
+      if (fullBoardPressure) conditionsMet = Math.max(conditionsMet, 1);
+
+      // 至少满足2个条件, 或 (满场+高价值商店卡且等级至少差1), 或 (主导种族+无协同且3+同族)
       var shouldSell = conditionsMet >= 2 ||
-        (conditionsMet >= 1 && boardMinions.length >= 7 && shopHasHighValue && tierGap >= 1) ||
+        (fullBoardPressure && tierGap >= 1) ||
         (conditionsMet >= 1 && hasDominantTribe && !minionHasTribe && dominantTribeCount >= 3);
 
       if (shouldSell) {
@@ -107,6 +122,11 @@ var SellModule = class SellModule extends BaseModule {
           : 1;
 
         var confidence = Math.min(0.85, 0.4 + conditionsMet * 0.15);
+        // 经济型随从卖出是倒转常规操作，提高置信度使其优先通过
+        if (this._isEconomyMinion(minion)) {
+          confidence = Math.min(0.85, confidence + 0.12);
+          reasons.push("经济牌轮换");
+        }
         var label = "建议卖掉 " + (minion.name_cn || minion.cardId) + "（" + reasons.join("，") + "）";
         var message = "卖 " + (minion.name_cn || minion.cardId);
 
@@ -122,7 +142,76 @@ var SellModule = class SellModule extends BaseModule {
       }
     }
 
-    return decisions;
+    // 动态卖牌上限：根据场面战力、回合、经济型随从数量自适应调整
+    if (decisions.length <= 1) return decisions;
+    decisions.sort(function(a, b) {
+      return (b.priority * b.confidence) - (a.priority * a.confidence);
+    });
+    var maxSells = this._calcDynamicSellLimit(ctx, shopHasHighValue);
+    return decisions.slice(0, maxSells);
+  }
+
+  /**
+   * 动态卖牌上限（分数制，需多条件叠加才升档）。
+   *
+   * 各条件贡献分数：
+   *  - 场面碾压 (boardPower >= 2.0)：+0.6
+   *  - 后期搜核 (turn >= 9, gold >= 9)：+0.4
+   *  - 满场压力 (board >= 7 + 商店高价值卡)：+0.5
+   *  - 倒转阵容 (经济型随从 >= 3)：+0.5
+   *
+   * floor(总分) = 最终上限，范围 1-2。
+   * 单条件不足以升档，需多条件叠加（如强场面+后期，或满场+经济）。
+   */
+  _calcDynamicSellLimit(ctx, shopHasHighValue) {
+    var boardLen = (ctx.boardMinions || []).length;
+    var boardPower = ctx.boardPower || 0;
+    var turn = ctx.turn || 1;
+    var gold = ctx.gold || 0;
+
+    var score = 1.0;
+
+    if (boardPower >= 2.0) score += 0.6;
+    if (turn >= 9 && gold >= 9) score += 0.4;
+    if (boardLen >= 7 && shopHasHighValue) score += 0.5;
+
+    var econCount = this._countEconomyMinions(ctx);
+    if (econCount >= 3) score += 0.5;
+
+    // 额外：场面极强(boardPower>=2.5)+后期 再+0.3 确保极端优势下可升档
+    if (boardPower >= 2.5 && turn >= 9) score += 0.3;
+
+    return Math.min(2, Math.floor(score));
+  }
+
+  /**
+   * 判断单张随从是否为经济型（可安全轮换）。
+   * 判定：文本含铸币/出售获利/免费刷新关键词，或低费战吼引擎。
+   */
+  _isEconomyMinion(minion) {
+    var text = (minion.text_cn || "").toLowerCase();
+    var mechs = minion.mechanics || [];
+    var hasBattlecry = false;
+    for (var i = 0; i < mechs.length; i++) {
+      if (mechs[i] === "BATTLECRY") { hasBattlecry = true; break; }
+    }
+    if (/铸币|金币|获得.*枚|gain.*coin/i.test(text)) return true;
+    if (/出售.*铸币|出售.*获得|sell.*coin|sell.*gain/i.test(text)) return true;
+    if (/刷新|refresh/i.test(text) && /免费|free|减.*费|cost.*less/i.test(text)) return true;
+    if ((minion.tier || 3) <= 2 && hasBattlecry && /铸币|金币|gain.*coin|出售|sell/i.test(text)) return true;
+    return false;
+  }
+
+  /**
+   * 统计场面上的经济型随从数量。
+   */
+  _countEconomyMinions(ctx) {
+    var board = ctx.boardMinions || [];
+    var count = 0;
+    for (var i = 0; i < board.length; i++) {
+      if (this._isEconomyMinion(board[i])) count++;
+    }
+    return count;
   }
 
   _getWeight(minion, ctx) {
@@ -132,6 +221,10 @@ var SellModule = class SellModule extends BaseModule {
     var tribeWeights = dominantTribe ? weights[dominantTribe] : null;
     var neutralW = weights.neutral || {};
     var bestW = (tribeWeights && tribeWeights[cid]) ? tribeWeights[cid] : neutralW[cid];
-    return bestW ? (bestW.weight || 0) : 0;
+    var w = bestW ? (bestW.weight || 0) : 0;
+    // 兜底：T5+或高身材的未知卡牌也应视为高价值
+    if (w === 0 && minion.tier >= 5) w = 6;
+    else if (w === 0 && minion.tier >= 4 && ((minion.attack || 0) + (minion.health || 0)) >= 16) w = 6;
+    return w;
   }
 };

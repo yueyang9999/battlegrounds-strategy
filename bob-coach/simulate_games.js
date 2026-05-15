@@ -24,6 +24,8 @@ loadModule("modules/SellModule.js");
 loadModule("modules/OpponentAnalysisModule.js");
 loadModule("modules/RefreshModule.js");
 loadModule("modules/FreezeModule.js");
+loadModule("modules/CardDatabase.js");
+loadModule("modules/ProfileEngine.js");
 
 // Load data
 var dt = JSON.parse(fs.readFileSync(path.join(base, "data", "decision_tables.json"), "utf-8"));
@@ -77,6 +79,18 @@ for (var i = 0; i < heroStats.length; i++) {
   heroStatsById[heroStats[i].hero_card_id] = heroStats[i];
 }
 
+// Load player profile for personalized Bob Coach
+var playerProfile = null;
+var profileEngine = null;
+try {
+  playerProfile = JSON.parse(fs.readFileSync(path.join(base, "data", "player_profile.json"), "utf-8"));
+  profileEngine = new ProfileEngine(null, null);
+  profileEngine.loadExtractedProfile(playerProfile);
+  console.log("玩家画像已加载: " + playerProfile.totalGamesCombined + " 局, 风格: " + profileEngine.inferPlaystyle());
+} catch (e) {
+  console.log("未找到玩家画像文件，使用通用策略");
+}
+
 // ═══════════════════════════════════════════════════════════
 // 8-PLAYER SIMULATION ENGINE
 // ═══════════════════════════════════════════════════════════
@@ -95,11 +109,21 @@ loadSim("DamageSystem.js");
 loadSim("CombatResolver.js");
 loadSim("PlayerAgent.js");
 loadSim("HeuristicAI.js");
+loadSim("RandomAI.js");
 loadSim("MatchmakingSystem.js");
 loadSim("WisdomBall.js");
 loadSim("PartnerSystem.js");
 loadSim("OpponentTracker.js");
+loadSim("CompMatcher.js");
+loadSim("TrinketOfferSystem.js");
 loadSim("SimulationEngine.js");
+
+// ── 初始化饰品系统 ──
+var trinketTips = {};
+try {
+  trinketTips = JSON.parse(fs.readFileSync(path.join(base, "data", "trinket_tips.json"), "utf-8"));
+} catch(e) { /* ignore */ }
+TrinketOfferSystem.init(cardsArr, trinketTips);
 
 // Hero leveling curve overrides
 var heroOverrides = (dt.leveling_curve && dt.leveling_curve.hero_overrides) || {};
@@ -114,6 +138,7 @@ SimulationEngine.init({
   lookup: lookup,
   levelingCurve: dt.leveling_curve,
   heroOverrides: heroOverrides,
+  profileEngine: profileEngine,
 });
 
 // ═══════════════════════════════════════════════════════════

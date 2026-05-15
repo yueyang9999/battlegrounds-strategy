@@ -68,8 +68,8 @@ var Orchestrator = class Orchestrator {
     return decisions.filter(function (d) {
       if (!d || !d.type) return false;
       if (d.confidence < minConfidence) return false;
-      // 不在商店阶段时过滤购买类建议
-      if (ctx.gamePhase !== "shop") {
+      // 不在商店/招募阶段时过滤购买类建议
+      if (ctx.gamePhase !== "shop" && ctx.gamePhase !== "recruit") {
         if (d.type === "minion_pick" || d.type === "spell_buy" || d.type === "refresh" || d.type === "refresh_smart" || d.type === "freeze" || d.type === "unfreeze") {
           return false;
         }

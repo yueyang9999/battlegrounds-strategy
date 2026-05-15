@@ -118,6 +118,13 @@ var LevelingModule = class LevelingModule extends BaseModule {
     if (turn <= 3) threshold += turnAdj.early || 0.1;
     else if (turn >= 8) threshold += turnAdj.late || -0.05;
 
+    // Board fill penalty: 随从数不足时提高升本门槛
+    var boardLen = (ctx.boardMinions || []).length;
+    var expectedMinions = Math.min(7, Math.floor(turn / 2) + 1);
+    if (boardLen < expectedMinions) {
+      threshold += 0.12 * (expectedMinions - boardLen);
+    }
+
     // Health adjustment
     var health = ctx.health || 25;
     if (health > 25) threshold += cfg.health_safe_above_25 || -0.08;
@@ -133,9 +140,9 @@ var LevelingModule = class LevelingModule extends BaseModule {
     if (compMatch >= 60) threshold += cfg.comp_forming_above_60 || -0.05;
     else if (compMatch < 30 && compMatch > 0) threshold += cfg.comp_weak_below_30 || 0.05;
 
-    // Clamp
+    // Clamp — 提高上限以允许场面惩罚生效
     var minT = cfg.min_threshold || 0.15;
-    var maxT = cfg.max_threshold || 0.55;
+    var maxT = cfg.max_threshold || 0.8;
     return Math.max(minT, Math.min(maxT, threshold));
   }
 

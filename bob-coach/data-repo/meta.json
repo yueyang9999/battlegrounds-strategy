@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-15T00:00:00.000Z",
+  "description": "Bob教练云端数据 — 由 scripts/upload_to_cloud.js 自动生成并推送",
+  "dataFiles": {
+    "playstyle_profiles/yueyang.json": {
+      "description": "玩家yueyang的玩法特征画像",
+      "generatedBy": "scripts/replay_simulation.js",
+      "features": ["levelingCurve", "racePreference", "mechanicPreference", "compAlignment", "goldEfficiency"]
+    },
+    "universal_features/ranking_features.json": {
+      "description": "全量数据MMR分段通用上分特征",
+      "generatedBy": "scripts/extract_universal_features.js",
+      "brackets": ["tier_0_6000", "tier_6001_8999", "tier_9000_plus"]
+    },
+    "universal_features/trinket_comparison.json": {
+      "description": "饰品赛季玩家模型 vs 通用模型对比测试",
+      "generatedBy": "scripts/trinket_comparative_test.js"
+    }
+  },
+  "segments_available": ["tier_0_6000", "tier_6001_8999", "tier_9000_plus"]
+}

@@ -101,6 +101,12 @@ var MinionPickModule = class MinionPickModule extends BaseModule {
         role = "tempo";
       }
 
+      // 个性化加成 (ProfileEngine)
+      if (ctx.profileEngine && ctx.profileEngine.hasEnoughData()) {
+        var boosted = ctx.profileEngine.boostScore(shopCard, weight);
+        if (boosted > weight) weight = boosted;
+      }
+
       var nonGoldCount = boardCounts[cid] || 0;
       var goldCount = goldenCounts[cid] || 0;
       var copiesNeeded = needsOnly2 ? 2 : 3;
@@ -262,10 +268,12 @@ var MinionPickModule = class MinionPickModule extends BaseModule {
     var confidence = 0.5 + (h.weight / 20);
 
     if (h.canTriple) {
-      confidence = Math.min(0.95, confidence + 0.2);
+      confidence = Math.min(0.98, confidence + 0.3);
+      // 三连标记：即使预算不足也应作为高优先级提示保留
+      priority = Math.max(priority, DecisionPriority.CORE_MINION);
     }
     if (h.isDiscoverMinion) {
-      confidence = Math.min(0.95, confidence + 0.05);
+      confidence = Math.min(0.98, confidence + 0.08);
     }
 
     var label = h.highlightType === "core" ? "核 买 " + h.name_cn :
@@ -301,6 +309,13 @@ var MinionPickModule = class MinionPickModule extends BaseModule {
 
     var targetMissing = ctx.currentComp.missingCards.slice(0, 3);
 
+    // 使用 PoolTracker 实时概率
+    var probPct = 12;
+    if (ctx.poolTracker && targetMissing.length > 0) {
+      var poolProb = ctx.poolTracker.refreshProbability(targetMissing[0], ctx.tavernTier);
+      probPct = Math.round(poolProb * 100);
+    }
+
     return this._decide(
       "refresh",
       DecisionPriority.REFRESH_HINT,
@@ -308,9 +323,9 @@ var MinionPickModule = class MinionPickModule extends BaseModule {
       "建议搜牌找核心",
       "当前" + (ctx.currentComp.comp.name_cn || ctx.currentComp.comp.name) +
       "核心卡进度 " + ctx.currentComp.overlapCount + "/" + ctx.currentComp.totalComp +
-      "，缺少: " + targetMissing.join("、") + "。刷出其中一张的概率约12%。",
+      "，缺少: " + targetMissing.join("、") + "。刷出其中一张的概率约" + probPct + "%。",
       0.55,
-      { missingCards: targetMissing }
+      { missingCards: targetMissing, refreshProb: probPct }
     );
   }
 };

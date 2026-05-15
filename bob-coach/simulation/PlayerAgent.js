@@ -30,6 +30,7 @@ var PlayerAgent = class PlayerAgent {
     this.heroPowerCost = 1;
 
     this.trinkets = [];
+    this.activeTrinkets = [];
     this.rewards = [];
     this.anomaly = null;
 
@@ -83,6 +84,7 @@ var PlayerAgent = class PlayerAgent {
           attack: card.attack || 1,
           health: card.health || 1,
           tribes_cn: card.minion_types_cn || [],
+          minion_types_cn: card.minion_types_cn || [],
           mechanics: mechs,
           text_cn: card.text_cn || "",
           position: i,
