@@ -2,40 +2,40 @@
    Bob教练 — 覆盖层设计系统
    ═══════════════════════════════════════════ */
 
-/* ── CSS 变量（暖色酒馆主题 "Tavern Mystic"） ── */
+/* ── CSS 变量（极简高对比度） ── */
 :root {
-  --c-positive: rgba(212, 175, 55, 0.9);
-  --c-positive-glow: rgba(212, 175, 55, 0.28);
-  --c-accent: rgba(212, 175, 55, 0.88);
-  --c-accent-glow: rgba(212, 175, 55, 0.24);
-  --c-danger: rgba(220, 80, 40, 0.88);
-  --c-danger-glow: rgba(220, 80, 40, 0.25);
-  --c-blue: rgba(70, 150, 220, 0.85);
-  --c-blue-glow: rgba(70, 150, 220, 0.22);
-  --c-purple: rgba(150, 110, 220, 0.85);
-  --c-purple-glow: rgba(150, 110, 220, 0.22);
-  --c-white: rgba(255, 248, 230, 0.9);
+  --c-positive: rgba(120, 200, 120, 0.92);
+  --c-positive-glow: rgba(120, 200, 120, 0.15);
+  --c-accent: rgba(170, 180, 200, 0.9);
+  --c-accent-glow: rgba(170, 180, 200, 0.12);
+  --c-danger: rgba(230, 75, 55, 0.9);
+  --c-danger-glow: rgba(230, 75, 55, 0.15);
+  --c-blue: rgba(80, 160, 230, 0.88);
+  --c-blue-glow: rgba(80, 160, 230, 0.12);
+  --c-purple: rgba(160, 120, 220, 0.85);
+  --c-purple-glow: rgba(160, 120, 220, 0.12);
+  --c-white: rgba(240, 242, 248, 0.95);
   --tip-opacity: 0.3;
   --bg-overlay: rgba(0, 0, 0, var(--tip-opacity));
-  --bg-tip: rgba(16, 13, 8, 0.93);
-  --bg-panel: rgba(16, 13, 8, 0.93);
-  --bg-card: rgba(22, 18, 10, 0.85);
-  --bg-hover: rgba(36, 28, 14, 0.9);
-  --bg-input: rgba(10, 8, 4, 0.8);
-  --border-subtle: rgba(140, 110, 50, 0.35);
-  --border-accent: rgba(212, 175, 55, 0.4);
-  --text-primary: rgba(255, 245, 220, 0.9);
-  --text-secondary: rgba(255, 245, 220, 0.62);
-  --text-muted: rgba(255, 245, 220, 0.35);
+  --bg-tip: rgba(10, 13, 20, 0.94);
+  --bg-panel: rgba(10, 13, 20, 0.94);
+  --bg-card: rgba(16, 20, 28, 0.9);
+  --bg-hover: rgba(26, 32, 42, 0.94);
+  --bg-input: rgba(6, 8, 12, 0.9);
+  --border-subtle: rgba(120, 135, 160, 0.28);
+  --border-accent: rgba(160, 175, 200, 0.35);
+  --text-primary: rgba(235, 240, 250, 0.94);
+  --text-secondary: rgba(200, 210, 225, 0.68);
+  --text-muted: rgba(155, 165, 180, 0.42);
   --font-size: 13px;
   --font-display: "STKaiti", "KaiTi", "楷体", "SimSun", "Noto Serif CJK SC", serif;
   --font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "PingFang SC", sans-serif;
-  --r-sm: 4px;
-  --r-md: 6px;
-  --r-lg: 10px;
-  --ease: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  --ease-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  --shadow-text: 0 1px 3px rgba(0, 0, 0, 0.88);
+  --r-sm: 3px;
+  --r-md: 5px;
+  --r-lg: 8px;
+  --ease: 0.2s ease;
+  --ease-spring: 0.25s ease;
+  --shadow-text: none;
 }
 
 /* ── 基础重置 ── */
@@ -43,6 +43,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* ── 全局滚动条 ── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 175, 200, 0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 175, 200, 0.4);
 }
 html {
   font-size: var(--font-size);
@@ -57,6 +73,48 @@ body {
   height: 100vh;
   user-select: none;
   -webkit-user-select: none;
+  contain: layout style paint;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   双窗口模式控制
+   ═══════════════════════════════════════════ */
+
+/* Display 模式（默认）：隐藏所有交互组件，整个窗口点击穿透 */
+body:not(.mode-control) .control-only { display: none !important; }
+
+/* Control 模式：恢复鼠标事件，隐藏纯展示组件 */
+body.mode-control { pointer-events: auto; }
+body.mode-control .display-only { display: none !important; }
+
+/* Control 模式：面板填满 control 窗口 */
+body.mode-control #suggestion-badge {
+  top: 2%; right: 2%; max-width: 100%; width: 96%;
+}
+body.mode-control .comp-panel {
+  width: 100%; max-width: 320px; right: 0;
+}
+body.mode-control .tactical-board {
+  width: 100%; max-width: 320px; right: 0; left: auto; transform: none;
+}
+body.mode-control #hero-select-panel {
+  width: 100%; max-width: 310px; right: 2%; top: 5%; left: auto; transform: none;
+}
+body.mode-control #trinket-select-panel {
+  width: 100%; max-width: 280px; right: 2%; top: 5%; left: auto; transform: none;
+}
+body.mode-control #secondary-hints {
+  width: 100%; max-width: 310px; right: 2%; top: calc(5% + 30px);
+}
+body.mode-control #gear-menu {
+  top: 1.5%; right: 2%;
+}
+body.mode-control #disconnect-btn {
+  right: 2%; bottom: 8%;
+}
+body.mode-control #demo-indicator {
+  top: 2%; right: 2%;
 }
 
 /* ── 根容器 ── */
@@ -71,19 +129,22 @@ body {
    ═══════════════════════════════════════════ */
 #suggestion-badge {
   position: absolute;
-  top: 8%;
-  right: 18%;
-  background: linear-gradient(135deg, rgba(20, 15, 6, var(--tip-opacity)), rgba(30, 22, 10, var(--tip-opacity)));
+  top: 5%;
+  right: 3%;
+  max-width: 24vw;
+  background: rgba(10, 13, 20, 0.92);
   border-radius: 3px 12px 3px 12px;
   padding: 4px 12px;
   font-family: var(--font-display);
   font-size: 1.08rem;
   font-weight: bold;
   color: var(--c-white);
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  text-shadow: none;
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+  box-shadow: none;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   z-index: 50;
   transition: opacity var(--ease), transform var(--ease), box-shadow var(--ease);
   pointer-events: auto;
@@ -236,12 +297,12 @@ body {
 #disconnect-btn:hover {
   opacity: 1;
   border-color: var(--c-accent);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 #disconnect-btn.active {
   opacity: 1;
   border-color: var(--c-accent);
-  box-shadow: 0 0 24px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
   transform: translateX(-50%) scale(1.12);
 }
 #disconnect-btn .dc-dot {
@@ -296,7 +357,7 @@ body {
 }
 #disconnect-btn.active #dc-label {
   color: var(--c-accent);
-  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  text-shadow: none;
 }
 
 /* ═══════════════════════════════════════════
@@ -308,14 +369,13 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
   border-radius: var(--r-lg);
   padding: 16px 24px;
   border: 1px solid var(--c-accent);
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
   z-index: 200;
   text-align: center;
+  font-size: 12px;
   transition: opacity var(--ease), transform 0.3s var(--ease-spring);
 }
 .dc-toast.hidden {
@@ -343,9 +403,9 @@ body {
    ═══════════════════════════════════════════ */
 #gear-menu {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 90;
+  top: 2%;
+  right: 2%;
+  z-index: 120;
 }
 .gear-icon {
   width: 38px;
@@ -365,24 +425,30 @@ body {
 }
 .gear-icon:hover {
   opacity: 1;
-  transform: rotate(30deg);
-  text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+  transform: scale(1.1);
 }
 .gear-dropdown {
   position: absolute;
   top: 44px;
-  right: 0;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 100% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 60%);
   border-radius: var(--r-md);
   border: 1px solid var(--border-accent);
   min-width: 160px;
   max-height: 60vh;
   overflow-y: auto;
-  z-index: 91;
+  z-index: 121;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   transition: opacity var(--ease), transform var(--ease);
+}
+/* 齿轮在右侧 → 下拉面板向左展开（默认） */
+.gear-dropdown.dropdown-right {
+  right: 0;
+  left: auto;
+}
+/* 齿轮在左侧 → 下拉面板向右展开 */
+.gear-dropdown.dropdown-left {
+  left: 0;
+  right: auto;
 }
 .gear-dropdown.hidden {
   opacity: 0;
@@ -417,139 +483,167 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   阵容面板 (Comp Panel) — 可拖拽浮动面板
+   阵容面板 (Comp Panel) — 自适应左右抽屉
    ═══════════════════════════════════════════ */
 .comp-panel {
   position: absolute;
+  top: 12%;
   right: 0;
-  top: 22%;
-  display: flex;
-  flex-direction: row-reverse;
   z-index: 100;
-  transition: transform 0.35s var(--ease-spring);
-  max-height: 72vh;
+  width: min(320px, 24vw);
+  max-height: 68vh;
+  height: auto;
+  pointer-events: none;
+  transition: transform 0.3s var(--ease);
 }
 
-/* Collapsed: only the handle tab is visible */
+/* 收起：只显示把手 */
 .comp-panel.hidden .comp-content {
   display: none;
 }
 
-/* Comp panel section staggered fade-in */
-.comp-section {
-  animation: section-fade-in 0.5s var(--ease) both;
-}
-.comp-section:nth-child(2) { animation-delay: 0.05s; }
-.comp-section:nth-child(3) { animation-delay: 0.1s; }
-.comp-section:nth-child(4) { animation-delay: 0.15s; }
-.comp-section:nth-child(5) { animation-delay: 0.2s; }
-
-@keyframes section-fade-in {
-  from {
-    opacity: 0;
-    transform: translateX(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
+/* ── 把手 ── */
 .comp-handle {
-  width: 22px;
-  height: 52px;
-  align-self: center;
-  background: rgba(16, 13, 8, 0.65);
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 28px;
+  min-height: 56px;
+  background: var(--bg-panel);
   border: 1px solid var(--border-accent);
   border-right: none;
-  border-radius: var(--r-md) 0 0 var(--r-md);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
-  transition: opacity var(--ease), background var(--ease);
-  position: relative;
+  transition: background var(--ease), opacity var(--ease), border-radius var(--ease);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: auto;
+  border-radius: var(--r-lg);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .comp-handle:hover {
   opacity: 1;
   background: var(--bg-hover);
 }
-#comp-handle-icon {
-  font-size: 11px;
+.comp-panel:not(.hidden) .comp-handle {
+  border-radius: var(--r-lg);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#comp-handle-label {
+  font-size: 12px;
   color: var(--c-accent);
-  transition: transform 0.25s var(--ease);
-}
-#comp-handle-icon.flipped {
-  transform: scaleX(-1);
-}
-.comp-handle:hover::after {
-  content: attr(title);
-  position: absolute;
-  right: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--bg-tip);
-  color: var(--text-primary);
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  white-space: nowrap;
-  border: 1px solid var(--border-accent);
-  pointer-events: none;
-  z-index: 200;
-}
-.comp-content {
-  width: 320px;
-  max-height: 72vh;
-  background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 30% 10%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 90%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
-  border-left: 1px solid var(--border-accent);
-  border-radius: 0 var(--r-md) var(--r-md) 0;
-  padding: 16px 14px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.comp-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  cursor: grab;
+  writing-mode: vertical-rl;
+  letter-spacing: 2px;
   user-select: none;
   -webkit-user-select: none;
 }
-.comp-header:active {
-  cursor: grabbing;
+
+/* ── 内容面板 ── */
+.comp-content {
+  position: absolute;
+  top: 0;
+  right: 28px;
+  width: calc(100% - 28px);
+  max-height: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-accent);
+  border-right: none;
+  border-radius: var(--r-md);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
 }
-.comp-header > span:first-child {
+
+/* 固定头部：名称 + 匹配度 + 关闭按钮 */
+.comp-content-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+}
+
+#comp-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+#comp-close-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* 可滚动内容区 */
+.comp-content-body {
+  flex: 1;
+  min-height: 0;
+  max-height: calc(68vh - 48px);
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* 各内容块 */
+.comp-section {
+  margin-bottom: 8px;
+}
+.comp-section:last-child {
+  margin-bottom: 0;
+}
+.comp-section.no-content {
+  display: none;
+}
+
+.comp-section-title {
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 10px;
   color: var(--c-accent);
-  text-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  opacity: 0.6;
+  margin-bottom: 3px;
+  text-transform: uppercase;
   letter-spacing: 2px;
 }
+
 .comp-match-badge {
   font-size: 11px;
   background: var(--c-accent);
-  color: #1a1408;
+  color: #1a1a20;
   padding: 1px 8px;
   border-radius: var(--r-sm);
   font-weight: bold;
+  white-space: nowrap;
 }
+
+/* Comp panel section staggered fade-in */
 .comp-section {
-  margin-bottom: 14px;
+  animation: section-fade-in 0.4s var(--ease) both;
 }
-.comp-section-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  color: var(--c-accent);
-  opacity: 0.7;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.comp-section:nth-child(2) { animation-delay: 0.04s; }
+.comp-section:nth-child(3) { animation-delay: 0.08s; }
+.comp-section:nth-child(4) { animation-delay: 0.12s; }
+.comp-section:nth-child(5) { animation-delay: 0.16s; }
+
+@keyframes section-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .mini-board {
   display: flex;
@@ -703,18 +797,14 @@ body {
    ═══════════════════════════════════════════ */
 .tactical-board {
   position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 420px;
+  top: 12%;
+  right: 2%;
+  width: min(400px, 23vw);
   max-height: 65vh;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 30% 10%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 75% 80%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 8px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   z-index: 150;
   overflow: hidden;
   transition: opacity 0.25s var(--ease), transform 0.35s var(--ease-spring);
@@ -722,7 +812,7 @@ body {
 .tactical-board.hidden {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-50%) translateY(16px) scale(0.96);
+  transform: translateY(16px) scale(0.96);
 }
 .tactical-header {
   display: flex;
@@ -861,13 +951,10 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(180, 120, 30, 0.04) 0%, transparent 50%);
   border-radius: var(--r-lg);
   padding: 28px 32px;
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 80px rgba(212, 175, 55, 0.08), 0 12px 50px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   text-align: center;
 }
 .agreement-modal h2 {
@@ -875,7 +962,7 @@ body {
   font-size: 22px;
   color: var(--c-accent);
   margin-bottom: 12px;
-  text-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
+  text-shadow: none;
   letter-spacing: 3px;
 }
 .agreement-body {
@@ -916,22 +1003,22 @@ body {
   margin-top: 3px;
 }
 .btn-primary {
-  background: linear-gradient(135deg, #7a5c1e, #b8903a);
-  transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
+  background: rgba(120, 140, 170, 0.25);
+  border: 1px solid rgba(160, 175, 200, 0.4);
+  transition: background var(--ease), border-color var(--ease);
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, #8e6c28, #c9a34a);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
-  transform: translateY(-1px);
+  background: rgba(140, 160, 190, 0.35);
+  border-color: rgba(180, 195, 220, 0.55);
 }
 .btn-secondary {
-  background: linear-gradient(135deg, #4a6a3a, #5c8a4c);
-  transition: background var(--ease), transform var(--ease), box-shadow var(--ease);
+  background: rgba(100, 130, 100, 0.22);
+  border: 1px solid rgba(130, 160, 130, 0.35);
+  transition: background var(--ease), border-color var(--ease);
 }
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #5a7c48, #6c9c5a);
-  box-shadow: 0 0 20px rgba(100, 180, 80, 0.2);
-  transform: translateY(-1px);
+  background: rgba(120, 150, 120, 0.3);
+  border-color: rgba(150, 180, 150, 0.5);
 }
 .agreement-check {
   display: flex;
@@ -968,12 +1055,9 @@ body {
   flex-direction: column;
   font-size: 13px;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 12px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 .settings-modal .tactical-header { flex-shrink: 0; font-size: 14px; }
@@ -1074,7 +1158,7 @@ body {
   border-top: 1px solid var(--border-accent);
 }
 .btn-cancel {
-  background: rgba(255,255,255,0.08);
+  background: transparent;
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-md);
@@ -1084,7 +1168,7 @@ body {
   transition: all var(--ease);
 }
 .btn-cancel:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
   color: var(--text-primary);
 }
 
@@ -1096,12 +1180,9 @@ body {
   max-height: 85vh;
   overflow-y: auto;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 10%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 90%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 12px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
 .about-body {
   padding: 14px 16px;
@@ -1134,12 +1215,9 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 10%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 90%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 12px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 .legend-body {
@@ -1183,24 +1261,26 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
 }
 .legend-icon-dot.buy_core {
-  background: rgba(220, 55, 40, 0.9);
+  background: rgba(60, 170, 80, 0.9);
   color: #fff;
+  border: 2px solid rgba(220, 55, 40, 0.9);
   box-shadow: 0 0 4px rgba(255, 60, 40, 0.4);
 }
 .legend-icon-dot.buy_power {
   background: rgba(50, 140, 200, 0.88);
   color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.7);
 }
 .legend-icon-dot.buy_triple {
   background: rgba(235, 150, 30, 0.92);
   color: #1a1000;
+  border: 2px solid rgba(30, 20, 0, 0.6);
   box-shadow: 0 0 4px rgba(255, 160, 20, 0.4);
 }
 .legend-icon-dot.sell {
-  background: rgba(180, 60, 50, 0.85);
-  color: #fff;
-  border-style: dashed;
-  border-color: rgba(255, 120, 100, 0.6);
+  background: transparent;
+  color: rgba(220, 80, 60, 0.9);
+  border: 2px dashed rgba(220, 80, 60, 0.8);
 }
 .legend-deco {
   font-size: 16px;
@@ -1283,12 +1363,9 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 10%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 90%, rgba(180, 120, 30, 0.03) 0%, transparent 50%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 12px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 .rules-body {
@@ -1496,7 +1573,7 @@ body {
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, rgba(150, 110, 220, 0.7), rgba(100, 60, 180, 0.7));
+  background: rgba(100, 80, 160, 0.7);
   color: var(--c-white);
   padding: 3px 14px;
   border-radius: 0 0 var(--r-md) var(--r-md);
@@ -1507,7 +1584,7 @@ body {
   z-index: 95;
   display: flex;
   gap: 8px;
-  box-shadow: 0 2px 12px rgba(150, 110, 220, 0.3);
+  box-shadow: none;
 }
 .demo-indicator.hidden {
   display: none;
@@ -1517,13 +1594,11 @@ body {
 .quit-modal {
   width: 340px;
   background: var(--bg-panel);
-  background-image:
-    radial-gradient(ellipse at 50% 10%, rgba(212, 175, 55, 0.06) 0%, transparent 60%);
   border-radius: var(--r-lg);
   border: 1px solid var(--border-accent);
   padding: 24px 28px;
   text-align: center;
-  box-shadow: 0 0 60px rgba(212, 175, 55, 0.06), 0 12px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
 .quit-modal h3 {
   font-family: var(--font-display);
@@ -1605,8 +1680,9 @@ body {
    ═══════════════════════════════════════════ */
 .secondary-hints {
   position: absolute;
-  top: calc(8% + 32px);
-  right: 18%;
+  top: calc(5% + 32px);
+  right: 3%;
+  max-width: 24vw;
   display: flex;
   flex-direction: row;
   gap: 6px;
@@ -1681,7 +1757,7 @@ body {
 /* ── 建议徽章新增类型 ── */
 #suggestion-badge.hero-power {
   border-color: rgba(212, 175, 55, 0.7);
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.18);
+  box-shadow: none;
 }
 #suggestion-badge.spell {
   border-color: rgba(150, 110, 220, 0.6);
@@ -1740,7 +1816,7 @@ body {
   border-radius: var(--r-md);
   padding: 4px 10px;
   min-width: 280px;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.08);
+  box-shadow: none;
   transition: opacity var(--ease);
 }
 #combat-predictor.hidden {
@@ -1810,11 +1886,10 @@ body {
 /* ═══════════ 英雄选择面板 ═══════════ */
 #hero-select-panel {
   position: absolute;
-  bottom: 14%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 290px;
-  max-height: 260px;
+  top: 28%;
+  right: 3%;
+  width: min(290px, 22vw);
+  max-height: 50vh;
   background: rgba(18, 18, 34, 0.88);
   border: 1px solid rgba(240, 192, 96, 0.3);
   border-radius: 8px;
@@ -1938,10 +2013,10 @@ body {
 /* ═══════════ 饰品选择面板 ═══════════ */
 #trinket-select-panel {
   position: absolute;
-  top: 22%;
-  right: 6%;
-  width: 260px;
-  max-height: 300px;
+  top: 48%;
+  right: 3%;
+  width: min(260px, 22vw);
+  max-height: 40vh;
   background: rgba(18, 18, 34, 0.88);
   border: 1px solid rgba(240, 192, 96, 0.3);
   border-radius: 8px;

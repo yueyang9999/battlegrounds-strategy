@@ -8,6 +8,7 @@ const {
   ipcMain,
   nativeImage,
   globalShortcut,
+  screen,
 } = require("electron");
 const path = require("path");
 const fs = require("fs");
@@ -24,7 +25,8 @@ const LOG_DIR = path.join(USER_DATA, "logs");
 const SESSIONS_DIR = path.join(USER_DATA, "sessions");
 
 // ── 全局状态 ──
-let overlayWin = null;
+let displayWin = null;   // 全屏展示窗口（永远穿透鼠标）
+let controlWin = null;   // 右侧控制面板（捕获自身区域鼠标）
 let tray = null;
 let settings = {};
 let gameWindowRect = null;
@@ -35,16 +37,35 @@ let logWatcher = null;
 let windowHiddenByUser = false;
 let gameTracker = null;
 
+// ═══════════════════════════════════════════════════════════
+// 双窗口 IPC 广播
+// ═══════════════════════════════════════════════════════════
+
+function sendToBoth(channel, data) {
+  if (displayWin && !displayWin.isDestroyed()) {
+    displayWin.webContents.send(channel, data);
+  }
+  if (controlWin && !controlWin.isDestroyed()) {
+    controlWin.webContents.send(channel, data);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 系统托盘
+// ═══════════════════════════════════════════════════════════
+
 function buildTrayMenu() {
   return Menu.buildFromTemplate([
     {
       label: windowHiddenByUser ? "显示面板" : "隐藏面板",
-      click: toggleWindowVisibility,
+      click: toggleControlWindow,
     },
     {
       label: "教练面板",
       click: () => {
-        if (overlayWin) overlayWin.webContents.send("toggle-panel");
+        if (controlWin && !controlWin.isDestroyed()) {
+          controlWin.webContents.send("toggle-panel");
+        }
       },
     },
     {
@@ -55,14 +76,18 @@ function buildTrayMenu() {
     {
       label: "设置",
       click: () => {
-        if (overlayWin) overlayWin.webContents.send("open-settings");
+        if (controlWin && !controlWin.isDestroyed()) {
+          controlWin.webContents.send("open-settings");
+        }
       },
     },
     { type: "separator" },
     {
       label: "关于 Bob教练",
       click: () => {
-        if (overlayWin) overlayWin.webContents.send("open-about");
+        if (controlWin && !controlWin.isDestroyed()) {
+          controlWin.webContents.send("open-about");
+        }
       },
     },
     {
@@ -75,17 +100,42 @@ function buildTrayMenu() {
   ]);
 }
 
-function toggleWindowVisibility() {
-  if (!overlayWin || overlayWin.isDestroyed()) return;
+function toggleControlWindow() {
+  if (!controlWin || controlWin.isDestroyed()) return;
   if (windowHiddenByUser) {
     windowHiddenByUser = false;
-    overlayWin.show();
-    overlayWin.focus();
+    controlWin.show();
   } else {
     windowHiddenByUser = true;
-    overlayWin.hide();
+    controlWin.hide();
   }
   if (tray) tray.setContextMenu(buildTrayMenu());
+}
+
+function createTray() {
+  const trayIcon = nativeImage.createFromDataURL(
+    "data:image/png;base64," +
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhklEQVQ4y6WTzUrDQBSFv2T" +
+    "SpGlJqzZu3Lhx48KNGzeC7+Ez+Ci+hC/hQ/gEPoJPIAiCgoiIP6U/Y9KMSe+9dyZjmqZWcb" +
+    "EMJDOZ+ebcOXd+hMiiIn8QAJER+QyIGIAFwBuC4JkNQMYkIp8AEWxGEQUCGYh/AH8CF4Apv" +
+    "osq8vQZQFqB0Doh6h1AEPQ/C24LQRAAUX8hCNCAJRkmDEe9RWZ7m1mcBUAwh1uB/tZmr/X+" +
+    "eQBqMwKcCbAF1wNr2QDQ3m5tNmqrj4+7dVh3a3A8HqQGAQQLQV0EfLf8OLxzEFrn1BsBHIj" +
+    "KbBhP+m5t77MYCOdgbGAMKAJ8n2Dxr3dBG+cSBMuAJ0C+OFwBSgCi2L3ZwDFvnQsRbAJLq" +
+    "fhqG3hNnEUDSY7rMqCV8s8A8F+La7JIMpLk5A65p9H09QNA2h27HUGArQBdylEAaGUBmLB" +
+    "gj3Ib2AIGKUC8FwRBO4BY5j4CloDpG2cygnF+SQrAnQAAAABJRU5ErkJggg=="
+  );
+  tray = new Tray(trayIcon);
+  tray.setToolTip("Bob教练 - 酒馆战棋教学插件");
+  tray.setContextMenu(buildTrayMenu());
+
+  tray.on("double-click", () => {
+    if (windowHiddenByUser) {
+      toggleControlWindow();
+    }
+    if (controlWin && !controlWin.isDestroyed() && controlWin.isVisible()) {
+      controlWin.webContents.send("toggle-panel");
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -146,96 +196,232 @@ function saveSettings() {
 // 游戏窗口跟踪
 // ═══════════════════════════════════════════════════════════
 
-function getHearthstoneWindowRect() {
-  try {
-    // Write PowerShell script to temp file to avoid escaping issues
-    const tmpFile = path.join(USER_DATA, "_hs_track.ps1");
-    const psScript = [
-      "$code = @'",
-      "using System;",
-      "using System.Runtime.InteropServices;",
-      "public class BCW32 {",
-      '    [DllImport("user32.dll")]',
-      "    public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);",
-      '    [DllImport("user32.dll")]',
-      "    public static extern bool IsWindowVisible(IntPtr hWnd);",
-      "    public struct RECT { public int Left, Top, Right, Bottom; }",
-      "}",
-      "'@",
-      "Add-Type -TypeDefinition $code -ErrorAction Stop",
-      "",
-      '$procs = Get-Process -Name "Hearthstone" -ErrorAction SilentlyContinue',
-      'if (-not $procs) { Write-Output "NOT_FOUND"; exit 2 }',
-      "foreach ($p in $procs) {",
-      "    if ($p.MainWindowHandle -ne 0) {",
-      "        if ([BCW32]::IsWindowVisible($p.MainWindowHandle)) {",
-      "            $r = New-Object BCW32+RECT",
-      "            [BCW32]::GetWindowRect($p.MainWindowHandle, [ref]$r)",
-      '            Write-Output "$($r.Left),$($r.Top),$($r.Right),$($r.Bottom)"',
-      "            exit 0",
-      "        }",
-      "    }",
-      "}",
-      'Write-Output "NOT_VISIBLE"',
-      "exit 1",
-    ].join("\n");
-    fs.writeFileSync(tmpFile, psScript, "utf-8");
-    const out = execSync(
-      `powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpFile}"`,
-      { timeout: 3000, windowsHide: true }
-    )
-      .toString()
-      .trim();
-    if (!out || out.includes("NOT_FOUND") || out.includes("NOT_VISIBLE")) return null;
-    const parts = out.split(",").map(Number);
-    if (parts.length !== 4 || parts.some(isNaN)) return null;
-    return {
-      left: parts[0],
-      top: parts[1],
-      width: parts[2] - parts[0],
-      height: parts[3] - parts[1],
-    };
-  } catch {
-    return null;
+function getDpiScaleFactor(gameRect) {
+  const allDisplays = screen.getAllDisplays();
+  const cx = gameRect.x + gameRect.width / 2;
+  const cy = gameRect.y + gameRect.height / 2;
+
+  let matched = null;
+  for (const d of allDisplays) {
+    const sf = d.scaleFactor || 1;
+    const physX = Math.round(d.bounds.x * sf);
+    const physY = Math.round(d.bounds.y * sf);
+    const physW = Math.round(d.bounds.width * sf);
+    const physH = Math.round(d.bounds.height * sf);
+    if (cx >= physX && cx < physX + physW && cy >= physY && cy < physY + physH) {
+      matched = d;
+      break;
+    }
   }
+  if (!matched) matched = screen.getPrimaryDisplay();
+
+  const sf = matched.scaleFactor;
+  if (sf <= 1) return 1;
+
+  if (gameRect.width > matched.bounds.width * 1.1) {
+    return sf;
+  }
+  return 1;
+}
+
+function getHearthstoneWindowRectAsync() {
+  return new Promise((resolve) => {
+    try {
+      if (!fs.existsSync(USER_DATA)) fs.mkdirSync(USER_DATA, { recursive: true });
+
+      const tmpFile = path.join(USER_DATA, "_hs_track.ps1");
+      const psScript = [
+        "$code = @'",
+        "using System;",
+        "using System.Runtime.InteropServices;",
+        "public class BCW32 {",
+        '    [DllImport("user32.dll")]',
+        "    public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);",
+        '    [DllImport("user32.dll")]',
+        "    public static extern bool IsWindowVisible(IntPtr hWnd);",
+        "    public struct RECT { public int Left, Top, Right, Bottom; }",
+        "}",
+        "'@",
+        "Add-Type -TypeDefinition $code -ErrorAction Stop",
+        "",
+        '$procs = Get-Process -Name "Hearthstone" -ErrorAction SilentlyContinue',
+        'if (-not $procs) { Write-Output "NOT_FOUND"; exit 2 }',
+        "foreach ($p in $procs) {",
+        "    if ($p.MainWindowHandle -ne 0) {",
+        "        if ([BCW32]::IsWindowVisible($p.MainWindowHandle)) {",
+        "            $r = New-Object BCW32+RECT",
+        "            $null = [BCW32]::GetWindowRect($p.MainWindowHandle, [ref]$r)",
+        '            Write-Output "$($r.Left),$($r.Top),$($r.Right),$($r.Bottom)"',
+        "            exit 0",
+        "        }",
+        "    }",
+        "}",
+        'Write-Output "NOT_VISIBLE"',
+        "exit 1",
+      ].join("\n");
+
+      fs.writeFileSync(tmpFile, psScript, "utf-8");
+
+      exec(
+        `powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpFile}"`,
+        { timeout: 3000, windowsHide: true },
+        (err, stdout) => {
+          if (err) {
+            log("debug", "HS window detect failed: " + err.message);
+            resolve(null);
+            return;
+          }
+
+          const out = (stdout || "").trim();
+          const lines = out.split(/\r?\n/);
+          const dataLine = lines.find(l => /^-?\d+,-?\d+,-?\d+,-?\d+$/.test(l));
+          if (dataLine) {
+            const parts = dataLine.split(",").map(Number);
+            if (parts.length === 4 && !parts.some(isNaN)) {
+              let result = {
+                x: parts[0],
+                y: parts[1],
+                width: parts[2] - parts[0],
+                height: parts[3] - parts[1],
+              };
+
+              const dpiScale = getDpiScaleFactor(result);
+              if (dpiScale > 1) {
+                result.x = Math.round(result.x / dpiScale);
+                result.y = Math.round(result.y / dpiScale);
+                result.width = Math.round(result.width / dpiScale);
+                result.height = Math.round(result.height / dpiScale);
+              }
+
+              log("debug", `HS window: ${result.x},${result.y} ${result.width}x${result.height}`);
+              resolve(result);
+              return;
+            }
+          }
+
+          if (out && !out.includes("NOT_FOUND") && !out.includes("NOT_VISIBLE")) {
+            log("debug", "HS window detect: unexpected output: " + out.substring(0, 100));
+          }
+          resolve(null);
+        }
+      );
+    } catch (e) {
+      log("debug", "HS window detect failed: " + e.message);
+      resolve(null);
+    }
+  });
+}
+
+function isHearthstoneForegroundAsync() {
+  return new Promise((resolve) => {
+    try {
+      if (!fs.existsSync(USER_DATA)) fs.mkdirSync(USER_DATA, { recursive: true });
+      const tmpFile = path.join(USER_DATA, "_hs_fg.ps1");
+      const psScript = [
+        "$code = @'",
+        "using System;",
+        "using System.Runtime.InteropServices;",
+        "public class BCFG {",
+        "    [DllImport(\"user32.dll\")]",
+        "    public static extern IntPtr GetForegroundWindow();",
+        "    [DllImport(\"user32.dll\")]",
+        "    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);",
+        "}",
+        "'@",
+        "Add-Type -TypeDefinition $code -ErrorAction Stop",
+        "$fw = [BCFG]::GetForegroundWindow()",
+        "if ($fw -eq [IntPtr]::Zero) { Write-Output 'false'; exit 0 }",
+        "$pid = 0",
+        "$null = [BCFG]::GetWindowThreadProcessId($fw, [ref]$pid)",
+        '$hs = Get-Process -Name "Hearthstone" -ErrorAction SilentlyContinue | Where-Object { $_.Id -eq $pid }',
+        "if ($hs) { Write-Output 'true' } else { Write-Output 'false' }",
+      ].join("\n");
+
+      fs.writeFileSync(tmpFile, psScript, "utf-8");
+
+      exec(
+        `powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpFile}"`,
+        { timeout: 2000, windowsHide: true },
+        (err, stdout) => {
+          if (err) { resolve(false); return; }
+          resolve((stdout || "").trim().toLowerCase() === "true");
+        }
+      );
+    } catch (_) {
+      resolve(false);
+    }
+  });
 }
 
 function startWindowTracking() {
-  const POLL_MS = 2000; // slower poll to avoid input lag
+  const POLL_MS = 2000;
+  let running = true;
 
-  function tick() {
-    const rect = getHearthstoneWindowRect();
-    if (overlayWin && !overlayWin.isDestroyed()) {
+  async function poll() {
+    if (!running) return;
+    if (!displayWin || displayWin.isDestroyed()) return;
+
+    try {
+      const rect = await getHearthstoneWindowRectAsync();
+
+      if (!running) return;
+      if (!displayWin || displayWin.isDestroyed()) return;
+
       if (rect) {
         if (
           !gameWindowRect ||
-          Math.abs(rect.left - gameWindowRect.left) > 5 ||
-          Math.abs(rect.top - gameWindowRect.top) > 5 ||
+          Math.abs(rect.x - gameWindowRect.x) > 5 ||
+          Math.abs(rect.y - gameWindowRect.y) > 5 ||
           Math.abs(rect.width - gameWindowRect.width) > 5 ||
           Math.abs(rect.height - gameWindowRect.height) > 5
         ) {
           gameWindowRect = rect;
-          overlayWin.setBounds(rect);
-          overlayWin.setIgnoreMouseEvents(true, { forward: true });
-          overlayWin.webContents.send("window-moved", rect);
+          displayWin.setBounds(rect);
+          displayWin.webContents.send("window-moved", rect);
+
+          // Control 窗口跟随游戏窗口右侧
+          if (controlWin && !controlWin.isDestroyed()) {
+            const cw = Math.min(320, Math.floor(rect.width * 0.25));
+            controlWin.setBounds({
+              x: rect.x + rect.width - cw, y: rect.y,
+              width: cw, height: rect.height,
+            });
+            controlWin.moveTop();
+          }
         }
-        if (!windowHiddenByUser && !overlayWin.isVisible()) overlayWin.show();
-        overlayWin.webContents.send("game-running", true);
+
+        // 游戏检测到 → Control 窗口可交互且可见
+        if (controlWin && !controlWin.isDestroyed()) {
+          controlWin.setIgnoreMouseEvents(false);
+          controlWin.setOpacity(settings.transparency || 0.7);
+          controlWin.moveTop();
+        }
+
+        if (!windowHiddenByUser && !displayWin.isVisible()) displayWin.show();
+        sendToBoth("game-running", true);
       } else {
-        // No game: compact interactive mode
         if (gameWindowRect) {
-          overlayWin.setBounds({ x: 100, y: 100, width: 800, height: 480 });
-          overlayWin.setIgnoreMouseEvents(false);
           gameWindowRect = null;
         }
-        if (!windowHiddenByUser && !overlayWin.isVisible()) overlayWin.show();
-        overlayWin.webContents.send("game-running", false);
+        // 游戏未运行 → Control 窗口透明且穿透鼠标，不遮挡其他应用
+        if (controlWin && !controlWin.isDestroyed()) {
+          controlWin.setIgnoreMouseEvents(true, { forward: true });
+        }
+        if (!windowHiddenByUser && !displayWin.isVisible()) displayWin.show();
+        sendToBoth("game-running", false);
       }
+    } catch (_) {
+      // 静默处理轮询异常
+    }
+
+    if (running) {
+      trackingInterval = setTimeout(poll, POLL_MS);
     }
   }
 
-  tick();
-  trackingInterval = setInterval(tick, POLL_MS);
+  poll();
+
+  return () => { running = false; };
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -256,7 +442,6 @@ function getHSExePath() {
   for (const p of candidates) {
     if (fs.existsSync(p)) return p;
   }
-  // fallback: try to find from process
   try {
     const psOut = execSync(
       'powershell -NoProfile -Command "(Get-Process -Name Hearthstone -ErrorAction Stop).Path"',
@@ -266,7 +451,7 @@ function getHSExePath() {
       .trim();
     if (psOut && fs.existsSync(psOut)) return psOut;
   } catch (_) {}
-  return "Hearthstone.exe"; // fallback: use name, netsh may resolve
+  return "Hearthstone.exe";
 }
 
 function blockHearthstone() {
@@ -309,30 +494,26 @@ function unblockHearthstone() {
 function triggerDisconnect() {
   if (firewallBlocked) return { status: "already_blocked" };
 
-  // clear any leftover rules from previous runs
-  unblockHearthstone();
-
-  // clear any existing timer
+  // 清理之前的定时器
   if (disconnectTimer) {
     clearTimeout(disconnectTimer);
     disconnectTimer = null;
   }
+  unblockHearthstone();
 
+  // 通知前端开始拔线（视觉反馈立即生效）
+  sendToBoth("disconnect:state-changed", "disconnecting");
+
+  // 尝试 netsh 防火墙（需管理员权限）
   const blocked = blockHearthstone();
-  if (!blocked) return { status: "failed" };
 
-  overlayWin.webContents.send("disconnect:state-changed", "disconnecting");
-
-  // Auto-reconnect after 3 seconds
   disconnectTimer = setTimeout(() => {
-    unblockHearthstone();
+    if (blocked) unblockHearthstone();
     disconnectTimer = null;
-    if (overlayWin && !overlayWin.isDestroyed()) {
-      overlayWin.webContents.send("disconnect:state-changed", "online");
-    }
+    sendToBoth("disconnect:state-changed", "online");
   }, 3000);
 
-  return { status: "disconnecting" };
+  return { status: "disconnecting", blocked };
 }
 
 function manualReconnect() {
@@ -341,9 +522,7 @@ function manualReconnect() {
     disconnectTimer = null;
   }
   unblockHearthstone();
-  if (overlayWin && !overlayWin.isDestroyed()) {
-    overlayWin.webContents.send("disconnect:state-changed", "online");
-  }
+  sendToBoth("disconnect:state-changed", "online");
   return { status: "online" };
 }
 
@@ -353,73 +532,68 @@ function cleanupFirewall() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 系统托盘
+// 双窗口创建
 // ═══════════════════════════════════════════════════════════
 
-function createTray() {
-  // Create a simple 16x16 tray icon via data URL (green circle)
-  const trayIcon = nativeImage.createFromDataURL(
-    "data:image/png;base64," +
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhklEQVQ4y6WTzUrDQBSFv2T" +
-    "SpGlJqzZu3Lhx48KNGzeC7+Ez+Ci+hC/hQ/gEPoJPIAiCgoiIP6U/Y9KMSe+9dyZjmqZWcb" +
-    "EMJDOZ+ebcOXd+hMiiIn8QAJER+QyIGIAFwBuC4JkNQMYkIp8AEWxGEQUCGYh/AH8CF4Apv" +
-    "osq8vQZQFqB0Doh6h1AEPQ/C24LQRAAUX8hCNCAJRkmDEe9RWZ7m1mcBUAwh1uB/tZmr/X+" +
-    "eQBqMwKcCbAF1wNr2QDQ3m5tNmqrj4+7dVh3a3A8HqQGAQQLQV0EfLf8OLxzEFrn1BsBHIj" +
-    "KbBhP+m5t77MYCOdgbGAMKAJ8n2Dxr3dBG+cSBMuAJ0C+OFwBSgCi2L3ZwDFvnQsRbAJLq" +
-    "fhqG3hNnEUDSY7rMqCV8s8A8F+La7JIMpLk5A65p9H09QNA2h27HUGArQBdylEAaGUBmLB" +
-    "gj3Ib2AIGKUC8FwRBO4BY5j4CloDpG2cygnF+SQrAnQAAAABJRU5ErkJggg=="
-  );
-  tray = new Tray(trayIcon);
-  tray.setToolTip("Bob教练 - 酒馆战棋教学插件");
+function createWindows() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { x, y, width, height } = primaryDisplay.bounds;
+  const controlWidth = Math.min(320, Math.floor(width * 0.25));
 
-  tray.setContextMenu(buildTrayMenu());
+  const sharedWebPrefs = {
+    preload: path.join(__dirname, "preload.js"),
+    contextIsolation: true,
+    nodeIntegration: false,
+    sandbox: false,
+  };
 
-  // double-click tray to toggle panel
-  tray.on("double-click", () => {
-    if (windowHiddenByUser) {
-      toggleWindowVisibility(); // show first, then toggle panel
-    }
-    if (overlayWin && !overlayWin.isDestroyed() && overlayWin.isVisible()) {
-      overlayWin.webContents.send("toggle-panel");
-    }
-  });
-}
-
-// ═══════════════════════════════════════════════════════════
-// 覆盖层窗口
-// ═══════════════════════════════════════════════════════════
-
-function createOverlayWindow() {
-  overlayWin = new BrowserWindow({
-    width: 800,
-    height: 480,
-    x: 100,
-    y: 100,
+  // ── Display Window：全屏，永久穿透鼠标 ──
+  displayWin = new BrowserWindow({
+    x, y, width, height,
     transparent: true,
     frame: false,
     alwaysOnTop: true,
     skipTaskbar: true,
     resizable: false,
     hasShadow: false,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false,
-    },
+    webPreferences: { ...sharedWebPrefs, additionalArguments: ["--bob-mode=display"] },
+  });
+  displayWin.loadFile("overlay.html", { hash: "mode=display" });
+  displayWin.setIgnoreMouseEvents(true, { forward: true });
+
+  displayWin.on("closed", () => {
+    displayWin = null;
   });
 
-  overlayWin.loadFile("overlay.html");
+  // ── Control Panel Window：右侧固定，可交互 ──
+  controlWin = new BrowserWindow({
+    x: x + width - controlWidth,
+    y,
+    width: controlWidth,
+    height,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    resizable: false,
+    hasShadow: false,
+    webPreferences: { ...sharedWebPrefs, additionalArguments: ["--bob-mode=control"] },
+  });
+  controlWin.loadFile("overlay.html", { hash: "mode=control" });
+  controlWin.setIgnoreMouseEvents(false);
 
-  // Default: interactive (compact mode). Only click-through when tracking game.
-  overlayWin.setIgnoreMouseEvents(false);
+  // 初始定位在屏幕右侧（独立窗口，非父子关系避免透明窗口兼容问题）
+  controlWin.setBounds({
+    x: x + width - controlWidth, y,
+    width: controlWidth, height,
+  });
+  controlWin.moveTop();
 
-  // Cleanup on close
-  overlayWin.on("closed", () => {
-    overlayWin = null;
+  controlWin.on("closed", () => {
+    controlWin = null;
   });
 
-  log("info", "Overlay window created");
+  log("info", `Windows created: display ${width}x${height}, control ${controlWidth}x${height}`);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -433,57 +607,101 @@ let logWatchRetryTimer = null;
 function findGameLogPaths() {
   const paths = [];
 
-  // 1. Hearthstone Power.log (最可靠)
+  // 优先：Hearthstone 原生 Power.log（由 log.config 开启）
   const hsLogDirs = [
     path.join(app.getPath("appData"), "..", "Local", "Blizzard", "Hearthstone", "Logs"),
     path.join(app.getPath("home"), "AppData", "Local", "Blizzard", "Hearthstone", "Logs"),
-    "C:\\Program Files (x86)\\Hearthstone\\Logs",
-    "D:\\Program Files (x86)\\Hearthstone\\Logs",
   ];
-  for (const p of hsLogDirs) {
-    if (fs.existsSync(p)) {
-      const powerLog = path.join(p, "Power.log");
-      if (fs.existsSync(powerLog)) {
-        paths.push({ path: powerLog, source: "hs" });
-      }
-    }
+  // 也检查炉石安装目录下的 Logs
+  const hsExe = getHSExePath();
+  if (hsExe && hsExe !== "Hearthstone.exe") {
+    const installLogsDir = path.join(path.dirname(hsExe), "Logs");
+    if (!hsLogDirs.includes(installLogsDir)) hsLogDirs.push(installLogsDir);
   }
 
-  // 2. HDT 日志目录
+  for (const p of hsLogDirs) {
+    try {
+      if (fs.existsSync(p)) {
+        const powerLog = path.join(p, "Power.log");
+        if (fs.existsSync(powerLog)) {
+          paths.push({ path: powerLog, source: "hs" });
+        }
+      }
+    } catch (_) {}
+  }
+
+  // 兜底：HDT 目录下的 Power.log（HDT 可能会同步一份）
   const hdtDirs = [
     path.join(app.getPath("appData"), "HearthstoneDeckTracker", "Logs"),
-    path.join(app.getPath("appData"), "..", "Local", "HearthstoneDeckTracker", "Logs"),
     path.join(app.getPath("home"), "AppData", "Local", "HearthstoneDeckTracker", "Logs"),
   ];
   for (const p of hdtDirs) {
-    if (fs.existsSync(p)) {
-      const files = fs.readdirSync(p).filter((f) => f.endsWith(".log") || f.endsWith(".txt"));
-      const sorted = files
-        .map((f) => ({ name: f, mtime: fs.statSync(path.join(p, f)).mtime }))
-        .sort((a, b) => b.mtime - a.mtime);
-      const bgLog = sorted.find(
-        (f) =>
-          f.name.toLowerCase().includes("bg") ||
-          f.name.toLowerCase().includes("battleground")
-      );
-      const powerLog = sorted.find((f) => f.name.toLowerCase().includes("power"));
-      const target = bgLog || powerLog || sorted[0];
-      if (target) {
-        paths.push({ path: path.join(p, target.name), source: "hdt" });
+    try {
+      if (fs.existsSync(p)) {
+        const powerLog = path.join(p, "Power.log");
+        if (fs.existsSync(powerLog)) {
+          paths.push({ path: powerLog, source: "hdt" });
+        }
+        // 也检查 hdt_log.txt 中包含 "Power" 的区块（HDT 可能会内嵌）
+        const hdtLog = path.join(p, "hdt_log.txt");
+        if (fs.existsSync(hdtLog)) {
+          // 快速检查是否含游戏数据（GameState 或 PowerTaskList 关键词）
+          const sample = fs.readFileSync(hdtLog, "utf-8").substring(0, 5000);
+          if (/PowerTaskList|GameState|TAG_CHANGE|FULL_ENTITY/i.test(sample)) {
+            paths.push({ path: hdtLog, source: "hdt" });
+          }
+        }
       }
-    }
+    } catch (_) {}
   }
 
   return paths;
 }
 
+function ensureHearthstoneLogging() {
+  const logConfigDirs = [
+    path.join(app.getPath("appData"), "..", "Local", "Blizzard", "Hearthstone"),
+    path.join(app.getPath("home"), "AppData", "Local", "Blizzard", "Hearthstone"),
+  ];
+  for (const dir of logConfigDirs) {
+    try {
+      if (fs.existsSync(dir)) {
+        const configPath = path.join(dir, "log.config");
+        // 标准化 log.config：统一小写、移除 Verbose 等多余字段
+        const correctContent = [
+          "[Log]",
+          "FileSizeLimit.MB=10",
+          "",
+          "[Power]",
+          "LogLevel=1",
+          "FilePrinting=true",
+          "ConsolePrinting=false",
+          "ScreenPrinting=false",
+        ].join("\n");
+        const existing = fs.existsSync(configPath) ? fs.readFileSync(configPath, "utf-8") : "";
+        // 检查 [Power] 段是否已正确配置
+        const hasPower = /\[Power\]/.test(existing);
+        const hasFilePrinting = /\[Power\][\s\S]*?FilePrinting\s*=\s*true/i.test(existing);
+        if (!hasPower || !hasFilePrinting) {
+          fs.writeFileSync(configPath, correctContent, "utf-8");
+          log("info", "Updated log.config at " + configPath);
+        }
+        // 确保 Logs 目录存在
+        const logsDir = path.join(dir, "Logs");
+        if (!fs.existsSync(logsDir)) {
+          fs.mkdirSync(logsDir, { recursive: true });
+          log("info", "Created Logs directory: " + logsDir);
+        }
+        return;
+      }
+    } catch (_) {}
+  }
+}
+
 function startLogWatching() {
-  // 初始化状态追踪器
   if (!gameTracker) {
     gameTracker = new GameStateTracker((state) => {
-      if (overlayWin && !overlayWin.isDestroyed()) {
-        overlayWin.webContents.send("game-state-update", state);
-      }
+      sendToBoth("game-state-update", state);
       if (state.gameActive) {
         log("debug", `Game state: T${state.turn} P${state.gamePhase} G${state.gold}/${state.maxGold} T${state.tavernTier} H${state.health} board=${state.boardMinions.length} shop=${state.shopMinions.length}`);
       }
@@ -493,12 +711,10 @@ function startLogWatching() {
   const logPaths = findGameLogPaths();
   if (logPaths.length === 0) {
     log("info", "No game log found, will rely on demo mode");
-    // 每 30 秒重试查找
     logWatchRetryTimer = setTimeout(() => startLogWatching(), 30000);
     return false;
   }
 
-  // 优先 HS Power.log，其次 HDT
   const target = logPaths[0];
   log("info", `Watching log [${target.source}]: ${target.path}`);
   logWatchFile = target.path;
@@ -517,7 +733,6 @@ function startLogWatching() {
       try {
         const stats = fs.statSync(target.path);
         if (stats.size < logLastSize) {
-          // 日志轮转（新对局）
           gameTracker.reset();
           logLastSize = 0;
         }
@@ -571,8 +786,9 @@ function registerIpcHandlers() {
   ipcMain.handle("settings:set", (_event, key, value) => {
     settings[key] = value;
     saveSettings();
-    if (key === "transparency" && overlayWin && !overlayWin.isDestroyed()) {
-      overlayWin.setOpacity(value);
+    if (key === "transparency") {
+      if (displayWin && !displayWin.isDestroyed()) displayWin.setOpacity(value);
+      if (controlWin && !controlWin.isDestroyed()) controlWin.setOpacity(value);
     }
     return settings;
   });
@@ -627,9 +843,9 @@ function registerIpcHandlers() {
     app.quit();
   });
   ipcMain.handle("app:hide-window", () => {
-    if (overlayWin && !overlayWin.isDestroyed() && !windowHiddenByUser) {
+    if (controlWin && !controlWin.isDestroyed() && !windowHiddenByUser) {
       windowHiddenByUser = true;
-      overlayWin.hide();
+      controlWin.hide();
       if (tray) tray.setContextMenu(buildTrayMenu());
     }
     return { hidden: windowHiddenByUser };
@@ -642,6 +858,7 @@ function registerIpcHandlers() {
 
   // keyboard shortcut
   ipcMain.handle("register-shortcut", (_event, key) => {
+    if (!app.isReady()) return false;
     try {
       globalShortcut.register(key, () => {
         triggerDisconnect();
@@ -653,16 +870,10 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle("unregister-shortcut", (_event, key) => {
+    if (!app.isReady()) return;
     try {
       globalShortcut.unregister(key);
     } catch (_) {}
-  });
-
-  // interactive regions for click-through toggle
-  ipcMain.handle("set-interactive", (_event, enable) => {
-    if (overlayWin && !overlayWin.isDestroyed()) {
-      overlayWin.setIgnoreMouseEvents(!enable, { forward: true });
-    }
   });
 
   // Data sync
@@ -673,10 +884,7 @@ function registerIpcHandlers() {
 
   ipcMain.handle("sync:apply", async (_event, sources) => {
     const result = await syncData.applyUpdates(sources);
-    // Notify renderer to reload data
-    if (overlayWin && !overlayWin.isDestroyed()) {
-      overlayWin.webContents.send("sync:applied", result);
-    }
+    sendToBoth("sync:applied", result);
     return result;
   });
 
@@ -732,22 +940,41 @@ app.whenReady().then(() => {
   unblockHearthstone();
 
   registerIpcHandlers();
-  createOverlayWindow();
+  createWindows();
   createTray();
 
-  overlayWin.webContents.once("did-finish-load", () => {
-    // Apply saved transparency
-    overlayWin.setOpacity(settings.transparency || 0.7);
+  // Both windows need to finish loading before we start tracking.
+  // Wait for both 'did-finish-load' events.
+  let displayReady = false;
+  let controlReady = false;
 
-    // Start window tracking after renderer is ready
-    startWindowTracking();
+  function onBothReady() {
+    if (!displayReady || !controlReady) return;
+
+    // Apply saved transparency
+    const opacity = settings.transparency || 0.7;
+    if (displayWin && !displayWin.isDestroyed()) displayWin.setOpacity(opacity);
+    if (controlWin && !controlWin.isDestroyed()) controlWin.setOpacity(opacity);
+
+    // IPC 确认模式（兜底，确保各窗口知道自己是谁）
+    if (displayWin && !displayWin.isDestroyed()) displayWin.webContents.send("set-mode", "display");
+    if (controlWin && !controlWin.isDestroyed()) controlWin.webContents.send("set-mode", "control");
+
+    // 确保 Control 窗口在 Display 上方（Windows z-order 有时不按创建顺序）
+    if (controlWin && !controlWin.isDestroyed()) controlWin.moveTop();
+
+    // Start window tracking for display window
+    displayWin._stopTracking = startWindowTracking();
+
+    // 确保炉石日志输出已开启
+    ensureHearthstoneLogging();
 
     // Try HDT log parsing
     const logFound = startLogWatching();
-    log("info", `HDT log ${logFound ? "found" : "not found, demo mode available"}`);
+    log("info", `HDT log ${logFound ? "found" : "not found"}`);
 
     // Register disconnect shortcut
-    if (settings.disconnectShortcut) {
+    if (app.isReady() && settings.disconnectShortcut) {
       globalShortcut.register(settings.disconnectShortcut, () => {
         triggerDisconnect();
       });
@@ -762,15 +989,22 @@ app.whenReady().then(() => {
           const keys = Object.keys(result.available);
           if (keys.length > 0) {
             log("info", `Updates available: ${keys.join(", ")}`);
-            if (overlayWin && !overlayWin.isDestroyed()) {
-              overlayWin.webContents.send("sync:update-available", result.available);
-            }
+            sendToBoth("sync:update-available", result.available);
           } else {
             log("info", "Data is up to date");
           }
         })
         .catch((e) => log("error", "Auto-check failed: " + e.message));
     }
+  }
+
+  displayWin.webContents.once("did-finish-load", () => {
+    displayReady = true;
+    onBothReady();
+  });
+  controlWin.webContents.once("did-finish-load", () => {
+    controlReady = true;
+    onBothReady();
   });
 });
 
@@ -780,8 +1014,9 @@ app.on("window-all-closed", () => {
 
 app.on("will-quit", () => {
   cleanupFirewall();
-  globalShortcut.unregisterAll();
-  if (trackingInterval) clearInterval(trackingInterval);
+  if (app.isReady()) globalShortcut.unregisterAll();
+  if (trackingInterval) clearTimeout(trackingInterval);
+  if (displayWin && displayWin._stopTracking) displayWin._stopTracking();
   if (logWatchRetryTimer) clearTimeout(logWatchRetryTimer);
   log("info", "Bob Coach stopped");
 });
@@ -792,10 +1027,14 @@ if (!gotLock) {
   app.quit();
 } else {
   app.on("second-instance", () => {
-    if (overlayWin) {
-      if (overlayWin.isMinimized()) overlayWin.restore();
-      overlayWin.show();
-      overlayWin.focus();
+    if (displayWin) {
+      if (displayWin.isMinimized()) displayWin.restore();
+      displayWin.show();
+    }
+    if (controlWin) {
+      if (controlWin.isMinimized()) controlWin.restore();
+      controlWin.show();
+      controlWin.focus();
     }
   });
 }

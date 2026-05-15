@@ -2,3 +2,11 @@ node_modules/
 .cache/
 *.log
 dist/
+
+# 模拟输出（不提交）
+sim_results.json
+
+# 临时/调试文件
+data/_db_dump.txt
+data/_wal_parse_report.txt
+reports/

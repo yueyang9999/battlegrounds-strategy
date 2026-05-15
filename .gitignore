@@ -1,6 +1,29 @@
+# 生成数据（不提交）
 *.db
-*.json
+bg_cards.json
+hero_stats_sample.json
+hero_strat.json
+comp_strat.json
+trinket_strat.json
+
+# 产出目录
 output/
 .claude/
+sessions/
+
+# Python
 __pycache__/
 *.pyc
+
+# Node（bob-coach 有自己的 .gitignore）
+node_modules/
+
+# 数据管道
+data-repo/
+
+# 自定义技能
+skills/
+
+# 临时/调试文件
+*_db_dump.txt
+*_wal_parse_report.txt

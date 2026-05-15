@@ -12,28 +12,28 @@
 <div id="app">
 
   <!-- 建议徽章：升本/搜牌/危险 -->
-  <div id="suggestion-badge" class="hidden">
+  <div id="suggestion-badge" class="hidden control-only">
     <span id="sug-text"></span>
     <div id="sug-reason" class="reason-tooltip hidden"></div>
   </div>
 
   <!-- 选牌高亮：随从商店卡片高亮边框 + 角标 -->
-  <div id="card-highlights"></div>
+  <div id="card-highlights" class="display-only"></div>
 
   <!-- 拔线按钮 -->
-  <div id="disconnect-btn" class="interactive" title="拔线跳过动画">
+  <div id="disconnect-btn" class="interactive control-only" title="拔线跳过动画">
     <div id="dc-dot" class="dc-dot online"></div>
     <div id="dc-ring" class="dc-ring"></div>
     <span id="dc-label">拔线</span>
   </div>
 
   <!-- 齿轮菜单 -->
-  <div id="gear-menu" class="interactive">
-    <div id="gear-icon" class="gear-icon">&#9881;</div>
+  <div id="gear-menu" class="interactive control-only">
+    <div id="gear-icon" class="gear-icon">&#x2630;</div>
     <div id="gear-dropdown" class="gear-dropdown hidden">
       <div class="gear-item" data-action="toggle-demo">&#9654; Demo 模式</div>
       <div class="gear-item" data-action="next-turn">&#9654; 下一回合</div>
-      <div class="gear-item" data-action="toggle-panel">&#9776; 教练面板</div>
+      <div class="gear-item" data-action="toggle-panel">&#9632; 教练面板</div>
       <div class="gear-item" data-action="open-settings">&#9878; 设置</div>
       <div class="gear-item" data-action="open-legend">&#128214; 图例说明</div>
       <div class="gear-item" data-action="open-rules">&#128220; 游戏规则</div>
@@ -42,65 +42,66 @@
     </div>
   </div>
 
-  <!-- 阵容路线图面板（侧边抽屉） -->
-  <div id="comp-panel" class="comp-panel hidden">
-    <div id="comp-handle" class="comp-handle" title="点击展开教练面板">
-      <span id="comp-handle-icon">&#9664;</span>
-    </div>
+  <!-- 阵容路线图面板（右侧抽屉） -->
+  <div id="comp-panel" class="comp-panel hidden control-only">
     <div id="comp-content" class="comp-content">
-      <div class="comp-header">
-        <span id="comp-name">--</span>
+      <div class="comp-content-header">
+        <span id="comp-name" style="font-family:var(--font-display);font-size:14px;font-weight:bold;color:var(--text-primary);letter-spacing:1px">--</span>
         <span id="comp-match" class="comp-match-badge">匹配度 --</span>
-        <button id="comp-close-btn" class="btn-close interactive" style="margin-left:auto" title="关闭面板">&times;</button>
+        <button id="comp-close-btn" class="btn-close interactive" title="关闭面板">&times;</button>
       </div>
+      <div class="comp-content-body">
+        <div class="comp-section">
+          <div class="comp-section-title">当前阵容</div>
+          <div id="current-board" class="mini-board"></div>
+        </div>
 
-      <div class="comp-section">
-        <div class="comp-section-title">当前阵容</div>
-        <div id="current-board" class="mini-board"></div>
-      </div>
+        <div class="comp-section">
+          <div class="comp-section-title">推荐阵容</div>
+          <div id="target-board" class="mini-board"></div>
+        </div>
 
-      <div class="comp-section">
-        <div class="comp-section-title">推荐阵容</div>
-        <div id="target-board" class="mini-board"></div>
-      </div>
+        <div class="comp-section">
+          <div class="comp-section-title">缺卡提示</div>
+          <div id="missing-cards" class="missing-list"></div>
+        </div>
 
-      <div class="comp-section">
-        <div class="comp-section-title">缺卡提示</div>
-        <div id="missing-cards" class="missing-list"></div>
-      </div>
+        <div class="comp-section">
+          <div class="comp-section-title">站位建议</div>
+          <div id="position-tip" class="position-tip"></div>
+        </div>
 
-      <div class="comp-section">
-        <div class="comp-section-title">站位建议</div>
-        <div id="position-tip" class="position-tip"></div>
-      </div>
-
-      <div class="comp-section">
-        <div class="comp-section-title">图例说明</div>
-        <div class="legend-list">
-          <div class="legend-item">
-            <span class="legend-badge core">核</span>
-            <span>红色高亮 — 流派核心卡，优先选取</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-badge power">战</span>
-            <span>蓝色高亮 — 战力提升卡，中期推荐</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-badge triple">碰</span>
-            <span>金橙高亮 — 可凑三连，碰高本核心</span>
+        <div class="comp-section">
+          <div class="comp-section-title">图例说明</div>
+          <div class="legend-list">
+            <div class="legend-item">
+              <span class="legend-badge core">核</span>
+              <span>红色高亮 — 流派核心卡，优先选取</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-badge power">战</span>
+              <span>蓝色高亮 — 战力提升卡，中期推荐</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-badge triple">碰</span>
+              <span>金橙高亮 — 可凑三连，碰高本核心</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="comp-section" id="comp-alt-section" style="display:none">
-        <div class="comp-section-title">备选流派</div>
-        <div id="alt-comps" class="alt-comps"></div>
+        <div class="comp-section" id="comp-alt-section" style="display:none">
+          <div class="comp-section-title">备选流派</div>
+          <div id="alt-comps" class="alt-comps"></div>
+        </div>
       </div>
+    </div>
+    <div id="comp-handle" class="comp-handle" title="点击展开/收起教练面板">
+      <span id="comp-handle-label">展开</span>
     </div>
   </div>
 
   <!-- 决策详细面板（C5 层级3） -->
-  <div id="tactical-board" class="tactical-board hidden">
+  <div id="tactical-board" class="tactical-board hidden control-only">
     <div class="tactical-header">
       <span id="tactical-title">决策分析</span>
       <button id="tactical-close" class="interactive btn-close">&times;</button>
@@ -109,7 +110,7 @@
   </div>
 
   <!-- 首次协议对话框 -->
-  <div id="agreement-overlay" class="modal-overlay hidden">
+  <div id="agreement-overlay" class="modal-overlay hidden control-only">
     <div class="agreement-modal interactive">
       <h2>Bob教练 开源教学插件</h2>
       <div class="agreement-body">
@@ -126,6 +127,7 @@
 
         <p style="font-weight:bold;color:#f0c060">数据来源声明</p>
         <ul style="font-size:11px;color:var(--text-muted)">
+          <li><strong>暴雪 Power.log</strong> — 官方公开的游戏日志文件（%LocalAppData%\Blizzard\Hearthstone\Logs\Power.log）</li>
           <li><strong>Gamerhub</strong> (api.gamerhub.com) — 卡牌图鉴、随从/英雄基础数据</li>
           <li><strong>Firestone</strong> (firestoneapp.com) — 英雄胜率、流派热度、环境大数据</li>
           <li>所有数据版权归原平台所有，本插件仅做教学性引用</li>
@@ -165,7 +167,7 @@
   </div>
 
   <!-- 设置面板 -->
-  <div id="settings-overlay" class="modal-overlay hidden">
+  <div id="settings-overlay" class="modal-overlay hidden control-only">
     <div class="settings-modal interactive">
       <div class="tactical-header">
         <span>设置</span>
@@ -276,8 +278,8 @@
       </div>
 
       <!-- ═══════ 账号管理区域 ═══════ -->
-      <div class="settings-section-divider"></div>
-      <div class="account-section">
+      <div class="settings-section-divider" style="display:none"></div>
+      <div class="account-section" style="display:none">
         <div class="account-section-header">
           <span>&#128100; 账号管理</span>
           <span id="account-status-badge" class="account-status-badge anonymous">未登录</span>
@@ -368,7 +370,7 @@
   </div>
 
   <!-- 图例说明面板 -->
-  <div id="legend-overlay" class="modal-overlay hidden">
+  <div id="legend-overlay" class="modal-overlay hidden control-only">
     <div class="legend-modal interactive">
       <div class="tactical-header">
         <span>图例说明</span>
@@ -438,7 +440,7 @@
             <span>饰品建议 — 推荐选择饰品</span>
           </div>
           <div class="legend-icon-row">
-            <span class="legend-deco">&#128308;</span>
+            <span class="legend-deco" style="color:#e55;font-weight:bold;font-size:18px">&#10071;</span>
             <span>危险警告 — 血量/场面危险，需要立即应对</span>
           </div>
           <div class="legend-icon-row">
@@ -507,7 +509,7 @@
   </div>
 
   <!-- 关于面板 -->
-  <div id="about-overlay" class="modal-overlay hidden">
+  <div id="about-overlay" class="modal-overlay hidden control-only">
     <div class="about-modal interactive">
       <div class="tactical-header">
         <span>关于 Bob教练</span>
@@ -545,7 +547,7 @@
   </div>
 
   <!-- 游戏规则参考面板 -->
-  <div id="rules-overlay" class="modal-overlay hidden">
+  <div id="rules-overlay" class="modal-overlay hidden control-only">
     <div class="rules-modal interactive">
       <div class="tactical-header">
         <span>游戏规则参考</span>
@@ -615,19 +617,19 @@
   </div>
 
   <!-- 拔线进度提示 -->
-  <div id="dc-toast" class="dc-toast hidden">
+  <div id="dc-toast" class="dc-toast hidden control-only">
     <div id="dc-toast-text"></div>
     <div class="dc-progress-bar"><div id="dc-progress-fill" class="dc-progress-fill"></div></div>
     <span style="font-size:9px;color:var(--text-muted);text-align:center;margin-top:2px">3秒后自动重连</span>
   </div>
 
   <!-- 退出确认对话框 -->
-  <div id="quit-overlay" class="modal-overlay hidden">
+  <div id="quit-overlay" class="modal-overlay hidden control-only">
     <div class="quit-modal interactive">
       <h3>退出 Bob教练</h3>
       <p style="margin:10px 0;font-size:12px;color:var(--text-secondary)">选择退出方式：</p>
       <div class="quit-buttons">
-        <button id="btn-quit-app" class="btn btn-primary" style="background:linear-gradient(135deg,#8b3a3a,#c0392b)">退出应用</button>
+        <button id="btn-quit-app" class="btn btn-primary" style="background:rgba(200,60,40,0.3);border-color:rgba(220,80,60,0.5)">退出应用</button>
         <button id="btn-quit-tray" class="btn btn-secondary">最小化到托盘</button>
         <button id="btn-quit-cancel" class="btn btn-cancel">取消</button>
       </div>
@@ -635,19 +637,19 @@
   </div>
 
   <!-- Demo 模式指示器 -->
-  <div id="demo-indicator" class="demo-indicator hidden">
+  <div id="demo-indicator" class="demo-indicator hidden control-only">
     <span>DEMO</span>
     <span id="demo-turn">回合 1</span>
   </div>
 
   <!-- 次级提示条 -->
-  <div id="secondary-hints" class="secondary-hints hidden"></div>
+  <div id="secondary-hints" class="secondary-hints hidden control-only"></div>
 
   <!-- 冻结状态指示器 -->
-  <div id="freeze-indicator" class="hidden">&#10052; 酒馆已冻结</div>
+  <div id="freeze-indicator" class="hidden display-only">&#10052; 酒馆已冻结</div>
 
   <!-- 对战胜率预测条 -->
-  <div id="combat-predictor" class="hidden">
+  <div id="combat-predictor" class="hidden display-only">
     <span class="cp-label cp-label-left">我方</span>
     <div class="cp-bar">
       <div id="cp-win-seg" class="cp-seg cp-win" style="width:0%"></div>
@@ -663,13 +665,13 @@
   </div>
 
   <!-- 英雄选择分析面板 -->
-  <div id="hero-select-panel" class="hidden">
+  <div id="hero-select-panel" class="hidden control-only">
     <div class="hero-select-header">选择英雄</div>
     <div id="hero-select-list" class="hero-select-list"></div>
   </div>
 
   <!-- 饰品选择面板 -->
-  <div id="trinket-select-panel" class="hidden">
+  <div id="trinket-select-panel" class="hidden control-only">
     <div class="trinket-select-header">选择饰品</div>
     <div id="trinket-select-list" class="trinket-select-list"></div>
   </div>

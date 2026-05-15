@@ -4,6 +4,11 @@
 // Bob教练 — 覆盖层 UI + 决策引擎
 // ═══════════════════════════════════════════════
 
+// ── 双窗口模式检测（preload 同步注入，不依赖 URL/hash） ──
+let mode = (window.bobCoach && window.bobCoach.mode) || "display";
+document.body.classList.add("mode-" + mode);
+console.log("[Bob] Window mode:", mode);
+
 // ── 状态 ──
 const state = {
   // 游戏状态
@@ -436,6 +441,11 @@ function applyGameState(gs) {
     };
   }
 
+  // 真实对局激活时，自动退出 Demo 模式
+  if (gs.gameActive && state.demoMode) {
+    state.demoMode = false;
+    if (dom.demoIndicator) dom.demoIndicator.classList.add("hidden");
+  }
   state.gameActive = gs.gameActive;
   state.turn = gs.turn || 1;
   state.gold = gs.gold || 0;
@@ -757,7 +767,21 @@ function getDominantTribe(boardMinions) {
 }
 
 function matchBoardToComps(boardMinions) {
-  return CompMatcher.matchBoardToComps(boardMinions, state.compStrategies, state.decisionTables);
+  var heroPowerText = "";
+  if (state.heroCardId && state._heroHpMap) {
+    var hpIds = state._heroHpMap[state.heroCardId];
+    if (hpIds && hpIds.length > 0) {
+      var hpCard = getCard(hpIds[0]);
+      heroPowerText = hpCard ? (hpCard.text_cn || "") : "";
+    }
+  }
+  var opts = {
+    availableRaces: state.availableRaces || [],
+    heroCardId: state.heroCardId,
+    cardTribesMap: state.cards,
+    heroPowerText: heroPowerText,
+  };
+  return CompMatcher.matchBoardToComps(boardMinions, state.compStrategies, state.decisionTables, opts);
 }
 
 function selectCurveType() {
@@ -885,19 +909,16 @@ function renderCardHighlights() {
   container.innerHTML = "";
   if (!state.gameActive) return;
 
-  // 参考分辨率缩放
-  var refW = 1920, refH = 1080;
-  var scaleX = window.innerWidth / refW;
-  var scaleY = window.innerHeight / refH;
+  // 百分比定位（分辨率无关）
+  var vw = window.innerWidth;
+  var vh = window.innerHeight;
 
-  // 商店卡牌参考坐标
-  var refCardY = 780, refCardW = 134, refCardH = 173;
-  var refStartX = 500, refGapX = 157;
-  var shopY = Math.round(refCardY * scaleY);
-  var cardW = Math.round(refCardW * scaleX);
-  var cardH = Math.round(refCardH * scaleY);
-  var startX = Math.round(refStartX * scaleX);
-  var gapX = Math.round(refGapX * scaleX);
+  // 商店卡牌 — 百分比相对于窗口尺寸
+  var shopY = Math.round(vh * 0.722);       // 72.2% from top
+  var cardW = Math.round(vw * 0.0698);      // 6.98% card width
+  var cardH = Math.round(vh * 0.160);       // 16.0% card height
+  var startX = Math.round(vw * 0.260);      // 26.0% first card left
+  var gapX = Math.round(vw * 0.0818);       // 8.18% card gap
 
   // ── 买随从费用判断（统一由 RulesEngine 计算洋葱层修正） ──
   var buyCost = RulesEngine.getBuyCost(state);
@@ -965,14 +986,12 @@ function renderCardHighlights() {
     }
   }
 
-  // 阵容卡牌参考坐标（下方偏左区域，7个位置）
-  var refBoardY = 870, refBoardW = 120, refBoardH = 150;
-  var refBoardStartX = 340, refBoardGapX = 128;
-  var boardY = Math.round(refBoardY * scaleY);
-  var boardCardW = Math.round(refBoardW * scaleX);
-  var boardCardH = Math.round(refBoardH * scaleY);
-  var boardStartX = Math.round(refBoardStartX * scaleX);
-  var boardGapX = Math.round(refBoardGapX * scaleX);
+  // 阵容卡牌 — 百分比相对于窗口尺寸
+  var boardY = Math.round(vh * 0.806);       // 80.6% from top
+  var boardCardW = Math.round(vw * 0.0625);  // 6.25% card width
+  var boardCardH = Math.round(vh * 0.139);   // 13.9% card height
+  var boardStartX = Math.round(vw * 0.177);  // 17.7% first card left
+  var boardGapX = Math.round(vw * 0.0667);   // 6.67% card gap
 
   var sellSuggestions = findSellableMinions(coreSet);
 
@@ -1066,13 +1085,36 @@ function renderCompPanel() {
 
   const match = state.currentComp;
   if (!match) {
-    dom.compName.textContent = "未匹配到流派";
-    dom.compMatch.textContent = "--";
-    dom.currentBoard.innerHTML = renderMiniBoard(state.boardMinions, []);
-    dom.targetBoard.innerHTML = "";
-    dom.missingCards.innerHTML = "<div class='missing-item'>继续构建阵容以匹配流派</div>";
-    dom.positionTip.textContent = "暂无可推荐的站位建议";
-    dom.compAltSection.style.display = "none";
+    // 无局面匹配时，基于可用种族展示推荐流派
+    var fallbackComps = getFallbackComps();
+    if (fallbackComps.length > 0) {
+      dom.compName.textContent = "推荐流派（当局可选）";
+      dom.compMatch.textContent = state.availableRaces.length > 0
+        ? "种族: " + state.availableRaces.join("、")
+        : "请开始对局以获取流派推荐";
+      dom.currentBoard.innerHTML = "";
+      dom.currentBoard.parentNode.classList.add("no-content");
+      dom.targetBoard.innerHTML = "";
+      dom.targetBoard.parentNode.classList.add("no-content");
+      dom.missingCards.innerHTML = "<div class='missing-item'>购买核心卡牌后将自动匹配具体流派</div>";
+      dom.positionTip.textContent = fallbackComps[0].comp.tips && fallbackComps[0].comp.tips[0]
+        ? (typeof fallbackComps[0].comp.tips[0] === "string" ? fallbackComps[0].comp.tips[0] : fallbackComps[0].comp.tips[0].tip || "")
+        : "优先收集核心随从，构建完整阵容";
+      dom.compAltSection.style.display = fallbackComps.length > 1 ? "block" : "none";
+      dom.altComps.innerHTML = fallbackComps.slice(1).map(function(m) {
+        return '<div class="alt-comp-item">' + (m.comp.name_cn || m.comp.name) + ' · 强度 ' + (m.comp.powerLevel || "C") + '</div>';
+      }).join("");
+    } else {
+      dom.compName.textContent = "未匹配到流派";
+      dom.compMatch.textContent = "--";
+      dom.currentBoard.innerHTML = renderMiniBoard(state.boardMinions, []);
+      dom.currentBoard.parentNode.classList.remove("no-content");
+      dom.targetBoard.innerHTML = "";
+      dom.targetBoard.parentNode.classList.add("no-content");
+      dom.missingCards.innerHTML = "<div class='missing-item'>继续构建阵容以匹配流派</div>";
+      dom.positionTip.textContent = "暂无可推荐的站位建议";
+      dom.compAltSection.style.display = "none";
+    }
     return;
   }
 
@@ -1089,9 +1131,11 @@ function renderCompPanel() {
   // Current board
   const coreCardIds = new Set(comp.cards.map((c) => c.cardId || c.card_id || ""));
   dom.currentBoard.innerHTML = renderMiniBoard(state.boardMinions, coreCardIds);
+  dom.currentBoard.parentNode.classList.remove("no-content");
 
   // Target board
   dom.targetBoard.innerHTML = renderTargetBoard(comp, state.boardMinions);
+  dom.targetBoard.parentNode.classList.remove("no-content");
 
   // Missing cards
   const missingNames = match.missingCards.map((id) => getCardName(id));
@@ -1166,6 +1210,55 @@ function renderTargetBoard(comp, currentMinions) {
     html += '<div class="mini-slot"><span class="ms-empty">-</span></div>';
   }
   return html;
+}
+
+// ── 无局面匹配时的兜底流派推荐（基于可用种族 + 英雄） ──
+function getFallbackComps() {
+  var comps = state.compStrategies || [];
+  if (comps.length === 0) return [];
+
+  var races = state.availableRaces || [];
+  var heroCardId = state.heroCardId || "";
+  var heroPowerText = "";
+  if (heroCardId && state._heroHpMap) {
+    var hpIds = state._heroHpMap[heroCardId];
+    if (hpIds && hpIds.length > 0) {
+      var hpCard = getCard(hpIds[0]);
+      heroPowerText = hpCard ? (hpCard.text_cn || "") : "";
+    }
+  }
+
+  var scored = [];
+  for (var i = 0; i < comps.length; i++) {
+    var c = comps[i];
+    // 强制种族过滤
+    var forced = c.forcedTribes || [];
+    if (forced.length > 0 && races.length > 0) {
+      var ok = false;
+      for (var ft = 0; ft < forced.length; ft++) {
+        if (races.indexOf(forced[ft]) >= 0) { ok = true; break; }
+      }
+      if (!ok) continue;
+    }
+    // 强度分
+    var powerMap = { S: 100, A: 80, B: 60, C: 40, D: 20 };
+    var pScore = powerMap[(c.powerLevel || "C").toUpperCase()] || 40;
+    // 英雄协同分
+    var hScore = 0;
+    if (heroPowerText && c.name_cn) {
+      var tribeKeys = ["龙", "野兽", "机械", "鱼人", "恶魔", "野猪人", "海盗", "元素", "亡灵", "娜迦"];
+      for (var tk = 0; tk < tribeKeys.length; tk++) {
+        if (c.name_cn.indexOf(tribeKeys[tk]) >= 0 && heroPowerText.indexOf(tribeKeys[tk]) >= 0) {
+          hScore = 40;
+          break;
+        }
+      }
+    }
+    scored.push({ comp: c, score: pScore + hScore });
+  }
+
+  scored.sort(function(a, b) { return b.score - a.score; });
+  return scored.slice(0, 4);
 }
 
 function getCardTierStr(cardId) {
@@ -1568,14 +1661,17 @@ function renderFreezeIndicator() {
 }
 
 function renderAll() {
-  renderSuggestionBadge();
-  renderCardHighlights();
-  renderCompPanel();
-  renderDisconnectButton();
-  renderCombatPredictor();
-  renderHeroSelection();
-  renderTrinketSelection();
-  renderFreezeIndicator();
+  if (mode === "display") {
+    renderCardHighlights();
+    renderCombatPredictor();
+    renderFreezeIndicator();
+  } else {
+    renderSuggestionBadge();
+    renderCompPanel();
+    renderDisconnectButton();
+    renderHeroSelection();
+    renderTrinketSelection();
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -1641,16 +1737,9 @@ function nextDemoTurn() {
 }
 
 function toggleDemoMode() {
-  state.demoMode = !state.demoMode;
-  if (state.demoMode) {
-    dom.demoIndicator.classList.remove("hidden");
-    applyDemoScenario(0);
-  } else {
-    dom.demoIndicator.classList.add("hidden");
-    state.gameActive = false;
-    clearDecisionState();
-    renderAll();
-  }
+  // Demo 模式已永久禁用 — 双窗口架构下无需演示
+  state.demoMode = false;
+  dom.demoIndicator.classList.add("hidden");
 }
 
 function updateDemoIndicator() {
@@ -1694,6 +1783,13 @@ function setupEvents() {
       _gearWasDragged = false;
       return;
     }
+    // 判断齿轮图标在屏幕左侧还是右侧，下拉面板反向展开
+    var gearRect = dom.gearIcon.getBoundingClientRect();
+    var gearCx = gearRect.left + gearRect.width / 2;
+    var isLeftSide = gearCx < window.innerWidth / 2;
+    dom.gearDropdown.classList.toggle("dropdown-left", isLeftSide);
+    dom.gearDropdown.classList.toggle("dropdown-right", !isLeftSide);
+
     state.gearMenuOpen = !state.gearMenuOpen;
     dom.gearDropdown.classList.toggle("hidden", !state.gearMenuOpen);
   });
@@ -1845,8 +1941,9 @@ function setupEvents() {
 
   // ── IPC 事件监听 ──
   window.bobCoach.on("window-moved", (rect) => {
-    // Positional recalculation can happen here
-    // Re-render highlights with new window size
+    // 窗口大小变化 → 重算百分比定位的元素
+    dcApplyPosition();
+    // 重新渲染卡牌高亮
     if (state.gameActive) renderCardHighlights();
   });
 
@@ -1860,9 +1957,32 @@ function setupEvents() {
     }
   });
 
+  // IPC 兜底确认模式（主进程通过 hash 和 IPC 双通道传递）
+  window.bobCoach.on("set-mode", (m) => {
+    if (!mode || mode === "display") {
+      mode = m;
+      document.body.className = document.body.className.replace(/mode-\w+/g, "");
+      document.body.classList.add("mode-" + m);
+      console.log("[Bob] Mode confirmed via IPC:", m);
+    }
+  });
+
+  window.bobCoach.on("game-running", (running) => {
+    if (running && state.demoMode) {
+      // 真实游戏检测到 → 关闭 demo 模式
+      console.log("[Bob] Game detected, disabling demo mode");
+      state.demoMode = false;
+      dom.demoIndicator.classList.add("hidden");
+      clearDecisionState();
+      renderAll();
+    }
+  });
+
   window.bobCoach.on("toggle-panel", toggleCompPanel);
   window.bobCoach.on("open-settings", openSettings);
   window.bobCoach.on("open-about", openAbout);
+
+
 
   // ── 实时游戏状态（来自 HDT 日志解析） ──
   window.bobCoach.on("game-state-update", (gameState) => {
@@ -1875,6 +1995,15 @@ function setupEvents() {
     }
 
     applyGameState(gameState);
+
+    // 节流：每秒最多刷新一次决策
+    var now = Date.now();
+    if (!state._lastDecisionRun || now - state._lastDecisionRun > 1000) {
+      state._lastDecisionRun = now;
+      computeCombatPrediction();
+      runDecisionEngine();
+      renderAll();
+    }
   });
 
   window.bobCoach.on("sync:update-available", (available) => {
@@ -1902,12 +2031,12 @@ function toggleCompPanel() {
   if (state.panelOpen) {
     dom.compPanel.classList.remove("hidden");
     dom.compHandle.title = "点击收起教练面板";
-    $("comp-handle-icon").classList.add("flipped");
+    $("comp-handle-label").textContent = "隐藏";
     renderCompPanel();
   } else {
     dom.compPanel.classList.add("hidden");
     dom.compHandle.title = "点击展开教练面板";
-    $("comp-handle-icon").classList.remove("flipped");
+    $("comp-handle-label").textContent = "展开";
   }
 }
 
@@ -1915,25 +2044,58 @@ function closeCompPanel() {
   state.panelOpen = false;
   dom.compPanel.classList.add("hidden");
   dom.compHandle.title = "点击展开教练面板";
-  $("comp-handle-icon").classList.remove("flipped");
+  $("comp-handle-label").textContent = "展开";
 }
 
 // ═══════════════════════════════════════════
 // 阵容面板拖拽（基于 transform 偏移，不冲突 CSS right 定位）
 // ═══════════════════════════════════════════
 
-function setupCompPanelDrag() {
-  const panel = dom.compPanel;
+function clampCompPanelOffset(dx, dy) {
+  var vw = window.innerWidth;
+  var vh = window.innerHeight;
 
-  // Restore saved drag offset
+  // 面板 right:0，限制 dx 范围
+  dx = Math.max(28 - vw, Math.min(28, dx));
+
+  // 垂直约束
+  var minDy = -vh * 0.15;
+  var maxDy = vh * 0.15;
+  dy = Math.max(minDy, Math.min(maxDy, dy));
+
+  return { dx: Math.round(dx), dy: Math.round(dy) };
+}
+
+function setupCompPanelDrag() {
+  var panel = dom.compPanel;
+
+  // 恢复保存的偏移
   _compDx = parseInt(state.compPanelDx) || 0;
   _compDy = parseInt(state.compPanelDy) || 0;
+  var clamped = clampCompPanelOffset(_compDx, _compDy);
+  _compDx = clamped.dx;
+  _compDy = clamped.dy;
   if (_compDx || _compDy) {
     applyCompPanelOffset(_compDx, _compDy);
   }
 
-  // Drag from the handle tab
-  dom.compHandle.addEventListener("mousedown", (e) => {
+  // 双击把手 — 重置位置
+  dom.compHandle.addEventListener("dblclick", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    _compDx = 0;
+    _compDy = 0;
+    panel.style.transition = "transform 0.3s ease";
+    applyCompPanelOffset(0, 0);
+    state.compPanelDx = "0";
+    state.compPanelDy = "0";
+    window.bobCoach.setSetting("compPanelDx", "0");
+    window.bobCoach.setSetting("compPanelDy", "0");
+    setTimeout(function() { panel.style.transition = ""; }, 350);
+  });
+
+  // 拖拽把手
+  dom.compHandle.addEventListener("mousedown", function(e) {
     if (e.button !== 0) return;
     e.preventDefault();
     e.stopPropagation();
@@ -1946,35 +2108,23 @@ function setupCompPanelDrag() {
     panel.style.transition = "none";
   });
 
-  // Also allow drag from the panel header when open
-  const header = dom.compContent.querySelector(".comp-header");
-  if (header) {
-    header.addEventListener("mousedown", (e) => {
-      if (e.button !== 0) return;
-      if (e.target.closest("button")) return;
-      e.preventDefault();
-      compDragInfo = {
-        startX: e.clientX,
-        startY: e.clientY,
-        origDx: _compDx,
-        origDy: _compDy,
-      };
-      panel.style.transition = "none";
-    });
-  }
-
-  document.addEventListener("mousemove", (e) => {
+  document.addEventListener("mousemove", function(e) {
     if (!compDragInfo) return;
-    _compDx = compDragInfo.origDx + (e.clientX - compDragInfo.startX);
-    _compDy = compDragInfo.origDy + (e.clientY - compDragInfo.startY);
+    var rawDx = compDragInfo.origDx + (e.clientX - compDragInfo.startX);
+    var rawDy = compDragInfo.origDy + (e.clientY - compDragInfo.startY);
+    var clamped = clampCompPanelOffset(rawDx, rawDy);
+    _compDx = clamped.dx;
+    _compDy = clamped.dy;
     applyCompPanelOffset(_compDx, _compDy);
   });
 
-  document.addEventListener("mouseup", () => {
+  document.addEventListener("mouseup", function() {
     if (!compDragInfo) return;
     panel.style.transition = "";
-    state.compPanelDx = String(Math.round(_compDx));
-    state.compPanelDy = String(Math.round(_compDy));
+    applyCompPanelOffset(_compDx, _compDy);
+
+    state.compPanelDx = String(_compDx);
+    state.compPanelDy = String(_compDy);
     window.bobCoach.setSetting("compPanelDx", state.compPanelDx);
     window.bobCoach.setSetting("compPanelDy", state.compPanelDy);
     compDragInfo = null;
@@ -1982,7 +2132,7 @@ function setupCompPanelDrag() {
 }
 
 function applyCompPanelOffset(dx, dy) {
-  dom.compPanel.style.transform = `translate(${dx}px, ${dy}px)`;
+  dom.compPanel.style.transform = "translate(" + dx + "px, " + dy + "px)";
 }
 
 function openTacticalBoard() {
@@ -2112,6 +2262,7 @@ async function checkForUpdates() {
     const keys = Object.keys(result.available);
     if (keys.length > 0) {
       showUpdateAvailable(result.available);
+      dom.btnCheckUpdate.textContent = "检查更新";
     } else {
       if ($("sync-update-banner")) $("sync-update-banner").classList.add("hidden");
       // Brief "已是最新" feedback
@@ -2127,12 +2278,16 @@ async function checkForUpdates() {
   } catch (e) {
     console.error("[Bob] Check updates failed:", e);
     dom.btnCheckUpdate.textContent = "网络错误 - 重试";
-    // Also show error in sync status area
     if (dom.syncLastCheck) dom.syncLastCheck.textContent = "检查失败: " + (e.message || "网络异常");
   }
-
-  dom.btnCheckUpdate.textContent = "检查更新";
   dom.btnCheckUpdate.disabled = false;
+}
+
+async function _resetCheckUpdateBtn() {
+  if (dom.btnCheckUpdate) {
+    dom.btnCheckUpdate.textContent = "检查更新";
+    dom.btnCheckUpdate.disabled = false;
+  }
 }
 
 async function applyUpdates() {
@@ -2143,15 +2298,6 @@ async function applyUpdates() {
 
   try {
     const result = await window.bobCoach.applySyncUpdates(state.pendingUpdates);
-    if (result.errors.length > 0) {
-      // 展示具体错误信息
-      dom.btnCheckUpdate.textContent = "部分失败 - 重试";
-      if ($("sync-update-text")) {
-        $("sync-update-text").textContent = "更新出错: " + result.errors.join("; ");
-        $("sync-update-banner").classList.remove("hidden");
-      }
-      console.error("[Bob] Some updates failed:", result.errors);
-    }
     if (result.applied.length > 0) {
       await loadAllData();
       runDecisionEngine();
@@ -2168,6 +2314,17 @@ async function applyUpdates() {
           dom.btnCheckUpdate.disabled = false;
         }
       }, 3000);
+      return;
+    }
+    if (result.errors.length > 0) {
+      dom.btnCheckUpdate.textContent = "部分失败 - 重试";
+      if ($("sync-update-text")) {
+        $("sync-update-text").textContent = "更新出错: " + result.errors.join("; ");
+        $("sync-update-banner").classList.remove("hidden");
+      }
+      console.error("[Bob] Some updates failed:", result.errors);
+    } else {
+      dom.btnCheckUpdate.textContent = "无更新内容";
     }
   } catch (e) {
     console.error("[Bob] Apply updates failed:", e);
@@ -2576,16 +2733,30 @@ function hideDcToast() {
 // 拔线按钮拖拽
 // ═══════════════════════════════════════════
 
-function setupDisconnectDrag() {
-  const el = dom.disconnectBtn;
+function dcPctToPx(pctLeft, pctTop) {
+  var btnSize = 38;
+  return {
+    left: Math.round(parseFloat(pctLeft) / 100 * window.innerWidth),
+    top: Math.round(parseFloat(pctTop) / 100 * window.innerHeight),
+  };
+}
 
-  // Restore saved position if any
-  if (state.dcBtnLeft && state.dcBtnTop) {
-    el.style.left = state.dcBtnLeft;
-    el.style.top = state.dcBtnTop;
+function dcApplyPosition() {
+  var el = dom.disconnectBtn;
+  if (state.dcBtnLeftPct != null && state.dcBtnTopPct != null) {
+    var px = dcPctToPx(state.dcBtnLeftPct, state.dcBtnTopPct);
+    el.style.left = px.left + "px";
+    el.style.top = px.top + "px";
     el.style.bottom = "auto";
     el.style.transform = "none";
   }
+}
+
+function setupDisconnectDrag() {
+  const el = dom.disconnectBtn;
+
+  // Restore saved percentage position
+  dcApplyPosition();
 
   el.addEventListener("mousedown", (e) => {
     if (e.button !== 0) return;
@@ -2603,10 +2774,13 @@ function setupDisconnectDrag() {
 
   document.addEventListener("mousemove", (e) => {
     if (!dcDragInfo) return;
-    const dx = e.clientX - dcDragInfo.startX;
-    const dy = e.clientY - dcDragInfo.startY;
-    const newLeft = dcDragInfo.origLeft + dx;
-    const newTop = dcDragInfo.origTop + dy;
+    var dx = e.clientX - dcDragInfo.startX;
+    var dy = e.clientY - dcDragInfo.startY;
+    var newLeft = dcDragInfo.origLeft + dx;
+    var newTop = dcDragInfo.origTop + dy;
+    var btnSize = 38;
+    newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - btnSize));
+    newTop = Math.max(0, Math.min(newTop, window.innerHeight - btnSize - 20));
     el.style.left = newLeft + "px";
     el.style.top = newTop + "px";
     el.style.bottom = "auto";
@@ -2616,10 +2790,14 @@ function setupDisconnectDrag() {
   document.addEventListener("mouseup", () => {
     if (!dcDragInfo) return;
     el.style.cursor = "grab";
-    state.dcBtnLeft = el.style.left;
-    state.dcBtnTop = el.style.top;
-    window.bobCoach.setSetting("dcBtnLeft", el.style.left);
-    window.bobCoach.setSetting("dcBtnTop", el.style.top);
+    // 存储百分比，窗口缩放时按比例重算
+    var rect = el.getBoundingClientRect();
+    var pctLeft = (rect.left / window.innerWidth * 100).toFixed(2);
+    var pctTop = (rect.top / window.innerHeight * 100).toFixed(2);
+    state.dcBtnLeftPct = pctLeft;
+    state.dcBtnTopPct = pctTop;
+    window.bobCoach.setSetting("dcBtnLeftPct", pctLeft);
+    window.bobCoach.setSetting("dcBtnTopPct", pctTop);
     dcDragInfo = null;
   });
 }
@@ -2629,7 +2807,7 @@ function setupDisconnectDrag() {
 // ═══════════════════════════════════════════
 
 function setupGearDrag() {
-  const el = dom.gearMenu;
+  var el = dom.gearMenu;
 
   // Restore saved position
   _gearDx = parseInt(state.gearDx) || 0;
@@ -2638,7 +2816,7 @@ function setupGearDrag() {
     applyGearOffset(_gearDx, _gearDy);
   }
 
-  el.addEventListener("mousedown", (e) => {
+  el.addEventListener("mousedown", function(e) {
     if (e.button !== 0) return;
     if (e.target.closest(".gear-item")) return;
     _gearWasDragged = false;
@@ -2652,28 +2830,35 @@ function setupGearDrag() {
     e.preventDefault();
   });
 
-  document.addEventListener("mousemove", (e) => {
+  document.addEventListener("mousemove", function(e) {
     if (!gearDragInfo) return;
-    const dx = e.clientX - gearDragInfo.startX;
-    const dy = e.clientY - gearDragInfo.startY;
+    var dx = e.clientX - gearDragInfo.startX;
+    var dy = e.clientY - gearDragInfo.startY;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
       _gearWasDragged = true;
     }
-    let newDx = gearDragInfo.origDx + dx;
-    let newDy = gearDragInfo.origDy + dy;
+    var newDx = gearDragInfo.origDx + dx;
+    var newDy = gearDragInfo.origDy + dy;
 
-    // Clamp to screen bounds (gear icon size ~38px, keep fully visible)
-    const maxX = window.innerWidth - 44;
-    const maxY = window.innerHeight - 44;
-    newDx = Math.max(-el.offsetLeft + 4, Math.min(newDx, maxX - el.offsetLeft));
-    newDy = Math.max(-el.offsetTop + 4, Math.min(newDy, maxY - el.offsetTop));
+    // 屏幕边界限制：基于元素实际位置动态计算
+    var prevTransform = el.style.transform;
+    el.style.transform = "";
+    var natRect = el.getBoundingClientRect();
+    el.style.transform = prevTransform;
+    var gearSize = 38;
+    var minDx = -natRect.left;
+    var maxDx = window.innerWidth - gearSize - natRect.left;
+    var minDy = -natRect.top;
+    var maxDy = window.innerHeight - gearSize - natRect.top;
+    newDx = Math.max(minDx, Math.min(maxDx, newDx));
+    newDy = Math.max(minDy, Math.min(maxDy, newDy));
 
     _gearDx = newDx;
     _gearDy = newDy;
     applyGearOffset(_gearDx, _gearDy);
   });
 
-  document.addEventListener("mouseup", () => {
+  document.addEventListener("mouseup", function() {
     if (!gearDragInfo) return;
     el.style.transition = "";
     state.gearDx = String(Math.round(_gearDx));
@@ -2791,9 +2976,18 @@ async function init() {
   state.showCombatPredictor = settings.showCombatPredictor !== false;
   state.combatSimSamples = settings.combatSimSamples || 200;
 
-  // Saved disconnect button position
-  state.dcBtnLeft = settings.dcBtnLeft || null;
-  state.dcBtnTop = settings.dcBtnTop || null;
+  // Saved disconnect button position (百分比字符串或旧格式px值)
+  var rawLeft = settings.dcBtnLeftPct || settings.dcBtnLeft || null;
+  var rawTop = settings.dcBtnTopPct || settings.dcBtnTop || null;
+  // 兼容旧格式：如果是px值则转为百分比
+  if (rawLeft && String(rawLeft).endsWith("px")) {
+    rawLeft = (parseFloat(rawLeft) / window.innerWidth * 100).toFixed(2);
+  }
+  if (rawTop && String(rawTop).endsWith("px")) {
+    rawTop = (parseFloat(rawTop) / window.innerHeight * 100).toFixed(2);
+  }
+  state.dcBtnLeftPct = rawLeft;
+  state.dcBtnTopPct = rawTop;
 
   // Saved comp panel drag offset
   state.compPanelDx = settings.compPanelDx || "0";
@@ -2835,13 +3029,11 @@ async function init() {
     // Handled by main process via IPC, but we store locally too
   }
 
-  if (dataLoaded && state.agreementAccepted) {
-    // Auto-start demo mode for quick validation
-    // (In production, this would wait for HDT log detection)
-    console.log("[Bob] Ready. Open gear menu -> Demo mode to test.");
-  }
+  // Demo 模式已移除，始终保持 demoMode = false
+  state.demoMode = false;
+  if (dom.demoIndicator) dom.demoIndicator.classList.add("hidden");
 
-  console.log("[Bob] Initialized");
+  console.log("[Bob] Initialized (" + mode + " mode)");
 }
 
 // Start

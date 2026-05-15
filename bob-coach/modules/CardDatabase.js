@@ -29,6 +29,7 @@ var CardDatabase = class CardDatabase {
     this._byTag = Object.create(null);     // { "economy": [card], "anti_divine_shield": [card], ... }
     this._byTiming = Object.create(null);  // { "early": [card], "mid": [card], "late": [card] }
     this._byCardType = Object.create(null);// { "minion": [card], "spell": [card], ... }
+    this._byNameCn = Object.create(null);  // { "战吼铜须": card, ... }
 
     this._buildIndex();
   }
@@ -43,6 +44,11 @@ var CardDatabase = class CardDatabase {
 
       // byId
       this._byId[id] = c;
+
+      // byNameCn
+      if (c.name_cn) {
+        this._byNameCn[c.name_cn] = c;
+      }
 
       // byCardType
       var type = c.card_type || "minion";
@@ -352,6 +358,15 @@ var CardDatabase = class CardDatabase {
    */
   getAvailableTags() {
     return Object.keys(this._byTag).sort();
+  }
+
+  /**
+   * 通过中文名称查找卡牌。
+   * @param {string} nameCn
+   * @returns {object|null}
+   */
+  getByNameCn(nameCn) {
+    return this._byNameCn[nameCn] || null;
   }
 
   /**

@@ -20,6 +20,8 @@ function loadModule(filename) {
 
 // Load CombatResolver and its dependencies
 loadSim("SeededRNG.js");
+loadSim("CombatEventQueue.js");
+loadSim("CombatEffects.js");
 loadSim("SharedPool.js");
 loadSim("ArmorSystem.js");
 loadSim("DamageSystem.js");

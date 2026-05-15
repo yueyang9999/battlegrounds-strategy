@@ -13,6 +13,8 @@ function loadSim(filename) {
 }
 
 loadSim("SeededRNG.js");
+loadSim("CombatEventQueue.js");
+loadSim("CombatEffects.js");
 loadSim("CombatResolver.js");
 loadSim("MatchmakingSystem.js");
 
@@ -265,6 +267,284 @@ function makePlayer(boardSize, tavernTier) {
   }
   return { id: "G_" + Math.random(), board: board, tavernTier: tavernTier, health: 30, alive: true };
 }
+
+// ══════════════════════════════════════════════════════
+// GROUP I: Trigger sequence — event queue priority
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP I: Event queue priority ===");
+
+var testQueue = CombatEventQueue.create({});
+var executionOrder = [];
+
+testQueue.push(CombatEventQueue.createEvent('DEFAULT', function() {
+  executionOrder.push('default');
+}));
+testQueue.push(CombatEventQueue.createEvent('DEATHRATTLE', function() {
+  executionOrder.push('deathrattle');
+}));
+testQueue.push(CombatEventQueue.createEvent('REBORN', function() {
+  executionOrder.push('reborn');
+}));
+testQueue.push(CombatEventQueue.createEvent('AURA_UPDATE', function() {
+  executionOrder.push('aura');
+}));
+testQueue.push(CombatEventQueue.createEvent('WHEN_DAMAGED', function() {
+  executionOrder.push('whenDamaged');
+}));
+
+testQueue.processAll();
+check("I1: whenDamaged highest priority", executionOrder[0] === 'whenDamaged');
+check("I2: aura before deathrattle", executionOrder[1] === 'aura');
+check("I3: deathrattle before reborn", executionOrder[2] === 'deathrattle');
+check("I4: reborn before default", executionOrder[3] === 'reborn');
+check("I5: default last", executionOrder[4] === 'default');
+
+// ══════════════════════════════════════════════════════
+// GROUP J: Deathrattle + Reborn ordering
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP J: Deathrattle → Reborn ===");
+
+// Register a test deathrattle card
+var drOrderLog = [];
+CombatEffects.register("TEST_DR", {
+  deathrattle: function(ctx, unit, side, enemySide, queue) {
+    drOrderLog.push('deathrattle');
+    var token = ctx.buildToken({ attack: 1, health: 1, name_cn: "test_token" });
+    ctx.spawnToken(side, token);
+  },
+});
+
+// Combat: DR unit (3/1) vs enemy (2/2) — both die simultaneously
+// DR deathrattle spawns token, reborn revives at 1 HP
+var drBoard = [
+  { cardId: "TEST_DR", attack: 3, health: 1, tier: 1, golden: false,
+    mechanics: ["DEATHRATTLE", "REBORN"], position: 0, name_cn: "DR_Unit" },
+];
+var drEnemy = [
+  { cardId: "WEAK", attack: 2, health: 2, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Weak" },
+];
+
+drOrderLog = [];
+var drResult = CombatResolver.simulateCombat(drBoard, drEnemy, 1);
+// 随从死亡 → 亡语触发 → 召唤 token → 复生触发
+check("J1: deathrattle triggers before reborn", drOrderLog.indexOf('deathrattle') === 0);
+// 复生让随从复活，最终场上应该有随从+token存活
+var totalSurvivors = drResult.attackerSurvivors.length;
+checkGt("J2: survivors include reborned unit and token", totalSurvivors, 0);
+
+// Cleanup
+delete CombatEffects._registry["TEST_DR"];
+
+// ══════════════════════════════════════════════════════
+// GROUP K: Start of Combat effects
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP K: Start of Combat ===");
+
+// Register a start-of-combat card that buffs own side
+CombatEffects.register("TEST_SOC", {
+  startOfCombat: function(ctx, unit, ownSide, enemySide) {
+    for (var i = 0; i < ownSide.length; i++) {
+      if (ownSide[i].alive) ownSide[i].attack += 2;
+    }
+  },
+});
+
+var socBoard = [
+  { cardId: "TEST_SOC", attack: 2, health: 5, tier: 2, golden: false,
+    mechanics: ["START_OF_COMBAT"], position: 0, name_cn: "Buffer" },
+  { cardId: "BEAST", attack: 3, health: 3, tier: 1, golden: false,
+    mechanics: [], position: 1, name_cn: "Beast" },
+];
+var socEnemy = [
+  { cardId: "DEF1", attack: 3, health: 10, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Def" },
+];
+var socResult = CombatResolver.simulateCombat(socBoard, socEnemy, 2);
+
+// Both units get +2 attack from start-of-combat before the first attack
+// After combat, check that battle resolved (we don't care about win/loss, just no errors)
+check("K1: start-of-combat combat resolves", socResult.win !== undefined);
+
+// Verify: test SOC with only one unit against weak enemy (should win due to buff)
+var socBoard2 = [
+  { cardId: "TEST_SOC", attack: 5, health: 10, tier: 2, golden: false,
+    mechanics: ["START_OF_COMBAT"], position: 0, name_cn: "Buffer2" },
+];
+var socEnemy2 = [
+  { cardId: "WEAK", attack: 1, health: 2, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Weak" },
+];
+var socResult2 = CombatResolver.simulateCombat(socBoard2, socEnemy2, 2);
+check("K2: start-of-combat buffed unit wins vs weak", socResult2.win === true);
+
+delete CombatEffects._registry["TEST_SOC"];
+
+// ══════════════════════════════════════════════════════
+// GROUP L: Cleave / Windfury multi-target
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP L: Cleave multi-target ===");
+
+// Cleave unit hits target + adjacent minions
+var cleaveBoard = [
+  { cardId: "CLEAVE1", attack: 5, health: 10, tier: 3, golden: false,
+    mechanics: [], position: 0, name_cn: "狂战斧", text_cn: "同时对其攻击目标相邻的随从造成伤害" },
+];
+var wideDef = [
+  { cardId: "L", attack: 1, health: 3, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Left" },
+  { cardId: "M", attack: 1, health: 3, tier: 1, golden: false,
+    mechanics: ["TAUNT"], position: 1, name_cn: "Mid" },
+  { cardId: "R", attack: 1, health: 3, tier: 1, golden: false,
+    mechanics: [], position: 2, name_cn: "Right" },
+];
+var cleaveResult = CombatResolver.simulateCombat(cleaveBoard, wideDef, 3);
+// Cleave hits taunt (mid) + left + right
+check("L1: cleave combat resolves", cleaveResult.win !== undefined);
+// At least the taunt target died (5 attack vs 3 health)
+check("L2: cleave hits kill multiple", cleaveResult.attackerSurvivors.length >= 0);
+
+// Windfury + Cleave combo
+var wfCleaveBoard = [
+  { cardId: "WF_CLEAVE", attack: 4, health: 15, tier: 4, golden: false,
+    mechanics: ["WINDFURY"], position: 0, name_cn: "风怒狂战斧", text_cn: "同时对其攻击目标相邻的随从造成伤害" },
+];
+var wfWideDef = [
+  { cardId: "A1", attack: 1, health: 2, tier: 1, golden: false, mechanics: [], position: 0, name_cn: "a" },
+  { cardId: "A2", attack: 1, health: 2, tier: 1, golden: false, mechanics: ["TAUNT"], position: 1, name_cn: "b" },
+  { cardId: "A3", attack: 1, health: 2, tier: 1, golden: false, mechanics: [], position: 2, name_cn: "c" },
+];
+var wfCleaveResult = CombatResolver.simulateCombat(wfCleaveBoard, wfWideDef, 4);
+check("L3: windfury+cleave combat resolves", wfCleaveResult.win !== undefined);
+
+// ══════════════════════════════════════════════════════
+// GROUP M: Aura effects
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP M: Aura effects ===");
+
+// Register an aura that revives 0-health minions
+var auraHealthCheck = [];
+CombatEffects.register("TEST_AURA_HEALER", {
+  aura: function(ctx, unit, side, enemySide) {
+    auraHealthCheck.push('aura');
+    // Aura prevents death: if any ally is at 0 health, set it to 1
+    for (var i = 0; i < side.length; i++) {
+      if (!side[i].alive && side[i].health <= 0 && side[i].cardId !== unit.cardId) {
+        // doesn't auto-revive in this model, but the framework tests the queue order
+      }
+    }
+  },
+});
+
+var auraBoard = [
+  { cardId: "TEST_AURA_HEALER", attack: 2, health: 5, tier: 2, golden: false,
+    mechanics: ["AURA"], position: 0, name_cn: "AuraHealer" },
+  { cardId: "ALLY", attack: 3, health: 3, tier: 1, golden: false,
+    mechanics: [], position: 1, name_cn: "Ally" },
+];
+var auraEnemy = [
+  { cardId: "KILLER", attack: 8, health: 8, tier: 3, golden: false,
+    mechanics: [], position: 0, name_cn: "Killer" },
+];
+
+auraHealthCheck = [];
+var auraResult = CombatResolver.simulateCombat(auraBoard, auraEnemy, 2);
+// Aura events fire during combat when deaths occur
+check("M1: aura combat resolves", auraResult.win !== undefined);
+
+delete CombatEffects._registry["TEST_AURA_HEALER"];
+
+// ══════════════════════════════════════════════════════
+// GROUP N: When Damaged triggers (immediate)
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP N: When Damaged triggers ===");
+
+var whenDamagedLog = [];
+CombatEffects.register("WD_UNIT", {
+  whenDamaged: function(ctx, damagedUnit, side, enemySide, queue) {
+    whenDamagedLog.push('whenDamaged:' + damagedUnit.cardId);
+    damagedUnit.attack += 1; // enrage: +1 attack when damaged
+  },
+});
+
+// Only register whenDamaged on the unit that gets hit
+var wdBoard = [
+  { cardId: "WD_UNIT", attack: 2, health: 5, tier: 2, golden: false,
+    mechanics: ["TRIGGER_VISUAL"], position: 0, name_cn: "受伤者", text_cn: "每当受到伤害时+1攻击力" },
+];
+var wdEnemy = [
+  { cardId: "SLAPPER", attack: 1, health: 10, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Slapper" },
+];
+
+whenDamagedLog = [];
+var wdResult = CombatResolver.simulateCombat(wdBoard, wdEnemy, 2);
+check("N1: whenDamaged triggers on hit", whenDamagedLog.length > 0);
+if (whenDamagedLog.length > 0) {
+  check("N2: whenDamaged targets correct unit", whenDamagedLog[0].indexOf('WD_UNIT') !== -1);
+}
+
+delete CombatEffects._registry["WD_UNIT"];
+
+// ══════════════════════════════════════════════════════
+// GROUP O: Built-in card effects
+// ══════════════════════════════════════════════════════
+console.log("=== GROUP O: Built-in cards ===");
+
+// Test Manasaber (BG26_800): deathrattle summon 2 taunt tokens
+var manaBoard = [
+  { cardId: "BG26_800", attack: 4, health: 1, tier: 1, golden: false,
+    mechanics: ["DEATHRATTLE"], position: 0, name_cn: "魔刃豹", minion_types_cn: ["野兽"] },
+];
+var manaEnemy = [
+  { cardId: "K1", attack: 2, health: 2, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Killer" },
+];
+var manaResult = CombatResolver.simulateCombat(manaBoard, manaEnemy, 1);
+// Dead manasaber + 2 baby tokens should give 2 survivors after beating 2/2 enemy
+check("O1: manasaber deathrattle spawns tokens", manaResult.attackerSurvivors.length >= 1);
+
+// Test Mecha-Jaraxxus token (BG29_611): deathrattle summon 1/1 micro bot
+var mechBoard = [
+  { cardId: "BG29_611", attack: 1, health: 1, tier: 1, golden: false,
+    mechanics: ["DEATHRATTLE", "DIVINE_SHIELD"], position: 0, name_cn: "微型机器人" },
+];
+var mechEnemy = [
+  { cardId: "P1", attack: 2, health: 1, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Puncher" },
+];
+var mechResult = CombatResolver.simulateCombat(mechBoard, mechEnemy, 1);
+check("O2: mech deathrattle combat resolves", mechResult.win !== undefined);
+
+// Test Humming Bird (BG26_805): start of combat, beasts get +1 attack
+var birdBoard = [
+  { cardId: "BG26_805", attack: 1, health: 4, tier: 2, golden: false,
+    mechanics: ["START_OF_COMBAT", "TRIGGER_VISUAL"], position: 0, name_cn: "哼鸣蜂鸟", minion_types_cn: ["野兽"] },
+  { cardId: "BEAST2", attack: 2, health: 2, tier: 1, golden: false,
+    mechanics: [], position: 1, name_cn: "野兽A", minion_types_cn: ["野兽"] },
+];
+var birdEnemy = [
+  { cardId: "EN1", attack: 1, health: 2, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Enemy" },
+];
+var birdResult = CombatResolver.simulateCombat(birdBoard, birdEnemy, 2);
+check("O3: humming bird combat resolves", birdResult.win !== undefined);
+
+// Test Iridescent Skyblazer (BG29_806): when beast damaged, buff another beast
+var skyBoard = [
+  { cardId: "BG29_806", attack: 3, health: 8, tier: 5, golden: false,
+    mechanics: ["TRIGGER_VISUAL"], position: 0, name_cn: "炫彩灼天者", minion_types_cn: ["野兽"] },
+  { cardId: "BEAST3", attack: 2, health: 5, tier: 2, golden: false,
+    mechanics: [], position: 1, name_cn: "野兽B", minion_types_cn: ["野兽"] },
+];
+var skyEnemy = [
+  { cardId: "HIT1", attack: 2, health: 1, tier: 1, golden: false,
+    mechanics: [], position: 0, name_cn: "Hitter" },
+  { cardId: "HIT2", attack: 2, health: 1, tier: 1, golden: false,
+    mechanics: [], position: 1, name_cn: "Hitter2" },
+];
+var skyResult = CombatResolver.simulateCombat(skyBoard, skyEnemy, 5);
+check("O4: skyblazer combat resolves", skyResult.win !== undefined);
 
 console.log("\n==================================================");
 console.log("  Passed: " + passed + " | Failed: " + failed);

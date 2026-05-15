@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "start:win": "powershell -Command \"Start-Process -FilePath 'cmd' -ArgumentList '/c', 'npx electron .' -WorkingDirectory '.' -WindowStyle Hidden\"",
     "export-data": "python scripts/export-data.py"
   },
   "author": "yueyang9999",

@@ -3,6 +3,11 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("bobCoach", {
+  // ── 窗口模式（display | control），由主进程通过 --bob-mode 参数注入 ──
+  mode: (() => {
+    const arg = process.argv.find(a => a.startsWith("--bob-mode="));
+    return arg ? arg.split("=")[1] : "display";
+  })(),
   // ── 设置 ──
   getSettings: () => ipcRenderer.invoke("settings:get"),
   setSetting: (key, value) => ipcRenderer.invoke("settings:set", key, value),
@@ -73,6 +78,7 @@ contextBridge.exposeInMainWorld("bobCoach", {
       "game-state-update",
       "sync:update-available",
       "sync:applied",
+      "set-mode",
     ];
     if (validChannels.includes(channel)) {
       const handler = (_event, ...args) => callback(...args);

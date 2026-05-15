@@ -1560,8 +1560,9 @@ async function checkForUpdates() {
   try {
     const compData = await fetchJSON(FIRESTONE_COMP_STRAT);
     const comps = Array.isArray(compData) ? compData : compData.comps || [];
-    if (comps.length !== meta.compStrategyCount) {
-      available.compStrategies = { count: comps.length, oldCount: meta.compStrategyCount || 0 };
+    const validComps = comps.filter((c) => c.compId && c.cards && c.cards.length > 0);
+    if (validComps.length !== meta.compStrategyCount) {
+      available.compStrategies = { count: validComps.length, oldCount: meta.compStrategyCount || 0 };
     }
   } catch (e) {
     console.error("[sync] Comp strategies fetch failed:", e.message);

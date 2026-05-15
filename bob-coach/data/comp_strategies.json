@@ -141,7 +141,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 5,
           "validRefs": 5,
           "missingRefs": [],
@@ -319,7 +319,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 4,
           "validRefs": 4,
           "missingRefs": [],
@@ -516,7 +516,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 6,
           "validRefs": 6,
           "missingRefs": [],
@@ -747,7 +747,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 1,
           "validRefs": 1,
           "missingRefs": [],
@@ -905,7 +905,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -1109,7 +1109,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 5,
           "validRefs": 5,
           "missingRefs": [],
@@ -1323,7 +1323,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -1491,7 +1491,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -1683,7 +1683,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 6,
           "validRefs": 6,
           "missingRefs": [],
@@ -1902,7 +1902,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 5,
           "validRefs": 5,
           "missingRefs": [],
@@ -2104,7 +2104,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 6,
           "validRefs": 6,
           "missingRefs": [],
@@ -2287,7 +2287,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 2,
           "validRefs": 2,
           "missingRefs": [],
@@ -2450,7 +2450,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -2654,7 +2654,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -2882,7 +2882,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 3,
           "validRefs": 3,
           "missingRefs": [],
@@ -3169,7 +3169,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 5,
           "validRefs": 5,
           "missingRefs": [],
@@ -3335,7 +3335,7 @@
         "freshness": {
           "score": 96,
           "status": "fresh",
-          "tipAgeDays": 30,
+          "tipAgeDays": 31,
           "totalRefs": 5,
           "validRefs": 5,
           "missingRefs": [],
@@ -3680,7 +3680,7 @@
         "freshness": {
           "score": 98,
           "status": "fresh",
-          "tipAgeDays": 14,
+          "tipAgeDays": 15,
           "totalRefs": 7,
           "validRefs": 7,
           "missingRefs": [],
